@@ -63,7 +63,7 @@ function MainMovie() {
                         <div className="d-flex justify-content-start">
                             <Button variant="light" className="d-flex align-items-center px-5 mr-3">
                                 <i className="bi bi-play-fill fs-1"></i>
-                                <h4 className="text-dark mb-0 ml-2 font-weight-bold">Play</h4>
+                                <h4 className="text-dark mb-0 ml-2">Play</h4>
                             </Button>
                             <div className="d-none d-md-block">
                                 <Button variant="secondary" className="d-flex align-items-center px-5 mx-3">
