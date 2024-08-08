@@ -34,6 +34,10 @@ h3 {
   font-family: "Netflix Sans3", serif;
 }
 
+h6 {
+  font-family: "Netflix Sans3", serif;
+}
+
 .tv-container {
   position: relative;
 }
@@ -43,6 +47,156 @@ video {
   height: auto;
   border-radius: 8px;
 }
+
+.nav-item {
+  font-family: "Netflix Sans3", serif;
+}
+
+.nav-item-selected {
+    font-family: "Netflix Sans1", serif;
+}
+
+.nav-item:hover {
+  font-family: "Netflix Sans1", serif;
+}
+
+form .search-input {
+  border: 1px solid white;
+  background-color: transparent;
+  color: white;
+}
+
+form .search-input::placeholder {
+  color: white;
+}
+
+form .search-input:focus {
+  outline: none;
+  box-shadow: 0 0 5px white;
+  color: white;
+  background-color: transparent;
+}
+
+.navbar-custom {
+  background-color: #000; /* Customize your navbar background color */
+}
+
+.nav-links {
+  display: flex;
+  flex-direction: column;
+}
+
+.main-movie-title {
+  font-family: "Madrigal", serif;
+}
+
+@media (min-width: 768px) {
+  .nav-links {
+    flex-direction: row;
+  }
+
+  .search-form {
+    order: 2;
+  }
+}
+
+@media (max-width: 767px) {
+  .navbar-custom .navbar-collapse {
+    flex-direction: column;
+  }
+
+  .navbar-brand {
+    order: 1;
+  }
+
+  .search-form {
+    order: 2;
+    flex: 1;
+  }
+
+  .nav-links {
+    order: 3;
+    width: 100%;
+  }
+}
+
+.search-input {
+  border: 2px solid white;
+  background-color: transparent;
+  color: white;
+}
+
+.search-input::placeholder {
+  color: white;
+}
+
+.search-input:focus {
+  outline: none;
+  box-shadow: 0 0 5px white;
+}
+
+.main-banner {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 80vh;
+  filter: drop-shadow(200px 0px 500px rgba(0, 0, 0, 0.5));
+}
+
+.main-banner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 30%;
+  width: 70%;
+  height: 100%;
+  background: linear-gradient(
+          to right,
+          rgba(0, 0, 0, 0) 0%,   /* Start transparent at the center */
+          rgba(0, 0, 0, 0.4) 10%,
+          rgba(0, 0, 0, 1) 100%
+  ),
+  linear-gradient(
+          to bottom,
+          rgba(0, 0, 0, 1) 0%,  /* Semi-transparent black at the top */
+          rgba(0, 0, 0, 0) 20%    /* Fade out downwards */
+  );
+  z-index: -1;
+}
+
+@media (max-width: 768px) { /* Tablet screens */
+  .main-banner::before {
+    left: 50%;
+    width: 50%;
+    background: linear-gradient(
+            to right,
+            rgba(0, 0, 0, 0) 0%,   /* Start transparent at the center */
+            rgba(0, 0, 0, 0.4) 10%,
+            rgba(0, 0, 0, 1) 100%
+    ),
+    linear-gradient(
+            to bottom,
+            rgba(0, 0, 0, 1) 0%,  /* Semi-transparent black at the top */
+            rgba(0, 0, 0, 0) 20%    /* Fade out downwards */
+    );
+    z-index: -1;
+  }
+}
+
+@media (max-width: 576px) { /* Mobile screens */
+  .main-banner::before {
+    left: 0;  /* Start from the left edge */
+    width: 100%;  /* Cover the full width */
+    height: 60%;  /* Adjust height to only cover the top portion */
+    background: linear-gradient(
+            to bottom,
+            rgba(0, 0, 0, 1) 0%,
+            rgba(0, 0, 0, 0) 100%
+    );
+    z-index: -1;
+  }
+}
+
 
 
 @font-face {

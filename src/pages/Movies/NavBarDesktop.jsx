@@ -1,0 +1,70 @@
+import {Container, Form, Nav, Navbar} from "react-bootstrap";
+import logo from "../../assets/logo.png";
+import {useState} from "react";
+import gsap from "gsap";
+import {useGSAP} from "@gsap/react";
+
+function NavBarDesktop() {
+    const [currentPage, setCurrentPage] = useState('home');
+    const [searchVisible, setSearchVisible] = useState(false);
+
+    useGSAP(() => {
+        gsap.fromTo('.search-input', {
+            duration: 1,
+            x: 100,
+            opacity: 0,
+            ease: 'ease-in'
+        }, {
+            x: 0,
+            opacity: 1,
+            ease: 'ease-out'
+        })
+    }, [searchVisible]);
+
+    useGSAP(() => {
+        gsap.from(['.nav-item-selected', '.nav-item'], {
+            duration: 1,
+            delay: 0.1,
+            x: 100,
+            opacity: 0,
+            ease: 'ease-in',
+            stagger: 0.1
+        })
+    }, [])
+
+
+    return (
+        <Navbar className="position-absolute w-100 bg-gradient-dark z-3">
+            <Container fluid>
+                <Navbar.Brand to='/homepage'>
+                    <div className="mx-5 mt-2" id="stiflix-logo">
+                        <img src={logo} alt="logo" height={50} width={150}/>
+                    </div>
+                </Navbar.Brand>
+                <Nav className="me-auto mt-2">
+                    <Nav.Link onClick={() => setCurrentPage("home")} className="text-white">
+                        <h5 className={currentPage === "home" ? "nav-item-selected" : "nav-item"}>Home</h5>
+                    </Nav.Link>
+                    <Nav.Link onClick={() => setCurrentPage("tvShows")} className="text-white">
+                        <h5 className={currentPage === "tvShows" ? "nav-item-selected" : "nav-item"}>TV Shows</h5>
+                    </Nav.Link>
+                    <Nav.Link onClick={() => setCurrentPage("movies")} className="text-white">
+                        <h5 className={currentPage === "movies" ? "nav-item-selected" : "nav-item"}>Movies</h5>
+                    </Nav.Link>
+                </Nav>
+                <Form className="d-flex mx-3">
+                    {searchVisible && (
+                        <Form.Control
+                            type="search"
+                            className="me-2 search-input"
+                            aria-label="Search"
+                        />
+                    )}
+                    <i onClick={() => setSearchVisible(!searchVisible)} className="bi bi-search text-white h2"></i>
+                </Form>
+            </Container>
+        </Navbar>
+    );
+}
+
+export default NavBarDesktop;

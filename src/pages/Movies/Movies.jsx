@@ -1,6 +1,9 @@
 import {useEffect, useState} from "react";
 import SplashScreen from "./SplashScreen.jsx";
 import {Col, Container, Row} from "react-bootstrap";
+import NavBar from "./NavBar.jsx";
+import test_bg from "../../assets/test_bg.png";
+import MainMovie from "./MainMovie.jsx";
 
 function Movies() {
     const [showSplash, setShowSplash] = useState(true);
@@ -22,11 +25,8 @@ function Movies() {
 function HomePage() {
     return (
         <Container fluid className="p-0 bg-gradient-dark-radius min-vh-100">
-            <Row>
-                <Col className="d-flex justify-content-center align-items-center mt-5">
-                    <h1 className="text-white">MOVIES GO HERE</h1>
-                </Col>
-            </Row>
+            <NavBar/>
+            <MainMovie/>
         </Container>
     );
 }

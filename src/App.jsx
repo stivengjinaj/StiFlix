@@ -1,6 +1,7 @@
 import './App.css'
 import {Route, Routes} from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import "bootstrap-icons/font/bootstrap-icons.css";
 import InitialPage from "./pages/InitialPage/InitialPage.jsx";
 import Movies from "./pages/Movies/Movies.jsx";
 
