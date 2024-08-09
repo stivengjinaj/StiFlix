@@ -69,7 +69,6 @@ function InitialPage() {
                     </Col>
                 </Row>
             </Container>
-
             <Container fluid className="min-vh-100 bg-gradient-dark-radius">
                 <div id="feature1">
                     <FeatureRow
