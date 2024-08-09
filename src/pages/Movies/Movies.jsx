@@ -3,7 +3,6 @@ import SplashScreen from "./SplashScreen.jsx";
 import {Container} from "react-bootstrap";
 import NavBar from "./NavBar.jsx";
 import MainMovie from "./MainMovie.jsx";
-import SecondaryMovies from "./MoviesCarousel.jsx";
 import logo1 from "../../assets/test_bg.png";
 import logo2 from "../../assets/got.png";
 import logo3 from "../../assets/narcos_logo.jpg";
@@ -22,13 +21,13 @@ function Movies() {
         const timer = setTimeout(() => {
             setShowSplash(false);
         }, 2000);
-        return () => clearTimeout(timer); // Clean up the timer on component unmount
+        return () => clearTimeout(timer);
     }, []);
 
     return (
         showSplash
             ? (<SplashScreen />)
-            : (<HomePage />)
+            : (<HomePage/>)
     );
 }
 
@@ -38,9 +37,9 @@ function HomePage() {
     return (
         <Container fluid className="p-0 bg-gradient-dark-radius min-vh-100">
             <NavBar/>
-            <MainMovie/>
-            <MoviesCarousel title={"Popular on Stiflix"} images={images}/>
-            <MoviesCarousel title={"Trending Now"} images={images}/>
+            <MainMovie />
+            <MoviesCarousel title={"Popular on Stiflix"} images={images} moving={true}/>
+            <MoviesCarousel title={"Trending Now"} images={images} moving={false}/>
         </Container>
     );
 }
