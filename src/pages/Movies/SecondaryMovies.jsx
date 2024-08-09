@@ -5,15 +5,19 @@ import {useEffect, useRef, useState} from "react";
 import {Container, Row} from "react-bootstrap";
 import logo1 from "../../assets/test_bg.png";
 import logo2 from "../../assets/got.png";
-import logo3 from "../../assets/test_bg.png";
-import logo4 from "../../assets/got.png";
-import logo5 from "../../assets/test_bg.png";
-import logo6 from "../../assets/got.png";
+import logo3 from "../../assets/narcos_logo.jpg";
+import logo4 from "../../assets/test_bg.png";
+import logo5 from "../../assets/got.png";
+import logo6 from "../../assets/narcos_logo.jpg";
 import logo7 from "../../assets/test_bg.png";
+import logo8 from "../../assets/got.png";
+import logo9 from "../../assets/narcos_logo.jpg";
+
+
 import {gsap} from "gsap";
 
 function SecondaryMovies() {
-    const [images ,setImages] = useState([logo1, logo2, logo3, logo4, logo5, logo6, logo7, logo6]);
+    const [images ] = useState([logo1, logo2, logo3, logo4, logo5, logo6, logo7, logo8, logo9, logo7, logo8, logo9]);
 
     return (
         <PopularMovies images={images}/>
@@ -33,12 +37,6 @@ const PopularMovies = ({images}) => {
     }, [images]);
 
     useGSAP(() => {
-        gsap.from('.popular', {
-            y: 100,
-            opacity: 0,
-            delay: 1.0,
-        });
-
         gsap.fromTo(
             rowRef.current,
             {
@@ -46,14 +44,22 @@ const PopularMovies = ({images}) => {
             },
             {
                 x: (screenWidth - rowRef.current.scrollWidth),
-                delay: 0.4,
-                duration: 10,
+                delay: 0.5,
+                duration: 20,
                 ease: "none",
                 repeat: -1,
                 yoyo: true
             }
         );
-    }, []);
+    }, [screenWidth]);
+
+    useGSAP(() => {
+        gsap.from('.popular', {
+            y: 100,
+            opacity: 0,
+            delay: 1.0,
+        });
+    });
 
     return (
         <Container fluid className="w-100 min-vh-100 popular">
@@ -67,7 +73,7 @@ const PopularMovies = ({images}) => {
                     <tbody>
                     <tr className="popular-movies-row" ref={rowRef}>
                         {images.slice(0, columnsToShow).map((item, index) => (
-                            <td key={index}><img className="popular-cover mx-2" alt="" src={item}/></td>
+                            <td key={index} className="popular-cover"><img className="mx-3" alt="" src={item}/></td>
                         ))}
                     </tr>
                     </tbody>
