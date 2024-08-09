@@ -12,6 +12,7 @@ body {
   min-height: 70vh;
   background-repeat: no-repeat;
   background-size: cover;
+  border-bottom: 7px solid #2b2a2a;
 }
 
 .bg-gradient-dark {
@@ -181,7 +182,12 @@ form .search-input:focus {
 
 .carousel-slider {
   overflow-x: auto;
+  overflow-y: hidden;
   white-space: nowrap;
+}
+
+.carousel-slider::-webkit-scrollbar {
+  display: none;
 }
 
 tr {
@@ -282,6 +288,5 @@ tr {
   font-display: optional;
   src: url(https://assets.nflxext.com/ffe/siteui/fonts/netflix-sans/v3/NetflixSans_W_Rg.woff2) format('woff2'),url(https://assets.nflxext.com/ffe/siteui/fonts/netflix-sans/v3/NetflixSans_W_Rg.woff) format('woff')
 }
-
 
 
