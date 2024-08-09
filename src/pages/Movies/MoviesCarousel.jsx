@@ -3,28 +3,12 @@ import {useGSAP} from "@gsap/react";
 {/* eslint-disable react/prop-types */}
 import {useEffect, useRef, useState} from "react";
 import {Container, Row} from "react-bootstrap";
-import logo1 from "../../assets/test_bg.png";
-import logo2 from "../../assets/got.png";
-import logo3 from "../../assets/narcos_logo.jpg";
-import logo4 from "../../assets/test_bg.png";
-import logo5 from "../../assets/got.png";
-import logo6 from "../../assets/narcos_logo.jpg";
-import logo7 from "../../assets/test_bg.png";
-import logo8 from "../../assets/got.png";
-import logo9 from "../../assets/narcos_logo.jpg";
 
 
 import {gsap} from "gsap";
+import {rand, sliceStr} from "../../helper/miscs.js";
 
-function SecondaryMovies() {
-    const [images ] = useState([logo1, logo2, logo3, logo4, logo5, logo6, logo7, logo8, logo9, logo7, logo8, logo9]);
-
-    return (
-        <PopularMovies images={images}/>
-    );
-}
-
-const PopularMovies = ({images}) => {
+const MoviesCarousel = ({title, images}) => {
     const rowRef = useRef(null);
     const [columnsToShow, setColumnsToShow] = useState(0);
     const [screenWidth, setScreenWidth] = useState(0);
@@ -38,14 +22,14 @@ const PopularMovies = ({images}) => {
 
     useGSAP(() => {
         gsap.fromTo(
-            rowRef.current,
+            `#movie-carousel-row-${sliceStr(title)}`,
             {
                 x: 0
             },
             {
                 x: (screenWidth - rowRef.current.scrollWidth),
-                delay: 0.5,
-                duration: 20,
+                delay: rand(0, 0.5),
+                duration: rand(17, 20),
                 ease: "none",
                 repeat: -1,
                 yoyo: true
@@ -54,7 +38,7 @@ const PopularMovies = ({images}) => {
     }, [screenWidth]);
 
     useGSAP(() => {
-        gsap.from('.popular', {
+        gsap.from(`#movie-carousel-${sliceStr(title)}`, {
             y: 100,
             opacity: 0,
             delay: 1.0,
@@ -62,18 +46,18 @@ const PopularMovies = ({images}) => {
     });
 
     return (
-        <Container fluid className="w-100 min-vh-100 popular">
+        <Container fluid className="w-100 mb-3" id={"movie-carousel-"+sliceStr(title)}>
             <Row className="justify-content-start align-items-center px-3 mt-3">
                 <h3 style={{ fontFamily: 'Netflix Sans1' }} className="text-white mt-3">
-                    Popular on Stiflix
+                    {title}
                 </h3>
             </Row>
-            <Container fluid className="bg-transparent min-vh-100 w-100 popular-movies mt-3">
+            <Container fluid className="bg-transparent w-100 carousel-slider mt-3" id>
                 <table>
                     <tbody>
-                    <tr className="popular-movies-row" ref={rowRef}>
+                    <tr id={`movie-carousel-row-${sliceStr(title)}`} ref={rowRef}>
                         {images.slice(0, columnsToShow).map((item, index) => (
-                            <td key={index} className="popular-cover"><img className="mx-3" alt="" src={item}/></td>
+                            <td key={index} className="carousel-slider-cover"><img className="mx-3" alt="" src={item}/></td>
                         ))}
                     </tr>
                     </tbody>
@@ -83,4 +67,4 @@ const PopularMovies = ({images}) => {
     );
 };
 
-export default SecondaryMovies;
+export default MoviesCarousel;
