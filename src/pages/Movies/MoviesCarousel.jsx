@@ -8,7 +8,7 @@ import {Container, Row} from "react-bootstrap";
 import {gsap} from "gsap";
 import {rand, sliceStr} from "../../helper/miscs.js";
 
-const MoviesCarousel = ({title, images}) => {
+const MoviesCarousel = ({title, images, moving}) => {
     const rowRef = useRef(null);
     const [columnsToShow, setColumnsToShow] = useState(0);
     const [screenWidth, setScreenWidth] = useState(0);
@@ -20,22 +20,25 @@ const MoviesCarousel = ({title, images}) => {
         setColumnsToShow(columnsPerView);
     }, [images]);
 
-    useGSAP(() => {
-        gsap.fromTo(
-            `#movie-carousel-row-${sliceStr(title)}`,
-            {
-                x: 0
-            },
-            {
-                x: (screenWidth - rowRef.current.scrollWidth),
-                delay: rand(0, 0.5),
-                duration: rand(17, 20),
-                ease: "none",
-                repeat: -1,
-                yoyo: true
+        useGSAP(() => {
+            if(moving) {
+                gsap.fromTo(
+                    `#movie-carousel-row-${sliceStr(title)}`,
+                    {
+                        x: 0
+                    },
+                    {
+                        x: (screenWidth - rowRef.current.scrollWidth),
+                        delay: rand(0, 0.5),
+                        duration: rand(17, 20),
+                        ease: "none",
+                        repeat: -1,
+                        yoyo: true
+                    }
+                );
             }
-        );
-    }, [screenWidth]);
+        }, [screenWidth]);
+
 
     useGSAP(() => {
         gsap.from(`#movie-carousel-${sliceStr(title)}`, {
