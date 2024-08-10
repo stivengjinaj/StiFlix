@@ -6,12 +6,12 @@ import MainMovie from "./MainMovie.jsx";
 import logo1 from "../../assets/test_bg.png";
 import logo2 from "../../assets/got.png";
 import logo3 from "../../assets/narcos_logo.jpg";
-import logo4 from "../../assets/test_bg.png";
-import logo5 from "../../assets/got.png";
-import logo6 from "../../assets/narcos_logo.jpg";
-import logo7 from "../../assets/test_bg.png";
-import logo8 from "../../assets/got.png";
-import logo9 from "../../assets/narcos_logo.jpg";
+import logo4 from "../../assets/test_bg2.jpg";
+import logo5 from "../../assets/test_bg.png";
+import logo6 from "../../assets/got.png";
+import logo7 from "../../assets/narcos_logo.jpg";
+import logo8 from "../../assets/test_bg2.jpg";
+import logo9 from "../../assets/test_bg.png";
 import MoviesCarousel from "./MoviesCarousel.jsx";
 
 function Movies() {
