@@ -157,24 +157,24 @@ form .search-input:focus {
   content: '';
   position: absolute;
   top: 0;
-  left: 30%;
-  width: 70%;
+  left: 0;
+  width: 100%;
   height: 100%;
   background: linear-gradient(
           to right,
           rgba(0, 0, 0, 0) 0%,
-          rgba(0, 0, 0, 0.4) 20%,
-          rgba(0, 0, 0, 1) 80%
+          rgba(0, 0, 0, 0.1) 20%,
+          rgba(0, 0, 0, 1) 100%
   ),
   linear-gradient(
           to bottom,
           rgba(0, 0, 0, 1) 0%,
-          rgba(0, 0, 0, 0) 20%
+          rgba(0, 0, 0, 0) 23%
   ),
   linear-gradient(
           to top,
           rgba(0, 0, 0, 1) 0%,
-          rgba(0, 0, 0, 0.4) 0%,
+          rgba(0, 0, 0, 0.3) 0%,
           rgba(0, 0, 0, 0) 20%
   );
   z-index: -1;
@@ -201,56 +201,23 @@ tr {
   padding: 0;
 }
 
-.carousel-slider-cover img {
+.card {
+  overflow: hidden;
+}
+
+.carousel-slider-cover>img, .card>.card-img-top {
   width: 100%;
   height: 100%;
   object-fit: cover;
   transition: transform 0.3s ease-in-out;
 }
 
-.carousel-slider-cover>img:hover {
+.carousel-slider-cover>img:hover, .card>.card-img-top:hover {
+
   transform: scale(1.5);
   transition: transform 0.3s ease-in-out;
 }
 
-.video-container {
-  position: relative;
-  width: 100vw;
-  height: 100vh;
-  overflow: hidden;
-}
-
-.video {
-  width: 100%;
-  height: 100%;
-  border: none;
-}
-
-.custom-controls {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 20px;
-}
-
-.control-btn {
-  background-color: rgba(0, 0, 0, 0.5);
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  font-size: 18px;
-  cursor: pointer;
-  border-radius: 5px;
-  transition: background-color 0.3s ease;
-}
-
-.control-btn:hover {
-  background-color: rgba(0, 0, 0, 0.8);
-}
 
 
 @media (max-width: 768px) {
@@ -282,10 +249,10 @@ tr {
 
 @media (max-width: 576px) {
   .main-banner {
+    height: 90vh;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    height: 80%;
     filter: drop-shadow(200px 0px 500px rgba(0, 0, 0, 0.5));
   }
 
