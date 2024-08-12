@@ -1,21 +1,46 @@
+import GridMovies from "./GridMovies.jsx";
+
+{/* eslint-disable react/prop-types */}
 import {useEffect, useState} from "react";
 import SplashScreen from "./SplashScreen.jsx";
-import {Container} from "react-bootstrap";
+import {Container, Row, Spinner} from "react-bootstrap";
 import NavBar from "./NavBar.jsx";
 import MainMovie from "./MainMovie.jsx";
-import logo1 from "../../assets/test_bg.png";
-import logo2 from "../../assets/got.png";
-import logo3 from "../../assets/narcos_logo.jpg";
-import logo4 from "../../assets/test_bg2.jpg";
-import logo5 from "../../assets/test_bg.png";
-import logo6 from "../../assets/got.png";
-import logo7 from "../../assets/narcos_logo.jpg";
-import logo8 from "../../assets/test_bg2.jpg";
-import logo9 from "../../assets/test_bg.png";
 import MoviesCarousel from "./MoviesCarousel.jsx";
+import FetchedMovieController from "../../controllers/FetchedMovieController.js";
+import {sortByVoteAverage} from "../../helper/miscs.js";
 
 function Movies() {
+    const fetcher = new FetchedMovieController();
     const [showSplash, setShowSplash] = useState(true);
+    const [section, setSection] = useState('home');
+    const [allPopular, setAllPopular] = useState([]);
+    const [allTrending, setAllTrending] = useState([]);
+    const [topRatedMovies, setTopRatedMovies] = useState([]);
+    const [onlyMovies, setOnlyMovies] = useState([]);
+    const [onlySeries, setOnlySeries] = useState([]);
+
+    useEffect(() => {
+        const fetchAllData = async () => {
+            try {
+                const [trending, popular, movies, series] = await Promise.all([
+                    fetcher.getAllTrending(),
+                    fetcher.getAllPopular(),
+                    fetcher.getTopRatedMovies(),
+                    fetcher.discoverTvShows()
+                ]);
+
+                setAllTrending([...trending]);
+                setAllPopular([...popular]);
+                setTopRatedMovies([...movies]);
+                setOnlySeries([...series]);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        fetchAllData();
+    }, []);
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -24,23 +49,81 @@ function Movies() {
         return () => clearTimeout(timer);
     }, []);
 
+    const handleSectionChange = (section) => {
+        const getOnlyMovies = async () => {
+            const movies = await fetcher.discoverMovies();
+            setOnlyMovies([...movies]);
+        }
+        const getOnlySeries = async () => {
+            const series = await fetcher.discoverTvShows();
+            setOnlySeries([...series]);
+        }
+        section === "movies" ? getOnlyMovies() : getOnlySeries();
+        setSection(section);
+    }
+
     return (
         showSplash
             ? (<SplashScreen />)
-            : (<HomePage/>)
+            : (<HomePage
+                allTrending={allTrending}
+                allPopular={allPopular}
+                topRatedMovies={topRatedMovies}
+                topRatedSeries={sortByVoteAverage(onlySeries)}
+                onlyMovies={onlyMovies}
+                onlySeries={onlySeries}
+                section={section}
+                handleSectionChange={handleSectionChange}
+            />)
     );
 }
 
-function HomePage() {
-    const [images ] = useState([logo1, logo2, logo3, logo4, logo5, logo6, logo7, logo8, logo9, logo7, logo8, logo9]);
-
+function HomePage(props) {
     return (
         <Container fluid className="p-0 bg-gradient-dark-radius min-vh-100">
-            <NavBar/>
-            <MainMovie />
-            <MoviesCarousel title={"Popular on Stiflix"} images={images} moving={true}/>
-            <MoviesCarousel title={"Trending Now"} images={images} moving={false}/>
+            <NavBar section={props.section} handleSectionChange={props.handleSectionChange}/>
+            {props.allTrending ? <MainMovie mainMovie={props.allTrending[0]}/> : Loading()}
+            {(() => {
+                switch (props.section) {
+                    case 'home':
+                        return (
+                            <>
+                                {props.allPopular ? <MoviesCarousel title={"Popular on Stiflix"} movies={props.allPopular} moving={true}/> : Loading()}
+                                {props.allTrending ? <MoviesCarousel title={"Trending Now"} movies={props.allTrending} moving={false}/> : Loading()}
+                                {props.topRatedMovies ? <MoviesCarousel title={"Top Rated Movies"} movies={props.topRatedMovies} moving={false}/> : Loading()}
+                                {props.topRatedSeries ? <MoviesCarousel title={"Top Rated TV Shows"} movies={props.topRatedSeries} moving={false}/> : Loading()}
+                            </>
+                        );
+                    case 'movies':
+                        return <GridMovies movies={props.onlyMovies} />;
+                    case 'tvShows':
+                        return <GridMovies movies={props.onlySeries} />;
+                    default:
+                        return <div>Section not found</div>;
+                }
+            })()}
+
+            <footer className="text-white text-center p-3 mt-5">
+                <Container>
+                    <Row>
+                        <h6>Stiflix does not store any of the contents present in the site.</h6>
+                        <strong>Copyright © Stiflix 2024</strong>
+                    </Row>
+                </Container>
+            </footer>
         </Container>
+    );
+}
+
+
+function Loading() {
+    return (
+        <Spinner
+            animation="border"
+            role="status"
+            style={{ color: 'red' }}
+        >
+        </Spinner>
     );
 }
 
