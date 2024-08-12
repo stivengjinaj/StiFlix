@@ -38,7 +38,7 @@ const getPopularMovies = async () => {
  * @returns JSON object of popular TV shows.
  * */
 const getPopularTvShows = async () => {
-    const response = await fetch(`https://api.themoviedb.org/3/tv/popular?language=en-US&page=1`, {
+    const response = await fetch(`https://api.themoviedb.org/3/discover/tv?include_adult=false&include_null_first_air_dates=false&language=en-US&page=1&sort_by=popularity.desc`, {
         headers: {
             Authorization: `Bearer ${tmdb_read_token}`,
             Accept: "application/json"
@@ -68,7 +68,7 @@ const getTopRatedMovies = async () => {
  * @returns JSON object of top-rated TV shows.
  * */
 const getTopRatedTvShows = async () => {
-    const response = await fetch(`https://api.themoviedb.org/3/tv/top_rated?language=en-US&page=1`, {
+    const response = await fetch(`https://api.themoviedb.org/3/discover/tv?include_adult=false&language=en-US&page=1&sort_by=vote_average.desc&vote_count.gte=200`, {
         headers: {
             Authorization: `Bearer ${tmdb_read_token}`,
             Accept: "application/json"
@@ -108,4 +108,24 @@ const getTvShowDetails = async (tvShowId) => {
     return await response.json();
 }
 
-export {getPopularMovies, getTopRatedMovies, getPopularTvShows, getTopRatedTvShows, getTrendingMovies, getTvShowDetails}
+const discoverMovies = async (page) => {
+    const response = await fetch(`https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=${page}&sort_by=popularity.desc`, {
+        headers: {
+            Authorization: `Bearer ${tmdb_read_token}`,
+            Accept: "application/json"
+        }
+    });
+    return await response.json();
+}
+
+const discoverTvShows = async (page) => {
+    const response = await fetch(`https://api.themoviedb.org/3/discover/tv?include_adult=false&include_null_first_air_dates=false&language=en-US&page=${page}&sort_by=popularity.desc`, {
+        headers: {
+            Authorization: `Bearer ${tmdb_read_token}`,
+            Accept: "application/json"
+        }
+    });
+    return await response.json();
+}
+
+export {getPopularMovies, getTopRatedMovies, getPopularTvShows, getTopRatedTvShows, getTrendingMovies, getTvShowDetails, discoverMovies, discoverTvShows}

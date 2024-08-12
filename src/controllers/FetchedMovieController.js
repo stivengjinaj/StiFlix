@@ -24,18 +24,21 @@ class FetchedMovieController {
         const fetchedMovies = [];
         const movies = await API.getTrendingMovies();
         movies.results.forEach(movie => {
-            if(movie.media_type === "movie") {
-                fetchedMovies.push(new FetchedMovie(movie, false, 0, 0));
-            }else {
-                const tvShowDetails = API.getTvShowDetails(movie.id);
-                fetchedMovies.push(
-                    new FetchedMovie(
-                        movie,
-                        true,
-                        tvShowDetails.number_of_seasons,
-                        tvShowDetails.number_of_episodes
-                    )
-                );
+            const detailsExist = movie.media_type === "movie" ? this.checkMovieData(movie) : this.checkTvShowData(movie);
+            if(detailsExist) {
+                if(movie.media_type === "movie") {
+                    fetchedMovies.push(new FetchedMovie(movie, false, 0, 0));
+                }else {
+                    const tvShowDetails = API.getTvShowDetails(movie.id);
+                    fetchedMovies.push(
+                        new FetchedMovie(
+                            movie,
+                            true,
+                            tvShowDetails.number_of_seasons,
+                            tvShowDetails.number_of_episodes
+                        )
+                    );
+                }
             }
         });
         return fetchedMovies;
@@ -49,7 +52,10 @@ class FetchedMovieController {
     async getPopularMovies() {
         const fetchedMovies = [];
         const movies = await API.getPopularMovies();
-        movies.results.forEach(movie => fetchedMovies.push(new FetchedMovie(movie, false, 0, 0)));
+        movies.results.forEach(movie => {
+            const detailsExist = this.checkMovieData(movie);
+            detailsExist && fetchedMovies.push(new FetchedMovie(movie, false, 0, 0))
+        });
         return fetchedMovies;
     }
 
@@ -62,15 +68,20 @@ class FetchedMovieController {
         const fetchedMovies = [];
         const tvShows = await API.getPopularTvShows();
         tvShows.results.forEach(tvShow => {
-            const tvShowDetails = API.getTvShowDetails(tvShow.id)
-            fetchedMovies.push(
-                new FetchedMovie(
-                    tvShow,
-                    true,
-                    tvShowDetails.number_of_seasons,
-                    tvShowDetails.number_of_episodes
-                )
-            )
+            const detailsExist = this.checkTvShowData(tvShow);
+            if(detailsExist){
+                API.getTvShowDetails(tvShow.id)
+                    .then(tvShowDetails => {
+                        fetchedMovies.push(
+                            new FetchedMovie(
+                                tvShow,
+                                true,
+                                tvShowDetails.number_of_seasons,
+                                tvShowDetails.number_of_episodes
+                            )
+                        );
+                    });
+            }
         });
         return fetchedMovies;
     }
@@ -82,14 +93,12 @@ class FetchedMovieController {
      * */
     async getTopRatedMovies() {
         const fetchedMovies = []
-        API.getTopRatedMovies()
-            .then((movies) => {
-                movies.results.map((movie) => {
-                    const fetchedMovie = new FetchedMovie(movie, false, 0, 0);
-                    fetchedMovies.push(fetchedMovie);
-                });
-                return fetchedMovies;
-            });
+        const movies = await API.getTopRatedMovies();
+        movies.results.forEach(movie => {
+            const detailsExist = this.checkMovieData(movie);
+            detailsExist && fetchedMovies.push(new FetchedMovie(movie, false, 0, 0));
+        });
+        return fetchedMovies;
     }
 
     /**
@@ -101,17 +110,97 @@ class FetchedMovieController {
         const fetchedMovies = [];
         const tvShows = await API.getTopRatedTvShows();
         tvShows.results.forEach(tvShow => {
-            const tvShowDetails = API.getTvShowDetails(tvShow.id);
-            fetchedMovies.push(
-                new FetchedMovie(
-                    tvShow,
-                    true,
-                    tvShowDetails.number_of_seasons,
-                    tvShowDetails.number_of_episodes
-                )
-            );
+                console.log(tvShows.results);
+                API.getTvShowDetails(tvShow.id)
+                    .then(tvShowDetails => {
+                        const detailsExist = this.checkTvShowData(tvShow);
+                        console.log(detailsExist);
+                        detailsExist && fetchedMovies.push(
+                            new FetchedMovie(
+                                tvShow,
+                                true,
+                                tvShowDetails.number_of_seasons,
+                                tvShowDetails.number_of_episodes
+                            )
+                        );
+                    });
         });
         return fetchedMovies;
+    }
+
+    /**
+     * Function used to get 3 pages of movies only
+     *
+     * @returns Array of movies.
+     * */
+    async discoverMovies() {
+        const fetchedMovies = []
+        for (let i = 2; i < 5; i++) {
+            const movies = await API.discoverMovies(i);
+            movies.results.forEach(movie => {
+                const detailsExist = this.checkMovieData(movie);
+                detailsExist && fetchedMovies.push(new FetchedMovie(movie, false, 0, 0));
+            });
+        }
+        return fetchedMovies;
+    }
+
+    /**
+     * Function used to get 4 pages of tv shows only
+     *
+     * @return Array of tv shows.
+     */
+    async discoverTvShows() {
+        const fetchedMovies = []
+        for (let i = 2; i < 6; i++) {
+            const tvShows = await API.discoverTvShows(i);
+            tvShows.results.forEach(tvShow => {
+                const detailsExist = this.checkTvShowData(tvShow);
+                if(detailsExist){
+                    API.getTvShowDetails(tvShow.id)
+                        .then(tvShowDetails => {
+                            fetchedMovies.push(
+                                new FetchedMovie(
+                                    tvShow,
+                                    true,
+                                    tvShowDetails.number_of_seasons,
+                                    tvShowDetails.number_of_episodes
+                                )
+                            );
+                        });
+                }
+            });
+        }
+        return fetchedMovies;
+    }
+
+    /**
+     * Function used to check if the details of a movie exist.
+     *
+     * @param movie movie to check
+     * @return {boolean} true if the details exist, false otherwise.
+     */
+    checkMovieData (movie) {
+        return movie.original_title !== undefined ||
+            movie.overview !== undefined ||
+            movie.backdrop_path !== undefined ||
+            movie.poster_path !== undefined ||
+            movie.vote_average !== undefined ||
+            movie.release_date !== undefined;
+    }
+
+    /**
+     * Function used to check if the details of a tv show exist.
+     *
+     * @param tvShow tv show to check
+     * @return {boolean} true if the details exist, false otherwise.
+     */
+    checkTvShowData (tvShow) {
+        return tvShow.original_name !== undefined ||
+            tvShow.overview !== undefined ||
+            tvShow.backdrop_path !== undefined ||
+            tvShow.poster_path !== undefined ||
+            tvShow.vote_average !== undefined;
     }
 }
 
