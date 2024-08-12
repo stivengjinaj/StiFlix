@@ -3,7 +3,7 @@ import GridMovies from "./GridMovies.jsx";
 {/* eslint-disable react/prop-types */}
 import {useEffect, useState} from "react";
 import SplashScreen from "./SplashScreen.jsx";
-import {Container, Row, Spinner} from "react-bootstrap";
+import {Container, Row} from "react-bootstrap";
 import NavBar from "./NavBar.jsx";
 import MainMovie from "./MainMovie.jsx";
 import MoviesCarousel from "./MoviesCarousel.jsx";
@@ -29,7 +29,6 @@ function Movies() {
                     fetcher.getTopRatedMovies(),
                     fetcher.discoverTvShows()
                 ]);
-
                 setAllTrending([...trending]);
                 setAllPopular([...popular]);
                 setTopRatedMovies([...movies]);
@@ -82,16 +81,16 @@ function HomePage(props) {
     return (
         <Container fluid className="p-0 bg-gradient-dark-radius min-vh-100">
             <NavBar section={props.section} handleSectionChange={props.handleSectionChange}/>
-            {props.allTrending ? <MainMovie mainMovie={props.allTrending[0]}/> : Loading()}
+            <MainMovie mainMovie={props.allTrending}/>
             {(() => {
                 switch (props.section) {
                     case 'home':
                         return (
                             <>
-                                {props.allPopular ? <MoviesCarousel title={"Popular on Stiflix"} movies={props.allPopular} moving={true}/> : Loading()}
-                                {props.allTrending ? <MoviesCarousel title={"Trending Now"} movies={props.allTrending} moving={false}/> : Loading()}
-                                {props.topRatedMovies ? <MoviesCarousel title={"Top Rated Movies"} movies={props.topRatedMovies} moving={false}/> : Loading()}
-                                {props.topRatedSeries ? <MoviesCarousel title={"Top Rated TV Shows"} movies={props.topRatedSeries} moving={false}/> : Loading()}
+                                <MoviesCarousel title={"Popular on Stiflix"} movies={props.allPopular} moving={true}/>
+                                <MoviesCarousel title={"Trending Now"} movies={props.allTrending} moving={false}/>
+                                <MoviesCarousel title={"Top Rated Movies"} movies={props.topRatedMovies} moving={false}/>
+                                <MoviesCarousel title={"Top Rated TV Shows"} movies={props.topRatedSeries} moving={false}/>
                             </>
                         );
                     case 'movies':
@@ -112,18 +111,6 @@ function HomePage(props) {
                 </Container>
             </footer>
         </Container>
-    );
-}
-
-
-function Loading() {
-    return (
-        <Spinner
-            animation="border"
-            role="status"
-            style={{ color: 'red' }}
-        >
-        </Spinner>
     );
 }
 
