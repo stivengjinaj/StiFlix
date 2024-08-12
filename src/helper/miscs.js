@@ -41,6 +41,6 @@ export function rand(min, max) {
  * Function used to sort an array of movies by vote average.
  * */
 export function sortByVoteAverage(arr) {
-    return arr.sort((a, b) => a.vote_average - b.vote_average);
+    return arr.sort((a, b) => b.vote_average - a.vote_average);
 }
 
