@@ -1,12 +1,12 @@
+{/*eslint-disable react/prop-types*/}
 import logo from "../../assets/titleLogo.png";
 import {Container, Form, Nav, Navbar} from "react-bootstrap";
 import {useState} from "react";
 import {useGSAP} from "@gsap/react";
 import gsap from "gsap";
 
-function NavBarMobile() {
+function NavBarMobile(props) {
     const [searchVisible, setSearchVisible] = useState(false);
-    const [currentPage, setCurrentPage] = useState('home');
 
     useGSAP(() => {
         gsap.fromTo('.search-input', {
@@ -55,14 +55,14 @@ function NavBarMobile() {
       </Navbar>
           <Container fluid>
               <Nav className="me-auto justify-content-center">
-                  <Nav.Link onClick={() => setCurrentPage("home")} className="text-white">
-                      <h5 className={currentPage === "home" ? "nav-item-selected" : "nav-item"}>Home</h5>
+                  <Nav.Link onClick={() => props.handleSectionChange("home")} className="text-white">
+                      <h5 className={props.section === "home" ? "nav-item-selected" : "nav-item"}>Home</h5>
                   </Nav.Link>
-                  <Nav.Link onClick={() => setCurrentPage("tvShows")} className="text-white">
-                      <h5 className={currentPage === "tvShows" ? "nav-item-selected" : "nav-item"}>TV Shows</h5>
+                  <Nav.Link onClick={() => props.handleSectionChange("tvShows")} className="text-white">
+                      <h5 className={props.section === "tvShows" ? "nav-item-selected" : "nav-item"}>TV Shows</h5>
                   </Nav.Link>
-                  <Nav.Link onClick={() => setCurrentPage("movies")} className="text-white">
-                      <h5 className={currentPage === "movies" ? "nav-item-selected" : "nav-item"}>Movies</h5>
+                  <Nav.Link onClick={() => props.handleSectionChange("movies")} className="text-white">
+                      <h5 className={props.section === "movies" ? "nav-item-selected" : "nav-item"}>Movies</h5>
                   </Nav.Link>
               </Nav>
           </Container>

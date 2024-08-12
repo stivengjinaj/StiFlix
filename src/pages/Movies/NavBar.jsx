@@ -1,8 +1,9 @@
+{/*eslint-disable react/prop-types*/}
 import {useEffect, useState} from "react";
 import NavBarDesktop from "./NavBarDesktop.jsx";
 import NavBarMobile from "./NavBarMobile.jsx";
 
-function NavBar() {
+function NavBar(props) {
     const [screen, setScreen] = useState('desktop');
     useEffect(() => {
         const handleResize = () => {
@@ -21,8 +22,8 @@ function NavBar() {
 
     return(
         screen === 'desktop'
-            ? (<NavBarDesktop />)
-            : (<NavBarMobile />)
+            ? (<NavBarDesktop section={props.section} handleSectionChange={props.handleSectionChange}/>)
+            : (<NavBarMobile section={props.section} handleSectionChange={props.handleSectionChange}/>)
     );
 }
 

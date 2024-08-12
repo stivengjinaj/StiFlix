@@ -1,11 +1,11 @@
+{/*eslint-disable react/prop-types*/}
 import {Container, Form, Nav, Navbar} from "react-bootstrap";
 import logo from "../../assets/logo.png";
 import {useState} from "react";
 import gsap from "gsap";
 import {useGSAP} from "@gsap/react";
 
-function NavBarDesktop() {
-    const [currentPage, setCurrentPage] = useState('home');
+function NavBarDesktop(props) {
     const [searchVisible, setSearchVisible] = useState(false);
 
     useGSAP(() => {
@@ -42,14 +42,14 @@ function NavBarDesktop() {
                     </div>
                 </Navbar.Brand>
                 <Nav className="me-auto mt-2">
-                    <Nav.Link onClick={() => setCurrentPage("home")} className="text-white">
-                        <h5 className={currentPage === "home" ? "nav-item-selected" : "nav-item"}>Home</h5>
+                    <Nav.Link onClick={() => props.handleSectionChange("home")} className="text-white">
+                        <h5 className={props.section === "home" ? "nav-item-selected" : "nav-item"}>Home</h5>
                     </Nav.Link>
-                    <Nav.Link onClick={() => setCurrentPage("tvShows")} className="text-white">
-                        <h5 className={currentPage === "tvShows" ? "nav-item-selected" : "nav-item"}>TV Shows</h5>
+                    <Nav.Link onClick={() => props.handleSectionChange("tvShows")} className="text-white">
+                        <h5 className={props.section === "tvShows" ? "nav-item-selected" : "nav-item"}>TV Shows</h5>
                     </Nav.Link>
-                    <Nav.Link onClick={() => setCurrentPage("movies")} className="text-white">
-                        <h5 className={currentPage === "movies" ? "nav-item-selected" : "nav-item"}>Movies</h5>
+                    <Nav.Link onClick={() => props.handleSectionChange("movies")} className="text-white">
+                        <h5 className={props.section === "movies" ? "nav-item-selected" : "nav-item"}>Movies</h5>
                     </Nav.Link>
                 </Nav>
                 <Form className="d-flex mx-3">
