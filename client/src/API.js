@@ -1,7 +1,7 @@
 //const tmdb_api_key = "9301ddc7c3bf38fbdf333ae15a936792"
 
 const tmdb_read_token = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI5MzAxZGRjN2MzYmYzOGZiZGYzMzNhZTE1YTkzNjc5MiIsIm5iZiI6MTcyMzM5NTY2NS40NTcyMDIsInN1YiI6IjY2YjhlZDY0ZmUyNGZlODUwNGY2ZWZjZiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.b8zxhQus7eZTVich0Jv9lMp3vXM2v-LQXPLLKB9cmaM"
-
+const remote_url = "https://www.stiflix.onrender.com"
 /**
  * API used to get popular movies(only).
  *
@@ -134,7 +134,7 @@ const discoverTvShows = async (page) => {
  * @return json with movie data.
  * */
 const getMovieId = async (query, type, year) => {
-    const response = await fetch(`http://localhost:3000/api/getMovieId?query=${query}&type=${type}&year=${year}`);
+    const response = await fetch(`${remote_url}/api/getMovieId?query=${query}&type=${type}&year=${year}`);
     return await response.json();
 };
 
@@ -146,7 +146,7 @@ const getMovieId = async (query, type, year) => {
  * @return json with data.
  * */
 const getMovieSources = async (movieId, server) => {
-    const response = await fetch(`http://localhost:3000/api/getMovieSources?movieId=${movieId}&server=${server}`);
+    const response = await fetch(`${remote_url}/api/getMovieSources?movieId=${movieId}&server=${server}`);
     return await response.json();
 };
 /**
@@ -164,7 +164,7 @@ const getMovieSources = async (movieId, server) => {
  * */
 const getMovieIdBraflix = async (server, query, year, type, episode, season, movieId) => {
     try {
-        const response = await fetch(`http://localhost:3000/api/getMovieIdBraflix?server=${server}&query=${query}&year=${year}&type=${type}&episode=${episode}&season=${season}&movieId=${movieId}`);
+        const response = await fetch(`${remote_url}/api/getMovieIdBraflix?server=${server}&query=${query}&year=${year}&type=${type}&episode=${episode}&season=${season}&movieId=${movieId}`);
 
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
