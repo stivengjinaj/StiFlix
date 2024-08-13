@@ -1,8 +1,9 @@
 {
   "name": "stiflix",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
   "type": "module",
+  "proxy": "https://www.stiflix.onrender.com",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
