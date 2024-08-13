@@ -5,7 +5,6 @@ import {useGSAP} from "@gsap/react";
 import {useEffect, useRef, useState} from "react";
 import {Container, Row} from "react-bootstrap";
 import {gsap} from "gsap";
-import {rand} from "../../helper/miscs.js";
 
 const MoviesCarousel = (props) => {
     const rowRef = useRef();
@@ -22,20 +21,22 @@ const MoviesCarousel = (props) => {
 
     useGSAP(() => {
         if (props.moving && rowRef.current) {
+            props.scrollable && rowRef.current.classList.add("scrollable");
             gsap.fromTo(
                 `#movie-carousel-row-${carouselScope}`,
                 { x: 0 },
                 {
+                    ease: "none",
                     x: screenWidth - rowRef.current.scrollWidth,
                     delay: 2,
-                    duration: rand(35, 45),
-                    ease: "none",
+                    duration: 15,
                     repeat: -1,
                     yoyo: true,
                 }
             );
         }
     }, [screenWidth]);
+
 
     useGSAP(() => {
         gsap.from(`#movie-carousel-${carouselScope}`, {
@@ -54,7 +55,7 @@ const MoviesCarousel = (props) => {
                     </h3>
                 </Row>
 
-                <Container fluid className="w-100 carousel-slider mt-3">
+                <Container fluid id={props.scrollable ? `scrollable` : `carousel-slider`} className="`w-100 mt-3">
                     <table>
                         <tbody>
                         <tr id={`movie-carousel-row-${carouselScope}`} ref={rowRef}>

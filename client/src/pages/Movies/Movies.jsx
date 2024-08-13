@@ -87,10 +87,10 @@ function HomePage(props) {
                     case 'home':
                         return (
                             <>
-                                <MoviesCarousel title={"Popular on Stiflix"} movies={props.allPopular} moving={true}/>
-                                <MoviesCarousel title={"Trending Now"} movies={props.allTrending} moving={false}/>
-                                <MoviesCarousel title={"Top Rated Movies"} movies={props.topRatedMovies} moving={false}/>
-                                <MoviesCarousel title={"Top Rated TV Shows"} movies={props.topRatedSeries} moving={false}/>
+                                <MoviesCarousel title={"Popular on Stiflix"} movies={props.allPopular} moving={true} scrollable={false}/>
+                                <MoviesCarousel title={"Trending Now"} movies={props.allTrending} moving={false} scrollable={true}/>
+                                <MoviesCarousel title={"Top Rated Movies"} movies={props.topRatedMovies} moving={false} scrollable={true}/>
+                                <MoviesCarousel title={"Top Rated TV Shows"} movies={props.topRatedSeries} moving={false} scrollable={true}/>
                             </>
                         );
                     case 'movies':
