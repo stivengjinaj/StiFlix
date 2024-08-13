@@ -74,7 +74,7 @@ const MoviesCarousel = (props) => {
                         {props.title}
                     </h3>
                 </Row>
-            <Loading />
+                <Loading />
             </Container>
         )
     );

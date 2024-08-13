@@ -1,43 +1,48 @@
 /* eslint-disable react/prop-types */
-import {Button, Col, Container, Row} from "react-bootstrap";
-
-import {gsap} from "gsap";
-import {useGSAP} from "@gsap/react";
-import {useEffect, useState} from "react";
-import {useNavigate} from "react-router-dom";
+import { Button, Col, Container, Row } from "react-bootstrap";
+import { gsap } from "gsap";
+import { useGSAP } from "@gsap/react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Loading from "./Loading.jsx";
 
-function MainMovie(props) {
-    const [mainMovie] = useState(props.mainMovie[0]);
+function MainMovie({ mainMovie }) {
+    const [currentMovie, setCurrentMovie] = useState(null);
     const [playMovieSplash, setPlayMovieSplash] = useState(false);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (mainMovie && mainMovie.length > 0) {
+            setCurrentMovie(mainMovie[0]);
+        }
+    }, [mainMovie]);
 
     useGSAP(() => {
         gsap.from('.main-banner', {
             x: 100,
             opacity: 0,
-        })
+        });
         gsap.from('.main-banner-title', {
             delay: 0.2,
             y: 50,
             opacity: 0,
-        })
+        });
         gsap.from('.main-banner-category', {
             delay: 0.4,
             y: 50,
             opacity: 0,
-        })
+        });
         gsap.from('.main-banner-description', {
             delay: 0.8,
             y: 50,
             opacity: 0,
-        })
+        });
         gsap.from('button', {
             delay: 1.0,
             y: 50,
             opacity: 0,
-        })
-    })
+        });
+    });
 
     useEffect(() => {
         if (playMovieSplash) {
@@ -71,26 +76,26 @@ function MainMovie(props) {
             }}></div>
 
             {
-                mainMovie
+                currentMovie && currentMovie.backdrop_path
                     ? (
-                        <Container fluid className="d-flex flex-column main-banner" style={{backgroundImage: `url(https://image.tmdb.org/t/p/original/${mainMovie.backdrop_path})`}}>
+                        <Container fluid className="d-flex flex-column main-banner" style={{ backgroundImage: `url(https://image.tmdb.org/t/p/original/${currentMovie.backdrop_path})` }}>
                             <Container fluid className="px-0 pt-5 mt-5 mx-0">
                                 <Row className="justify-content-start align-items-center mt-2 px-5">
                                     <Col xs={12} md={8} lg={6} xl={5} className="mt-3 text-center text-md-start">
-                                        <h1 className="text-white main-banner-title mt-5">{mainMovie.title}</h1>
+                                        <h1 className="text-white main-banner-title mt-5">{currentMovie.title}</h1>
                                     </Col>
                                 </Row>
                                 <Row className="justify-content-start align-items-center mt-2 px-5">
                                     <Col xs={12} md={8} lg={6} xl={5} className="text-center text-md-start">
                                         <h6 className="text-white main-banner-category">
-                                            <strong>{mainMovie.release_date} &#x2022; {mainMovie.isSeries ? "TV Show" : "Movie"} &#x2022; {mainMovie.vote_average.toString().slice(0,3)}/10</strong>
+                                            <strong>{currentMovie.release_date} &#x2022; {currentMovie.isSeries ? "TV Show" : "Movie"} &#x2022; {currentMovie.vote_average.toString().slice(0, 3)}/10</strong>
                                         </h6>
                                     </Col>
                                 </Row>
                                 <Row className="justify-content-start align-items-center mt-2 px-5">
                                     <Col xs={12} md={8} lg={6} xl={5}>
                                         <h5 className="text-white main-banner-description">
-                                            {mainMovie.overview}
+                                            {currentMovie.overview}
                                         </h5>
                                     </Col>
                                 </Row>
@@ -124,13 +129,10 @@ function MainMovie(props) {
                                 <Loading />
                             </Row>
                         </Container>
-
                     )
             }
         </>
-
     );
 }
-
 
 export default MainMovie;
