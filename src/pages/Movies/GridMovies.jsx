@@ -18,7 +18,7 @@ function GridMovies(props) {
                 {
                     props.movies.length > 0
                         ? (props.movies && props.movies.map(movie => (
-                            <Col xs={12} sm={6} md={4} lg={2} key={movie.id} className="mb-4">
+                            <Col xs={4} sm={4} md={3} lg={2} key={movie.id} className="mb-4">
                                 <Card className="h-100 border-0">
                                     <Card.Img
                                         variant="top"

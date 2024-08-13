@@ -59,7 +59,7 @@ const MoviesCarousel = (props) => {
                         <tr id={`movie-carousel-row-${sliceStr(props.title)}`} ref={rowRef}>
                             {props.movies.slice(0, columnsToShow).map((item, index) => (
                                 <td key={index} className="carousel-slider-cover">
-                                    <img className="mx-3" alt="" src={`https://image.tmdb.org/t/p/original/${item.poster_path}`} />
+                                    <img className="mx-3" alt="" src={`https://image.tmdb.org/t/p/w500/${item.poster_path}`} />
                                 </td>
                             ))}
                         </tr>
