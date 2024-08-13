@@ -27,6 +27,10 @@ export function sliceStr(str) {
 
 /**
  * Function used to get a random number between min and max.
+ *
+ * @param min - The minimum number.
+ * @param max - The maximum number.
+ * @returns The random number.
  * */
 export function rand(min, max) {
     // Ensure min is less than or equal to max
@@ -39,8 +43,42 @@ export function rand(min, max) {
 
 /**
  * Function used to sort an array of movies by vote average.
+ *
+ * @param arr - The array to sort.
+ * @returns The sorted array.
  * */
 export function sortByVoteAverage(arr) {
     return arr.sort((a, b) => b.vote_average - a.vote_average);
 }
 
+/**
+ * Function used to get the query string for the API.
+ *
+ * @param str - The string to convert.
+ * @returns The converted string.
+ * */
+export function stringQuery(str) {
+    const trimmedString = str.trim();
+    if (trimmedString.includes(' ')) {
+        return trimmedString.replace(/\s+/g, '+');
+    }
+    return trimmedString;
+}
+
+/**
+ * Function used to get the year from a date string.
+ *
+ * @param date - The date string.
+ * @returns The year.
+ * */
+export function getYearFromDate(date) {
+    const parts = date.split('-');
+
+    for (let part of parts) {
+        if (part.length === 4 && !isNaN(part)) {
+            return part;
+        }
+    }
+
+    return null;
+}

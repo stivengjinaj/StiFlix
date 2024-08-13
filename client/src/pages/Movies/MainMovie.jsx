@@ -42,7 +42,7 @@ function MainMovie({ mainMovie }) {
             y: 50,
             opacity: 0,
         });
-    });
+    }, [mainMovie[0]]);
 
     useEffect(() => {
         if (playMovieSplash) {

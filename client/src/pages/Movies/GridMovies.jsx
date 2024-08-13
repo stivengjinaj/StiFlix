@@ -4,14 +4,19 @@ import {useGSAP} from "@gsap/react";
 import {Card, Col, Container, Row} from "react-bootstrap";
 import {gsap} from "gsap";
 import Loading from "./Loading.jsx";
+import FetchLinksController from "../../controllers/FetchLinksController.js";
+import {getYearFromDate, stringQuery} from "../../helper/miscs.js";
 
 function GridMovies(props) {
+    const linkFetcher = new FetchLinksController();
     useGSAP(() => {
         gsap.from('.allMovies', {
             y: 100,
             opacity: 0,
         })
     }, []);
+
+
     return (
         <Container fluid className="py-5 allMovies">
             <Row>
@@ -24,6 +29,7 @@ function GridMovies(props) {
                                         variant="top"
                                         src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
                                         alt={movie.title}
+                                        onClick={() => getMovieLinks(movie)}
                                     />
                                 </Card>
                             </Col>

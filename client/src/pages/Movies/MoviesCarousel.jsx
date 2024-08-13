@@ -5,12 +5,13 @@ import {useGSAP} from "@gsap/react";
 import {useEffect, useRef, useState} from "react";
 import {Container, Row} from "react-bootstrap";
 import {gsap} from "gsap";
-import {rand, sliceStr} from "../../helper/miscs.js";
+import {rand} from "../../helper/miscs.js";
 
 const MoviesCarousel = (props) => {
     const rowRef = useRef();
     const [columnsToShow, setColumnsToShow] = useState(0);
     const [screenWidth, setScreenWidth] = useState(0);
+    const [carouselScope] = useState(props.title === "Popular on Stiflix" ? "popular" : (props.title === "Trending Now" ? "trending" : (props.title === "Top Rated Movies" ? "topMovies" : "topShows")));
 
     useEffect(() => {
         const viewportWidth = window.innerWidth;
@@ -22,7 +23,7 @@ const MoviesCarousel = (props) => {
     useGSAP(() => {
         if (props.moving && rowRef.current) {
             gsap.fromTo(
-                `#movie-carousel-row-${sliceStr(props.title)}`,
+                `#movie-carousel-row-${carouselScope}`,
                 { x: 0 },
                 {
                     x: screenWidth - rowRef.current.scrollWidth,
@@ -37,7 +38,7 @@ const MoviesCarousel = (props) => {
     }, [screenWidth]);
 
     useGSAP(() => {
-        gsap.from(`#movie-carousel-${sliceStr(props.title)}`, {
+        gsap.from(`#movie-carousel-${carouselScope}`, {
             y: 100,
             opacity: 0,
             delay: 1.0,
@@ -46,7 +47,7 @@ const MoviesCarousel = (props) => {
 
     return (
         props.movies.length > 0 ? (
-            <Container fluid className="w-100 mb-3 mt-3" id={"movie-carousel-" + sliceStr(props.title)}>
+            <Container fluid className="w-100 mb-3 mt-3" id={"movie-carousel-" + carouselScope}>
                 <Row className="justify-content-start align-items-center px-3 mt-3">
                     <h3 style={{ fontFamily: 'Netflix Sans1' }} className="text-white mt-3">
                         {props.title}
@@ -56,7 +57,7 @@ const MoviesCarousel = (props) => {
                 <Container fluid className="w-100 carousel-slider mt-3">
                     <table>
                         <tbody>
-                        <tr id={`movie-carousel-row-${sliceStr(props.title)}`} ref={rowRef}>
+                        <tr id={`movie-carousel-row-${carouselScope}`} ref={rowRef}>
                             {props.movies.slice(0, columnsToShow).map((item, index) => (
                                 <td key={index} className="carousel-slider-cover">
                                     <img className="mx-3" alt="" src={`https://image.tmdb.org/t/p/w500/${item.poster_path}`} />
@@ -68,7 +69,7 @@ const MoviesCarousel = (props) => {
                 </Container>
             </Container>
         ) : (
-            <Container fluid className="w-100 mb-3 mt-3" id={"movie-carousel-" + sliceStr(props.title)}>
+            <Container fluid className="w-100 mb-3 mt-3" id={"movie-carousel-" + carouselScope}>
                 <Row className="justify-content-start align-items-center px-3 mt-3">
                     <h3 style={{ fontFamily: 'Netflix Sans1' }} className="text-white mt-3">
                         {props.title}
