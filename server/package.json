@@ -1,4 +1,9 @@
 {
+  "scripts": {
+    "start": "node server.mjs",
+    "dev": "nodemon server.mjs",
+    "prod": "NODE_ENV=production nodemon server.mjs"
+  },
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.19.2",
