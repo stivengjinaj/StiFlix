@@ -72,5 +72,5 @@ app.get('/api/getMegacloud', async (req, res) => {
 });
 
 app.listen(3000, () => {
-    console.log('Proxy server is running on http://localhost:3000');
+    console.log('Proxy server is online on port 3000');
 });
