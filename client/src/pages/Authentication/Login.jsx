@@ -46,7 +46,7 @@ function Login() {
                     navigate("/");
                 }
             })
-            .catch((e) => {
+            .catch(() => {
                 setWrongCredentials(true);
             });
     }
