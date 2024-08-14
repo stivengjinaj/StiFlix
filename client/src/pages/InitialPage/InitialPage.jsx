@@ -46,7 +46,7 @@ function InitialPage() {
                         <img src={logo} alt="Logo" width={150} height={50} />
                     </Col>
                     <Col className="d-flex justify-content-evenly align-items-center py-3">
-                        <Button className="btn-danger px-3 py-1">
+                        <Button className="btn-danger px-3 py-1" onClick={() => navigate('/login')}>
                             <strong>Sign in</strong>
                         </Button>
                     </Col>
