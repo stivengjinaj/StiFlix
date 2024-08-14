@@ -1,3 +1,5 @@
+{/*eslint-disable react/prop-types*/}
+import {auth} from "../../../firebase.js";
 import {Button, Col, Container, Row} from "react-bootstrap";
 import logo from "../../assets/logo.png";
 import tvvideo from "../../assets/tv.mp4";
@@ -7,12 +9,13 @@ import { useGSAP } from "@gsap/react";
 import FeatureRow from "./FeatureRow.jsx";
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import {useNavigate} from "react-router-dom";
+import {useState} from "react";
 
 gsap.registerPlugin(ScrollTrigger);
 
-
 function InitialPage() {
     const navigate = useNavigate();
+    const [user, setUser] = useState(auth.currentUser);
 
     useGSAP(() => {
         gsap.from("#feature1", {
@@ -35,8 +38,6 @@ function InitialPage() {
         })
 
     }, [])
-
-
 
     return (
         <Container fluid className="p-0 bg-gradient-dark-radius">
