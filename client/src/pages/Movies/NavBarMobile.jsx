@@ -1,12 +1,36 @@
+import {randomAvatar} from "../../helper/miscs.js";
+
 {/*eslint-disable react/prop-types*/}
 import logo from "../../assets/images/titleLogo.png";
-import {Container, Form, Nav, Navbar} from "react-bootstrap";
+import {Container, Dropdown, Form, Nav, Navbar} from "react-bootstrap";
 import {useState} from "react";
 import {useGSAP} from "@gsap/react";
 import gsap from "gsap";
+import avatar1 from "../../assets/avatars/avatar1.png";
+import avatar2 from "../../assets/avatars/avatar2.png";
+import avatar3 from "../../assets/avatars/avatar3.png";
+import avatar4 from "../../assets/avatars/avatar4.png";
+import {auth} from "../../../firebaseConfiguration.js";
+import {useNavigate} from "react-router-dom";
 
 function NavBarMobile(props) {
+    const navigate = useNavigate()
     const [searchVisible, setSearchVisible] = useState(false);
+    const [user, setUser] = useState(auth.currentUser);
+
+    auth.onAuthStateChanged((usr) => {
+        if (usr) {
+            setUser(usr);
+        }
+    })
+
+    const handleSignOut = async (e) => {
+        e.preventDefault()
+        await auth.signOut().then(() => {
+            setUser(null)
+            navigate("/");
+        });
+    }
 
     useGSAP(() => {
         gsap.fromTo('.search-input', {
@@ -45,11 +69,27 @@ function NavBarMobile(props) {
                   {searchVisible && (
                       <Form.Control
                           type="search"
-                          className="search-input me-3"
+                          className="search-input"
                           aria-label="Search"
                       />
                   )}
                   <i onClick={() => setSearchVisible(!searchVisible)} className="bi bi-search text-white h2"></i>
+                  {
+                      user && (
+                          <Dropdown align={{lg: 'start'}} className="mx-3">
+                              <Dropdown.Toggle className="p-0 btn-avatar">
+                                  <img src={randomAvatar([avatar1, avatar2, avatar3, avatar4])} alt="avatar"
+                                       width={50} height={50} className="rounded-3"/>
+                              </Dropdown.Toggle>
+
+                              <Dropdown.Menu className="mt-2">
+                                  <Dropdown.Item href="/movies">Movies</Dropdown.Item>
+                                  <Dropdown.Item href="/account">Account</Dropdown.Item>
+                                  <Dropdown.Item onClick={handleSignOut} href="/" className="text-danger">Logout</Dropdown.Item>
+                              </Dropdown.Menu>
+                          </Dropdown>
+                      )
+                  }
               </Form>
           </Container>
       </Navbar>

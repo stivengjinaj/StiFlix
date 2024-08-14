@@ -6,7 +6,7 @@ import {Button, Col, Container, Form, Row} from "react-bootstrap";
 import logo from "../../assets/images/logo.png";
 import gsap from "gsap";
 import {useGSAP} from "@gsap/react";
-import {auth, db} from "../../../firebase.js";
+import {auth, db} from "../../../firebaseConfiguration.js";
 import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 
@@ -83,7 +83,7 @@ function Register() {
                          className="flex-column justify-content-center align-items-center px-5 login-col"
                          style={{backgroundColor: "rgba(0,0,0,0.6)"}}
                     >
-                        <h2 className="text-white my-5 mx-4">Sign in</h2>
+                        <h2 className="text-white my-5 mx-4">Sign up</h2>
                         <Form>
                             <Form.Group className="mb-3 mx-4">
                                 <Form.Floating className="mb-3">

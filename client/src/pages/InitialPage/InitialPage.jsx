@@ -1,7 +1,7 @@
 import {randomAvatar} from "../../helper/miscs.js";
 
 {/*eslint-disable react/prop-types*/}
-import {auth} from "../../../firebase.js";
+import {auth} from "../../../firebaseConfiguration.js";
 import {Button, Col, Container, Dropdown, Row} from "react-bootstrap";
 import logo from "../../assets/images/logo.png";
 import tvvideo from "../../assets/videos/tv.mp4";
@@ -24,11 +24,19 @@ function InitialPage() {
     const [user, setUser] = useState(auth.currentUser);
 
     auth.onAuthStateChanged((usr) => {
+        console.log(usr);
         if (usr) {
-            console.log(usr);
             setUser(usr);
         }
     })
+
+    const handleSignOut = async (e) => {
+        e.preventDefault()
+        await auth.signOut().then(() => {
+            setUser(null)
+            navigate("/");
+        });
+    }
 
     useGSAP(() => {
         gsap.from("#feature1", {
@@ -70,9 +78,9 @@ function InitialPage() {
                                         </Dropdown.Toggle>
 
                                         <Dropdown.Menu className="mt-2">
-                                            <Dropdown.Item href="/home">Home</Dropdown.Item>
+                                            <Dropdown.Item href="/movies">Movies</Dropdown.Item>
                                             <Dropdown.Item href="/account">Account</Dropdown.Item>
-                                            <Dropdown.Item onClick={auth.signOut()} href="/" className="text-danger">Logout</Dropdown.Item>
+                                            <Dropdown.Item onClick={handleSignOut} className="text-danger">Logout</Dropdown.Item>
                                         </Dropdown.Menu>
                                     </Dropdown>
                                 )
