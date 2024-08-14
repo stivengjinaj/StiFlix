@@ -3,12 +3,12 @@ import User from "../../models/User.js";
 {/*eslint-disable react/prop-types*/}
 import {useState} from "react";
 import {Button, Col, Container, Form, Row} from "react-bootstrap";
-import logo from "../../assets/logo.png";
+import logo from "../../assets/images/logo.png";
 import gsap from "gsap";
 import {useGSAP} from "@gsap/react";
 import {auth, db} from "../../../firebase.js";
 import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
-import { collection, doc, setDoc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 
 function Register() {
 

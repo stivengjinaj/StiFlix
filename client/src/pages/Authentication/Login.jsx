@@ -5,7 +5,7 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import {auth, db} from "../../../firebase.js";
 import { doc, updateDoc } from "firebase/firestore";
 import {Button, Col, Container, Form, Row} from "react-bootstrap";
-import logo from "../../assets/logo.png";
+import logo from "../../assets/images/logo.png";
 import gsap from "gsap";
 import {useGSAP} from "@gsap/react";
 

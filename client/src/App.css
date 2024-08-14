@@ -8,7 +8,7 @@ body {
 }
 
 .initial-bg{
-  background-image: url('assets/background.jpg');
+  background-image: url('assets/images/background.jpg');
   min-height: 70vh;
   background-repeat: no-repeat;
   background-size: cover;
@@ -16,7 +16,7 @@ body {
 }
 
 .login-bg {
-  background-image: url('assets/background.jpg');
+  background-image: url('assets/images/background.jpg');
   min-height: 90vh;
   background-repeat: no-repeat;
   background-size: cover;
@@ -47,6 +47,21 @@ body {
 
 .btn-danger{
   background-color: rgb(229,9,20) !important;
+}
+
+.btn-avatar {
+  border: none !important;
+  background-color: transparent !important;
+}
+
+.btn-avatar::after {
+  content: none !important;
+  transition: transform 0.3s ease-in-out;
+}
+
+.btn-avatar:hover {
+  scale: 1.3;
+  transition: transform 1s ease-in-out;
 }
 
 .bg-gradient-dark-radius {

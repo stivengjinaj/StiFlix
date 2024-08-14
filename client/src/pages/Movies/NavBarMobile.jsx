@@ -1,5 +1,5 @@
 {/*eslint-disable react/prop-types*/}
-import logo from "../../assets/titleLogo.png";
+import logo from "../../assets/images/titleLogo.png";
 import {Container, Form, Nav, Navbar} from "react-bootstrap";
 import {useState} from "react";
 import {useGSAP} from "@gsap/react";

@@ -79,6 +79,15 @@ export function getYearFromDate(date) {
             return part;
         }
     }
-
     return null;
+}
+
+/**
+ * Function used to get a random avatar image.
+ *
+ * @param avatars list of available avatars.
+ * @return random avatar.
+ * */
+export function randomAvatar(avatars) {
+    return avatars[Math.floor(Math.random() * avatars.length)];
 }
