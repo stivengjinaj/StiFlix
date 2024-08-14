@@ -58,6 +58,11 @@ body {
     opacity: 0.8;
 }
 
+a, a>strong {
+  text-decoration: none;
+  outline: 0;
+}
+
 h1 {
   font-family: "Netflix Sans1", serif;
 }
@@ -254,8 +259,6 @@ tr {
   transform: scale(1.5) !important;
   transition: transform 0.3s ease-in-out !important;
 }
-
-
 
 @media (max-width: 768px) {
   .main-banner {
