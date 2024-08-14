@@ -78,7 +78,8 @@ function MainMovie({ mainMovie }) {
             {
                 currentMovie && currentMovie.backdrop_path
                     ? (
-                        <Container fluid className="d-flex flex-column main-banner" style={{ backgroundImage: `url(https://image.tmdb.org/t/p/original/${currentMovie.backdrop_path})` }}>
+                        <Container fluid className="d-flex flex-column main-banner position-relative"
+                                   style={{backgroundImage: `url(https://image.tmdb.org/t/p/original/${currentMovie.backdrop_path})`}}>
                             <Container fluid className="px-0 pt-5 mt-5 mx-0">
                                 <Row className="justify-content-start align-items-center mt-2 px-5">
                                     <Col xs={12} md={8} lg={6} xl={5} className="mt-3 text-center text-md-start">
@@ -102,7 +103,8 @@ function MainMovie({ mainMovie }) {
                                 <Row className="justify-content-start align-items-center mt-3 px-5">
                                     <Col md={8} lg={6} xl={10} className="action-buttons">
                                         <div className="d-flex justify-content-start main-banner-controls">
-                                            <Button onClick={handlePlayClick} variant="light" className="d-flex align-items-center px-5 mr-3">
+                                            <Button onClick={handlePlayClick} variant="light"
+                                                    className="d-flex align-items-center px-5 mr-3">
                                                 <i className="bi bi-play-fill fs-1"></i>
                                                 <h4 className="text-dark mb-0 ml-2">Play</h4>
                                             </Button>
@@ -126,7 +128,7 @@ function MainMovie({ mainMovie }) {
                     : (
                         <Container className="justify-content-center d-flex flex-column main-banner">
                             <Row>
-                                <Loading />
+                                <Loading/>
                             </Row>
                         </Container>
                     )

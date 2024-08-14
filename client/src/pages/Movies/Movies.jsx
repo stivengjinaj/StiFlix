@@ -8,7 +8,8 @@ import NavBar from "./NavBar.jsx";
 import MainMovie from "./MainMovie.jsx";
 import MoviesCarousel from "./MoviesCarousel.jsx";
 import FetchedMovieController from "../../controllers/FetchedMovieController.js";
-import {sortByVoteAverage} from "../../helper/miscs.js";
+import {sortByVoteAverage, stringQuery} from "../../helper/miscs.js";
+import SeachResults from "./SeachResults.jsx";
 
 function Movies() {
     const fetcher = new FetchedMovieController();
@@ -78,29 +79,56 @@ function Movies() {
 }
 
 function HomePage(props) {
+    const fetcher = new FetchedMovieController();
+    const [searchedMovies, setSearchedMovies] = useState([]);
+    const [isSearching, setIsSearching ] = useState(false);
+
+    const handleSearch = (query) => {
+        fetcher.search(stringQuery(query)).then((movies) => {
+            setSearchedMovies([...movies]);
+        });
+    }
+    const startSearching = () => {
+        setSearchedMovies([]);
+        setIsSearching(!isSearching);
+    };
+
     return (
         <Container fluid className="p-0 bg-gradient-dark-radius min-vh-100">
-            <NavBar section={props.section} handleSectionChange={props.handleSectionChange}/>
+            <NavBar
+                section={props.section}
+                handleSectionChange={props.handleSectionChange}
+                handleSearch={handleSearch}
+                startSearching={startSearching}
+            />
             <MainMovie mainMovie={props.allTrending}/>
-            {(() => {
-                switch (props.section) {
-                    case 'home':
-                        return (
-                            <>
-                                <MoviesCarousel title={"Popular on Stiflix"} movies={props.allPopular} moving={true} scrollable={false}/>
-                                <MoviesCarousel title={"Trending Now"} movies={props.allTrending} moving={false} scrollable={true}/>
-                                <MoviesCarousel title={"Top Rated Movies"} movies={props.topRatedMovies} moving={false} scrollable={true}/>
-                                <MoviesCarousel title={"Top Rated TV Shows"} movies={props.topRatedSeries} moving={false} scrollable={true}/>
-                            </>
-                        );
-                    case 'movies':
-                        return <GridMovies movies={props.onlyMovies} />;
-                    case 'tvShows':
-                        return <GridMovies movies={props.onlySeries} />;
-                    default:
-                        return <div>Section not found</div>;
-                }
-            })()}
+            {
+                !isSearching
+                    ? (
+                        (() => {
+                            switch (props.section) {
+                                case 'home':
+                                    return (
+                                        <>
+                                            <MoviesCarousel title={"Popular on Stiflix"} movies={props.allPopular} moving={true} scrollable={false}/>
+                                            <MoviesCarousel title={"Trending Now"} movies={props.allTrending} moving={false} scrollable={true}/>
+                                            <MoviesCarousel title={"Top Rated Movies"} movies={props.topRatedMovies} moving={false} scrollable={true}/>
+                                            <MoviesCarousel title={"Top Rated TV Shows"} movies={props.topRatedSeries} moving={false} scrollable={true}/>
+                                        </>
+                                    );
+                                case 'movies':
+                                    return <GridMovies movies={props.onlyMovies} />;
+                                case 'tvShows':
+                                    return <GridMovies movies={props.onlySeries} />;
+                                default:
+                                    return <div>Section not found</div>;
+                            }
+                        })()
+                    )
+                    : (
+                        <SeachResults movies={searchedMovies}/>
+                    )
+            }
 
             <footer className="text-white text-center p-3 mt-5">
                 <Container>

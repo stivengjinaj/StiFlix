@@ -52,15 +52,29 @@ function NavBarDesktop(props) {
                         <h5 className={props.section === "movies" ? "nav-item-selected" : "nav-item"}>Movies</h5>
                     </Nav.Link>
                 </Nav>
-                <Form className="d-flex mx-3">
+                <Form
+                    className="d-flex mx-3"
+                    onSubmit={(e) => {
+                        e.preventDefault()
+                    }}
+                    onChange={(e) => {
+                        if (searchVisible) {
+                            props.handleSearch(e.target.value);
+                        }
+                    }}
+                >
                     {searchVisible && (
                         <Form.Control
                             type="search"
+                            name="searchInput"
                             className="me-2 search-input"
                             aria-label="Search"
                         />
                     )}
-                    <i onClick={() => setSearchVisible(!searchVisible)} className="bi bi-search text-white h2"></i>
+                    <i onClick={() => {
+                        props.startSearching()
+                        setSearchVisible(!searchVisible)
+                    }} className="bi bi-search text-white h2"></i>
                 </Form>
             </Container>
         </Navbar>

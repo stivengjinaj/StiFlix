@@ -5,6 +5,7 @@ import NavBarMobile from "./NavBarMobile.jsx";
 
 function NavBar(props) {
     const [screen, setScreen] = useState('desktop');
+
     useEffect(() => {
         const handleResize = () => {
             if (window.innerWidth <= 768) {
@@ -22,8 +23,22 @@ function NavBar(props) {
 
     return(
         screen === 'desktop'
-            ? (<NavBarDesktop section={props.section} handleSectionChange={props.handleSectionChange}/>)
-            : (<NavBarMobile section={props.section} handleSectionChange={props.handleSectionChange}/>)
+            ? (
+                <NavBarDesktop
+                    section={props.section}
+                    handleSectionChange={props.handleSectionChange}
+                    handleSearch={props.handleSearch}
+                    startSearching={props.startSearching}
+                />
+            )
+            : (
+                <NavBarMobile
+                    section={props.section}
+                    handleSectionChange={props.handleSectionChange}
+                    handleSearch={props.handleSearch}
+                    startSearching={props.startSearching}
+                />
+            )
     );
 }
 

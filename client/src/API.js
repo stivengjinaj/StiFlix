@@ -1,7 +1,7 @@
 //const tmdb_api_key = "9301ddc7c3bf38fbdf333ae15a936792"
 
 const tmdb_read_token = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI5MzAxZGRjN2MzYmYzOGZiZGYzMzNhZTE1YTkzNjc5MiIsIm5iZiI6MTcyMzM5NTY2NS40NTcyMDIsInN1YiI6IjY2YjhlZDY0ZmUyNGZlODUwNGY2ZWZjZiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.b8zxhQus7eZTVich0Jv9lMp3vXM2v-LQXPLLKB9cmaM"
-const remote_url = "https://www.stiflix.onrender.com"
+const remote_url = "http://localhost:3000"
 /**
  * API used to get popular movies(only).
  *
@@ -125,6 +125,17 @@ const discoverTvShows = async (page) => {
     return await response.json();
 }
 
+const search = async (query) => {
+    const response = await fetch(`https://api.themoviedb.org/3/search/multi?include_adult=false&language=en-US&page=1&query=${query}`, {
+        headers: {
+            Authorization: `Bearer ${tmdb_read_token}`,
+            Accept: "application/json"
+        }
+    });
+    return await response.json();
+
+}
+
 /**
  * API used to get movie ID.
  *
@@ -180,4 +191,4 @@ const getMovieIdBraflix = async (server, query, year, type, episode, season, mov
 };
 
 
-export {getPopularMovies, getPopularTvShows, getTopRatedMovies, getTopRatedTvShows, getTrendingMovies, getTvShowDetails, discoverMovies, discoverTvShows, getMovieId, getMovieSources, getMovieIdBraflix}
+export {getPopularMovies, getPopularTvShows, getTopRatedMovies, getTopRatedTvShows, getTrendingMovies, getTvShowDetails, discoverMovies, discoverTvShows, getMovieId, getMovieSources, getMovieIdBraflix, search}

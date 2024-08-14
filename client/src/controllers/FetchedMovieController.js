@@ -174,6 +174,30 @@ class FetchedMovieController {
         return fetchedMovies;
     }
 
+    async search(query) {
+        const fetchedMovies = [];
+        const movies = await API.search(query);
+        movies.results.forEach(movie => {
+            const detailsExist = movie.media_type === "movie" ? this.checkMovieData(movie) : this.checkTvShowData(movie);
+            if(detailsExist) {
+                if(movie.media_type === "movie") {
+                    fetchedMovies.push(new FetchedMovie(movie, false, 0, 0));
+                }else {
+                    const tvShowDetails = API.getTvShowDetails(movie.id);
+                    fetchedMovies.push(
+                        new FetchedMovie(
+                            movie,
+                            true,
+                            tvShowDetails.number_of_seasons,
+                            tvShowDetails.number_of_episodes
+                        )
+                    );
+                }
+            }
+        });
+        return fetchedMovies;
+    }
+
     /**
      * Function used to check if the details of a movie exist.
      *
