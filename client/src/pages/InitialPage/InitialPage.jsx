@@ -1,21 +1,34 @@
+import {randomAvatar} from "../../helper/miscs.js";
+
 {/*eslint-disable react/prop-types*/}
 import {auth} from "../../../firebase.js";
-import {Button, Col, Container, Row} from "react-bootstrap";
-import logo from "../../assets/logo.png";
-import tvvideo from "../../assets/tv.mp4";
-import devicePile from "../../assets/device-pile.mp4";
+import {Button, Col, Container, Dropdown, Row} from "react-bootstrap";
+import logo from "../../assets/images/logo.png";
+import tvvideo from "../../assets/videos/tv.mp4";
+import devicePile from "../../assets/videos/device-pile.mp4";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import FeatureRow from "./FeatureRow.jsx";
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import {useNavigate} from "react-router-dom";
 import {useState} from "react";
+import avatar1 from "../../assets/avatars/avatar1.png"
+import avatar2 from "../../assets/avatars/avatar2.png"
+import avatar3 from "../../assets/avatars/avatar3.png"
+import avatar4 from "../../assets/avatars/avatar4.png"
 
 gsap.registerPlugin(ScrollTrigger);
 
 function InitialPage() {
     const navigate = useNavigate();
     const [user, setUser] = useState(auth.currentUser);
+
+    auth.onAuthStateChanged((usr) => {
+        if (usr) {
+            console.log(usr);
+            setUser(usr);
+        }
+    })
 
     useGSAP(() => {
         gsap.from("#feature1", {
@@ -47,9 +60,28 @@ function InitialPage() {
                         <img src={logo} alt="Logo" width={150} height={50} />
                     </Col>
                     <Col className="d-flex justify-content-evenly align-items-center py-3">
-                        <Button className="btn-danger px-3 py-1" onClick={() => navigate('/login')}>
-                            <strong>Sign in</strong>
-                        </Button>
+                        {
+                            user
+                                ? (
+                                    <Dropdown align={{lg: 'start'}}>
+                                        <Dropdown.Toggle className="p-0 btn-avatar">
+                                            <img src={randomAvatar([avatar1, avatar2, avatar3, avatar4])} alt="avatar"
+                                                 width={50} height={50} className="rounded-3"/>
+                                        </Dropdown.Toggle>
+
+                                        <Dropdown.Menu className="mt-2">
+                                            <Dropdown.Item href="/home">Home</Dropdown.Item>
+                                            <Dropdown.Item href="/account">Account</Dropdown.Item>
+                                            <Dropdown.Item onClick={auth.signOut()} href="/" className="text-danger">Logout</Dropdown.Item>
+                                        </Dropdown.Menu>
+                                    </Dropdown>
+                                )
+                                : (
+                                    <Button className="btn-danger px-3 py-1" onClick={() => navigate('/login')}>
+                                        <strong>Sign in</strong>
+                                    </Button>
+                                )
+                        }
                     </Col>
                 </Row>
                 <Row className="justify-content-center mx-0">
