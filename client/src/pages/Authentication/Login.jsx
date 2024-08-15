@@ -16,6 +16,7 @@ function Login() {
     const [password, setPassword] = useState("");
     const [wrongCredentials, setWrongCredentials] = useState(false);
     const [currentUserState, setCurrentUserState ] = useState("")
+
     useGSAP(() => {
         gsap.from('img', {
             opacity: 0,
