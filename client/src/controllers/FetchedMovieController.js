@@ -174,6 +174,18 @@ class FetchedMovieController {
         return fetchedMovies;
     }
 
+    /**
+     * Function used to get the trailer of a movie.
+     *
+     * @param movieId Id of the movie.
+     * @return youtube link of the trailer.
+     * */
+    async getTrailer(movieId) {
+        const videoResults = await API.getMovieTrailer(movieId);
+        const youtubeLink = "https://www.youtube.com/watch?v=";
+        return videoResults.results.length > 0 ? youtubeLink+videoResults.results[0].key : null;
+    }
+
     async search(query) {
         const fetchedMovies = [];
         const movies = await API.search(query);

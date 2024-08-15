@@ -125,6 +125,28 @@ const discoverTvShows = async (page) => {
     return await response.json();
 }
 
+/**
+ * API used to get movie trailer.
+ *
+ * @param movieId id of the movie.
+ * @return youtube key of the trailer.
+ * */
+const getTrailerKey = async (movieId) => {
+    const response = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/videos?language=en-US`, {
+        headers: {
+            Authorization: `Bearer ${tmdb_read_token}`,
+            Accept: "application/json"
+        }
+    });
+    return await response.json();
+}
+
+/**
+ * API used to search for movies and tv shows.
+ *
+ * @param query search query.
+ * @return json with search results.
+ * */
 const search = async (query) => {
     const response = await fetch(`https://api.themoviedb.org/3/search/multi?include_adult=false&language=en-US&page=1&query=${query}`, {
         headers: {
@@ -191,4 +213,4 @@ const getMovieIdBraflix = async (server, query, year, type, episode, season, mov
 };
 
 
-export {getPopularMovies, getPopularTvShows, getTopRatedMovies, getTopRatedTvShows, getTrendingMovies, getTvShowDetails, discoverMovies, discoverTvShows, getMovieId, getMovieSources, getMovieIdBraflix, search}
+export {getPopularMovies, getPopularTvShows, getTopRatedMovies, getTopRatedTvShows, getTrendingMovies, getTvShowDetails, discoverMovies, discoverTvShows, getMovieId, getMovieSources, getMovieIdBraflix, search, getTrailerKey}
