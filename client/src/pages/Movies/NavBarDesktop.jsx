@@ -1,27 +1,26 @@
-import {randomAvatar} from "../../helper/miscs.js";
-
 {/*eslint-disable react/prop-types*/}
 import {Container, Dropdown, Form, Nav, Navbar} from "react-bootstrap";
 import logo from "../../assets/images/logo.png";
 import {useEffect, useState} from "react";
 import gsap from "gsap";
 import {useGSAP} from "@gsap/react";
-import avatar1 from "../../assets/avatars/avatar1.png";
-import avatar2 from "../../assets/avatars/avatar2.png";
-import avatar3 from "../../assets/avatars/avatar3.png";
-import avatar4 from "../../assets/avatars/avatar4.png";
-import {auth} from "../../../firebaseConfiguration.js";
+import {auth, db} from "../../../firebaseConfiguration.js";
 import {useNavigate} from "react-router-dom";
+import {doc, getDoc} from "firebase/firestore";
 
 function NavBarDesktop(props) {
     const navigate = useNavigate();
     const [searchVisible, setSearchVisible] = useState(false);
     const [user, setUser] = useState(auth.currentUser);
+    const [avatar, setAvatar] = useState(null)
 
     useEffect(() => {
         auth.onAuthStateChanged((usr) => {
             if (usr) {
                 setUser(usr);
+                getDoc(doc(db, "users", usr.uid)).then((doc) => {
+                    setAvatar(doc.data().avatar);
+                });
             }
         })
     }, []);
@@ -106,12 +105,12 @@ function NavBarDesktop(props) {
                     user && (
                         <Dropdown align={{lg: 'end'}} className="mx-4">
                             <Dropdown.Toggle className="p-0 btn-avatar">
-                                <img src={randomAvatar([avatar1, avatar2, avatar3, avatar4])} alt="avatar"
-                                     width={50} height={50} className="rounded-3"/>
+                                {avatar && <img src={`/avatars/${avatar}.png`} alt="avatar"
+                                                width={50} height={50} className="rounded-3"/>}
                             </Dropdown.Toggle>
 
                             <Dropdown.Menu className="mt-2">
-                                <Dropdown.Item href="/movies">Movies</Dropdown.Item>
+                                <Dropdown.Item href="/movies">Home</Dropdown.Item>
                                 <Dropdown.Item href="/account">Account</Dropdown.Item>
                                 <Dropdown.Item onClick={handleSignOut} href="/" className="text-danger">Logout</Dropdown.Item>
                             </Dropdown.Menu>

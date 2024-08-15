@@ -1,7 +1,5 @@
-import {randomAvatar} from "../../helper/miscs.js";
-
 {/*eslint-disable react/prop-types*/}
-import {auth} from "../../../firebaseConfiguration.js";
+import {auth, db} from "../../../firebaseConfiguration.js";
 import {Button, Col, Container, Dropdown, Row} from "react-bootstrap";
 import logo from "../../assets/images/logo.png";
 import tvvideo from "../../assets/videos/tv.mp4";
@@ -12,21 +10,21 @@ import FeatureRow from "./FeatureRow.jsx";
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import {useNavigate} from "react-router-dom";
 import {useState} from "react";
-import avatar1 from "../../assets/avatars/avatar1.png"
-import avatar2 from "../../assets/avatars/avatar2.png"
-import avatar3 from "../../assets/avatars/avatar3.png"
-import avatar4 from "../../assets/avatars/avatar4.png"
+import {doc, getDoc} from "firebase/firestore";
 
 gsap.registerPlugin(ScrollTrigger);
 
 function InitialPage() {
     const navigate = useNavigate();
     const [user, setUser] = useState(auth.currentUser);
+    const [avatar, setAvatar] = useState(null)
 
     auth.onAuthStateChanged((usr) => {
-        console.log(usr);
         if (usr) {
             setUser(usr);
+            getDoc(doc(db, "users", usr.uid)).then((doc) => {
+               setAvatar(doc.data().avatar);
+            });
         }
     })
 
@@ -73,12 +71,12 @@ function InitialPage() {
                                 ? (
                                     <Dropdown align={{lg: 'start'}}>
                                         <Dropdown.Toggle className="p-0 btn-avatar">
-                                            <img src={randomAvatar([avatar1, avatar2, avatar3, avatar4])} alt="avatar"
-                                                 width={50} height={50} className="rounded-3"/>
+                                            {avatar && <img src={`/avatars/${avatar}.png`} alt="avatar"
+                                                  width={50} height={50} className="rounded-3"/>}
                                         </Dropdown.Toggle>
 
                                         <Dropdown.Menu className="mt-2">
-                                            <Dropdown.Item href="/movies">Movies</Dropdown.Item>
+                                            <Dropdown.Item href="/movies">Home</Dropdown.Item>
                                             <Dropdown.Item href="/account">Account</Dropdown.Item>
                                             <Dropdown.Item onClick={handleSignOut} className="text-danger">Logout</Dropdown.Item>
                                         </Dropdown.Menu>
