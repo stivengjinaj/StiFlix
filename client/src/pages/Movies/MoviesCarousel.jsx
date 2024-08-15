@@ -1,5 +1,3 @@
-import Loading from "./Loading.jsx";
-
 {/* eslint-disable react/prop-types */}
 import {useGSAP} from "@gsap/react";
 import {useEffect, useRef, useState} from "react";
@@ -47,7 +45,7 @@ const MoviesCarousel = (props) => {
     });
 
     return (
-        props.movies.length > 0 ? (
+        props.movies.length > 0 && (
             <Container fluid className="w-100 mb-3 mt-3" id={"movie-carousel-" + carouselScope}>
                 <Row className="justify-content-start align-items-center px-3 mt-3">
                     <h3 style={{ fontFamily: 'Netflix Sans1' }} className="text-white mt-3">
@@ -68,15 +66,6 @@ const MoviesCarousel = (props) => {
                         </tbody>
                     </table>
                 </Container>
-            </Container>
-        ) : (
-            <Container fluid className="w-100 mb-3 mt-3" id={"movie-carousel-" + carouselScope}>
-                <Row className="justify-content-start align-items-center px-3 mt-3">
-                    <h3 style={{ fontFamily: 'Netflix Sans1' }} className="text-white mt-3">
-                        {props.title}
-                    </h3>
-                </Row>
-                <Loading />
             </Container>
         )
     );

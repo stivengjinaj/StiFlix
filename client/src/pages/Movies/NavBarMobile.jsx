@@ -64,7 +64,7 @@ function NavBarMobile(props) {
                   <img src={logo} alt="logo" width={25} height={44}/>
               </div>
 
-              <Form inline className="d-flex align-items-center me-3">
+              <Form className="d-flex align-items-center me-3">
                   {searchVisible && (
                       <Form.Control
                           type="search"

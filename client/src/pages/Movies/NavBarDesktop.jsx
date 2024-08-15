@@ -8,6 +8,8 @@ import {auth, db} from "../../../firebaseConfiguration.js";
 import {useNavigate} from "react-router-dom";
 import {doc, getDoc} from "firebase/firestore";
 
+gsap.config().nullTargetWarn = false;
+
 function NavBarDesktop(props) {
     const navigate = useNavigate();
     const [searchVisible, setSearchVisible] = useState(false);
