@@ -126,6 +126,33 @@ const discoverTvShows = async (page) => {
 }
 
 /**
+ * API used to get media genres.
+ *
+ * @param id id of the media.
+ * @param media_type movie or tv show.
+ * @return a list of details.
+ * */
+const mediaGenres = async (id, media_type) => {
+    let response;
+    if (media_type === "tv") {
+        response = await fetch(`https://api.themoviedb.org/3/tv/${id}?language=en-US`, {
+            headers: {
+                Authorization: `Bearer ${tmdb_read_token}`,
+                Accept: "application/json"
+            }
+        });
+    } else {
+        response = await fetch(`https://api.themoviedb.org/3/movie/${id}?language=en-US`, {
+            headers: {
+                Authorization: `Bearer ${tmdb_read_token}`,
+                Accept: "application/json"
+            }
+        });
+    }
+    return await response.json();
+}
+
+/**
  * API used to get movie trailer.
  *
  * @param movieId id of the movie.
@@ -213,4 +240,4 @@ const getMovieIdBraflix = async (server, query, year, type, episode, season, mov
 };
 
 
-export {getPopularMovies, getPopularTvShows, getTopRatedMovies, getTopRatedTvShows, getTrendingMovies, getTvShowDetails, discoverMovies, discoverTvShows, getMovieId, getMovieSources, getMovieIdBraflix, search, getTrailerKey}
+export {getPopularMovies, getPopularTvShows, getTopRatedMovies, getTopRatedTvShows, getTrendingMovies, getTvShowDetails, discoverMovies, discoverTvShows, getMovieId, getMovieSources, getMovieIdBraflix, search, getTrailerKey, mediaGenres}

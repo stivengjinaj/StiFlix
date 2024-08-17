@@ -49,6 +49,10 @@ body {
   background-color: rgb(229,9,20) !important;
 }
 
+.btn-close {
+  background-color: whitesmoke !important;
+}
+
 .btn-avatar {
   border: none !important;
   background-color: transparent !important;
@@ -199,7 +203,7 @@ form .search-input:focus {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  height: 70vh;
+  height: 85vh;
   filter: drop-shadow(200px 0px 500px rgba(0, 0, 0, 0.5));
   display: flex;
   flex-direction: column;

@@ -5,10 +5,12 @@ import { useGSAP } from "@gsap/react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Loading from "./Loading.jsx";
+import MoreInfo from "./MoreInfo.jsx";
 
 function MainMovie({ mainMovie }) {
     const [currentMovie, setCurrentMovie] = useState(null);
     const [playMovieSplash, setPlayMovieSplash] = useState(false);
+    const [showMoreInfo, setShowMoreInfo] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -94,7 +96,7 @@ function MainMovie({ mainMovie }) {
                                     </Col>
                                 </Row>
                                 <Row className="justify-content-start align-items-center mt-2 px-5">
-                                    <Col xs={12} md={8} lg={6} xl={5}>
+                                    <Col xs={12} md={8} lg={6} xl={4}>
                                         <h5 className="text-white main-banner-description">
                                             {currentMovie.overview}
                                         </h5>
@@ -109,13 +111,14 @@ function MainMovie({ mainMovie }) {
                                                 <h4 className="text-dark mb-0 ml-2">Play</h4>
                                             </Button>
                                             <div className="d-none d-md-block">
-                                                <Button variant="secondary" className="d-flex align-items-center px-5 mx-3">
+                                                <Button onClick={() => setShowMoreInfo(true)} variant="secondary" className="d-flex align-items-center px-5 mx-3">
                                                     <i className="bi bi-info-circle fs-1"></i>
                                                     <h4 className="text-white mb-0 mx-3 font-weight-bold">More Info</h4>
                                                 </Button>
+                                                <MoreInfo show={showMoreInfo} onHide={() => setShowMoreInfo(false)} movie={currentMovie}/>
                                             </div>
                                             <div className="d-flex d-md-none justify-content-center mx-3">
-                                                <Button variant="secondary" className="d-flex align-items-center px-3">
+                                                <Button onClick={() => setShowMoreInfo(true)} variant="secondary" className="d-flex align-items-center px-3">
                                                     <i className="bi bi-info-circle fs-1"></i>
                                                 </Button>
                                             </div>

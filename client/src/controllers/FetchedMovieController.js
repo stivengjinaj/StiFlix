@@ -181,11 +181,29 @@ class FetchedMovieController {
      * @return youtube link of the trailer.
      * */
     async getTrailer(movieId) {
-        const videoResults = await API.getMovieTrailer(movieId);
-        const youtubeLink = "https://www.youtube.com/watch?v=";
+        const videoResults = await API.getTrailerKey(movieId);
+        const youtubeLink = "https://www.youtube.com/embed/";
         return videoResults.results.length > 0 ? youtubeLink+videoResults.results[0].key : null;
     }
 
+    /**
+     * Function used to get genres for a movie or tv show.
+     *
+     * @param mediaId Id of the media.
+     * @param media_type movie or tv show.
+     * @return Array of genres.
+     * */
+    async getMediaGenres(mediaId, media_type) {
+        const details = await API.mediaGenres(mediaId, media_type);
+        return details.genres;
+    }
+
+    /**
+     * Function used to search a movie or tv show.
+     *
+     * @param query What to search.
+     * @return a list of results.
+     * */
     async search(query) {
         const fetchedMovies = [];
         const movies = await API.search(query);
