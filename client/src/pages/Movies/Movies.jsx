@@ -4,7 +4,7 @@ import GridMovies from "./GridMovies.jsx";
 import {useEffect, useState} from "react";
 import SplashScreen from "./SplashScreen.jsx";
 import {Container, Row} from "react-bootstrap";
-import NavBar from "./NavBar.jsx";
+import NavBar from "../Navbars/NavBar.jsx";
 import MainMovie from "./MainMovie.jsx";
 import MoviesCarousel from "./MoviesCarousel.jsx";
 import FetchedMovieController from "../../controllers/FetchedMovieController.js";
@@ -126,7 +126,7 @@ function HomePage(props) {
                         })()
                     )
                     : (
-                        <SeachResults movies={searchedMovies}/>
+                        props.allTrending.length > 0 && <SeachResults movies={searchedMovies}/>
                     )
             }
 

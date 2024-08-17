@@ -75,9 +75,9 @@ function InitialPage() {
                                                   width={50} height={50} className="rounded-3"/>}
                                         </Dropdown.Toggle>
 
-                                        <Dropdown.Menu className="mt-2">
-                                            <Dropdown.Item href="/movies">Home</Dropdown.Item>
-                                            <Dropdown.Item href="/account">Account</Dropdown.Item>
+                                        <Dropdown.Menu className="mt-2 bg-dark">
+                                            <Dropdown.Item className="text-white" href="/movies">Home</Dropdown.Item>
+                                            <Dropdown.Item className="text-white" href="/account">Account</Dropdown.Item>
                                             <Dropdown.Item onClick={handleSignOut} className="text-danger">Logout</Dropdown.Item>
                                         </Dropdown.Menu>
                                     </Dropdown>
