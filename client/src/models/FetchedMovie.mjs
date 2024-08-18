@@ -5,7 +5,7 @@ class FetchedMovie {
         this.overview = jsonMovie.overview;
         this.backdrop_path = jsonMovie.backdrop_path;
         this.poster_path = jsonMovie.poster_path;
-        this.genres_ids = jsonMovie.genre_ids;
+        this.genres_ids = jsonMovie.genres_ids;
         this.release_date = isSeries ? jsonMovie.first_air_date : jsonMovie.release_date;
         this.vote_average = jsonMovie.vote_average;
         this.isSeries = isSeries;
