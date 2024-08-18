@@ -199,6 +199,16 @@ form .search-input:focus {
   box-shadow: 0 0 5px white;
 }
 
+.movie-details {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 85vh;
+  filter: drop-shadow(200px 0px 500px rgba(0, 0, 0, 0.5));
+  display: flex;
+  flex-direction: column;
+}
+
 .main-banner {
   background-size: cover;
   background-position: center;
@@ -307,6 +317,14 @@ tr {
 }
 
 @media (max-width: 576px) {
+
+  .movie-details {
+    height: 100vh;
+    background-size: cover;
+    background-position: center;
+    background-repeat: repeat;
+  }
+
   .main-banner {
     height: 90vh;
     background-size: cover;

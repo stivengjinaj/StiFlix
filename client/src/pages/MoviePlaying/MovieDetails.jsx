@@ -226,7 +226,7 @@ function MovieDetails() {
                       backgroundColor: 'black',
                       zIndex: playMovieSplash ? 1000 : -1,
                   }}></div>
-                  <Container fluid className="w-100 p-0 min-vh-100 main-banner" style={{
+                  <Container fluid className="movie-details w-100 p-0 min-vh-100" style={{
                       backgroundImage: `url(https://image.tmdb.org/t/p/original/${movie.backdrop_path})`,
                       backgroundColor: "black"
                   }}>
