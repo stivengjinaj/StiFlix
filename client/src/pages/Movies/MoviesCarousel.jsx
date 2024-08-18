@@ -1,3 +1,5 @@
+import {useNavigate} from "react-router-dom";
+
 {/* eslint-disable react/prop-types */}
 import {useGSAP} from "@gsap/react";
 import {useEffect, useRef, useState} from "react";
@@ -6,6 +8,7 @@ import {gsap} from "gsap";
 
 const MoviesCarousel = (props) => {
     const rowRef = useRef();
+    const navigate = useNavigate();
     const [columnsToShow, setColumnsToShow] = useState(0);
     const [screenWidth, setScreenWidth] = useState(0);
     const [carouselScope] = useState(props.title === "Popular on Stiflix" ? "popular" : (props.title === "Trending Now" ? "trending" : (props.title === "Top Rated Movies" ? "topMovies" : "topShows")));
@@ -58,7 +61,7 @@ const MoviesCarousel = (props) => {
                         <tbody>
                         <tr id={`movie-carousel-row-${carouselScope}`} ref={rowRef}>
                             {props.movies.slice(0, columnsToShow).map((item, index) => (
-                                <td key={index} className="carousel-slider-cover">
+                                <td key={index} className="carousel-slider-cover" onClick={() => navigate(`/movies/info/${item.id}`)}>
                                     <img className="mx-3" alt="" src={`https://image.tmdb.org/t/p/w500/${item.poster_path}`} />
                                 </td>
                             ))}
