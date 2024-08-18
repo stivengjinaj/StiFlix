@@ -25,26 +25,28 @@ function GridMovies(props) {
 
 
     return (
-        <Container fluid className="py-5 allMovies">
-            <Row>
-                {
-                    props.movies.length > 0
-                        ? (props.movies && props.movies.map(movie => (
-                            <Col xs={4} sm={4} md={3} lg={2} key={movie.id} className="mb-4">
-                                <Card className="h-100 border-0">
-                                    <Card.Img
-                                        variant="top"
-                                        src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
-                                        alt={movie.title}
-                                        onClick={() => getMovieLinks(movie)}
-                                    />
-                                </Card>
-                            </Col>
-                        )))
-                        : (<Loading />)
-                }
-            </Row>
-        </Container>
+        props.movies.length > 0
+            ? (
+                <Container fluid className="py-5 allMovies">
+                    <Row>
+                        {
+                            props.movies && props.movies.map(movie => (
+                                    <Col xs={4} sm={4} md={3} lg={2} key={movie.id} className="mb-4">
+                                        <Card className="h-100 border-0">
+                                            <Card.Img
+                                                variant="top"
+                                                src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
+                                                alt={movie.title}
+                                                onClick={() => getMovieLinks(movie)}
+                                            />
+                                        </Card>
+                                    </Col>
+                                ))
+                        }
+                    </Row>
+                </Container>
+            )
+            : (<Loading />)
     );
 }
 

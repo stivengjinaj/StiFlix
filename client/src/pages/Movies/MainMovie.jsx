@@ -1,7 +1,6 @@
 /* eslint-disable react/prop-types */
 import { Button, Col, Container, Row } from "react-bootstrap";
 import { gsap } from "gsap";
-import { useGSAP } from "@gsap/react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Loading from "./Loading.jsx";
@@ -19,32 +18,34 @@ function MainMovie({ mainMovie }) {
         }
     }, [mainMovie]);
 
-    useGSAP(() => {
-        gsap.from('.main-banner', {
-            x: 100,
-            opacity: 0,
-        });
-        gsap.from('.main-banner-title', {
-            delay: 0.2,
-            y: 50,
-            opacity: 0,
-        });
-        gsap.from('.main-banner-category', {
-            delay: 0.4,
-            y: 50,
-            opacity: 0,
-        });
-        gsap.from('.main-banner-description', {
-            delay: 0.8,
-            y: 50,
-            opacity: 0,
-        });
-        gsap.from('button', {
-            delay: 1.0,
-            y: 50,
-            opacity: 0,
-        });
-    }, [mainMovie[0]]);
+    useEffect(() => {
+        if(currentMovie && currentMovie.backdrop_path) {
+            gsap.from('.main-banner', {
+                x: 100,
+                opacity: 0,
+            });
+            gsap.from('.main-banner-title', {
+                delay: 0.2,
+                y: 50,
+                opacity: 0,
+            });
+            gsap.from('.main-banner-category', {
+                delay: 0.4,
+                y: 50,
+                opacity: 0,
+            });
+            gsap.from('.main-banner-description', {
+                delay: 0.8,
+                y: 50,
+                opacity: 0,
+            });
+            gsap.from('button', {
+                delay: 1.0,
+                y: 50,
+                opacity: 0,
+            });
+        }
+    }, [currentMovie]);
 
     useEffect(() => {
         if (playMovieSplash) {
@@ -129,11 +130,7 @@ function MainMovie({ mainMovie }) {
                         </Container>
                     )
                     : (
-                        <Container className="justify-content-center d-flex flex-column main-banner">
-                            <Row>
-                                <Loading/>
-                            </Row>
-                        </Container>
+                        <Loading/>
                     )
             }
         </>
