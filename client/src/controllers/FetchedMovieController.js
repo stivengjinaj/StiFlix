@@ -1,7 +1,6 @@
 import * as API from "../API.js";
 import FetchedMovie from "../models/FetchedMovie.mjs";
 import {sortByVoteAverage} from "../helper/miscs.js";
-import {json} from "react-router-dom";
 
 class FetchedMovieController {
 
