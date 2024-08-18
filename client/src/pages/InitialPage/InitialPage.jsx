@@ -78,6 +78,9 @@ function InitialPage() {
                                         <Dropdown.Menu className="mt-2 bg-dark">
                                             <Dropdown.Item className="text-white" href="/movies">Home</Dropdown.Item>
                                             <Dropdown.Item className="text-white" href="/account">Account</Dropdown.Item>
+                                            <Dropdown.Item className="text-white" href="/favourites">Favourites</Dropdown.Item>
+                                            <Dropdown.Item className="text-white" href="/watched-list">Watched List</Dropdown.Item>
+                                            <Dropdown.Item className="text-white" href="/to-watch-list">To Watch List</Dropdown.Item>
                                             <Dropdown.Item onClick={handleSignOut} className="text-danger">Logout</Dropdown.Item>
                                         </Dropdown.Menu>
                                     </Dropdown>
