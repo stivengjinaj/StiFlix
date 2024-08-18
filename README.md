@@ -53,15 +53,15 @@ You can check out the links in console.
 
 ## Screenshots
 
-!include[First page](./screenshots/initial%20scr.png)
-!include[Login page](./screenshots/login%20scr.png)
-!include[Login movile](./screenshots/signin%20mobile.png)
-!include[Sign up](./screenshots/signup%20scr.png)
-!include[Movies page](./screenshots/main%20scr.png)
-!include[Movies page mobile](./screenshots/main%20mobile.png)
-!include[More info of main movie](./screenshots/mainmoreinfo%20scr.png)
-!include[Movie clicked](./screenshots/movieinfo%20scr.png)
-!include[Favourite movie](./screenshots/moviefavourite%20scr.png)
+![First page](/screenshots/initial%20scr.png)
+![Login page](/screenshots/login%20scr.png)
+![Login movile](/screenshots/signin%20mobile.png)
+![Sign up](/screenshots/signup%20scr.png)
+![Movies page](/screenshots/main%20scr.png)
+![Movies page mobile](/screenshots/main%20mobile.png)
+![More info of main movie](/screenshots/mainmoreinfo%20scr.png)
+![Movie clicked](/screenshots/movieinfo%20scr.png)
+![Favourite movie](/screenshots/moviefavourite%20scr.png)
 
 
 ## Task List
