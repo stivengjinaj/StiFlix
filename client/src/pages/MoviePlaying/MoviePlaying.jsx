@@ -1,14 +1,21 @@
-import {useParams} from "react-router-dom";
 import {useEffect, useRef, useState} from "react";
 import FetchedMovieController from "../../controllers/FetchedMovieController.js";
+import FetchLinksController from "../../controllers/FetchLinksController.js";
+import {useParams} from "react-router-dom";
 
 function MoviePlaying() {
-
-    const fetcher = new FetchedMovieController();
     const {movieId} = useParams();
-    //const iframeRef = useRef(null);
+    const iframeRef = useRef(null);
+    const fetcher = new FetchedMovieController();
+    const [links, setLinks] = useState([]);
+    const linkFetcher = new FetchLinksController();
 
-
+    useEffect(() => {
+        const fetchLinks = async () => {
+            const links = await linkFetcher.fetchLinks("Bad Boys", "movie", 2021, 1);
+            setLinks(links);
+        }
+    }, [])
 
     return (
         <div>
