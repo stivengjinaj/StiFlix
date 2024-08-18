@@ -1,4 +1,4 @@
-import {Button, Col, Container, Navbar, Row} from "react-bootstrap";
+import {Button, Col, Container, Navbar, Row, Spinner} from "react-bootstrap";
 import {useNavigate, useParams} from "react-router-dom";
 import FetchedMovieController from "../../controllers/FetchedMovieController.js";
 import {useEffect, useState} from "react";
@@ -6,6 +6,7 @@ import Loading from "../Movies/Loading.jsx";
 import {auth, db} from "../../../firebaseConfiguration.js";
 import {collection, doc, addDoc, deleteDoc, query, where, getDocs} from "firebase/firestore";
 import {gsap} from "gsap";
+import {useGSAP} from "@gsap/react";
 
 function MovieDetails() {
     const fetcher = new FetchedMovieController();
@@ -13,9 +14,11 @@ function MovieDetails() {
     const {movieId} = useParams();
     const [movie, setMovie] = useState(null);
     const [trailer, setTrailer] = useState('');
+
     const [isFavourite, setIsFavourite] = useState(false);
     const [isWatched, setIsWatched] = useState(false);
     const [toWatch, setToWatch] = useState(false);
+
     const [user, setUser] = useState(auth.currentUser);
     const [playMovieSplash, setPlayMovieSplash] = useState(false);
 
@@ -109,7 +112,7 @@ function MovieDetails() {
         }
     };
 
-    const onWatched = async () => {
+    const onWatchlist = async () => {
         if (user) {
             try {
                 const userDocRef = doc(db, 'users', user.uid);
@@ -142,7 +145,7 @@ function MovieDetails() {
     };
 
 
-    const onToWatch = async () => {
+    const onWatchlater = async () => {
         if (user) {
             try {
                 const userDocRef = doc(db, 'users', user.uid);
@@ -175,6 +178,41 @@ function MovieDetails() {
         }
     };
 
+    useGSAP(() => {
+        gsap.from('.main-container', {
+            opacity: 0,
+            duration: 1
+        })
+
+        gsap.from('.main-banner-title', {
+            opacity: 0,
+            y: 100,
+            duration: 1
+        })
+
+        gsap.from('.main-banner-video', {
+            opacity: 0,
+            duration: 1
+        })
+
+        gsap.from('.categories', {
+            opacity: 0,
+            duration: 1
+        })
+
+        gsap.from('.main-banner-description', {
+            opacity: 0,
+            y: 100,
+            duration: 1
+        })
+
+        gsap.from('.main-banner-actions', {
+            opacity: 0,
+            y: 100,
+            duration: 1
+        })
+    }, [trailer]);
+
     return (
       movie
           ? (
@@ -199,7 +237,7 @@ function MovieDetails() {
                               </Button>
                           </Navbar.Brand>
                       </Navbar>
-                      <Container className="rounded-4 bg-opacity-75" style={{backgroundColor: "rgb(0,0,0,0.6)"}}>
+                      <Container className="rounded-4 bg-opacity-75 main-container" style={{backgroundColor: "rgb(0,0,0,0.6)"}}>
                           <Container className="mt-5">
                               <h1 className="text-white main-banner-title mt-5">{movie.title}</h1>
                           </Container>
@@ -207,6 +245,7 @@ function MovieDetails() {
                               {trailer ? (
                                   <iframe
                                       src={trailer}
+                                      className="main-banner-video"
                                       width="100%"
                                       height="400"
                                       allowFullScreen
@@ -217,7 +256,7 @@ function MovieDetails() {
                           </Container>
                           <Container className="mt-2">
                               {movie.genres_ids.map((genre, index) => (
-                                  <span key={index} className="badge bg-danger me-2 opacity-75">{genre.name}</span>
+                                  <span key={index} className="categories badge bg-danger me-2 opacity-75">{genre.name}</span>
                               ))}
                           </Container>
                           <Container className="mt-3">
@@ -225,7 +264,7 @@ function MovieDetails() {
                                   {movie.overview}
                               </h5>
                           </Container>
-                          <Row className="my-5 d-flex justify-content-center gap-4">
+                          <Row className="main-banner-actions my-5 d-flex justify-content-center gap-4">
                               <Col xs="auto">
                                   <Button onClick={onPlay} variant="light" className="d-flex align-items-center px-3">
                                       <i className="bi bi-play-fill fs-2"></i>
@@ -233,19 +272,17 @@ function MovieDetails() {
                                   </Button>
                               </Col>
                               <Col xs="auto">
-                                  <Button onClick={onToWatch} variant={toWatch ? "danger" : "light"}
+                                  <Button onClick={onWatchlater} variant={toWatch ? "danger" : "light"}
                                           className="d-flex align-items-center px-3">
-                                      <i className={`bi bi-eye fs-2 ${toWatch ? "text-light" : "text-danger"}`}></i>
-                                      <h4 className={`${toWatch ? "text-light" : "text-dark"} mb-0 d-none d-md-inline mx-1`}>To
-                                          Watch List</h4>
+                                      <i className={`bi bi-clock-fill fs-2 ${toWatch ? "text-light" : "text-danger"}`}></i>
+                                      <h4 className={`${toWatch ? "text-light" : "text-dark"} mb-0 d-none d-md-inline mx-1`}>Watch Later</h4>
                                   </Button>
                               </Col>
                               <Col xs="auto">
-                                  <Button onClick={onWatched} variant={isWatched ? "danger" : "light"}
+                                  <Button onClick={onWatchlist} variant={isWatched ? "danger" : "light"}
                                           className="d-flex align-items-center px-3">
                                       <i className={`bi bi-eye-fill fs-2 ${isWatched ? "text-light" : "text-danger"}`}></i>
-                                      <h4 className={`${isWatched ? "text-light" : "text-dark"} mb-0 d-none d-md-inline mx-1`}>Watched
-                                          List</h4>
+                                      <h4 className={`${isWatched ? "text-light" : "text-dark"} mb-0 d-none d-md-inline mx-1`}>Watchlist</h4>
                                   </Button>
                               </Col>
                               <Col xs="auto">
@@ -262,8 +299,13 @@ function MovieDetails() {
               </>
           )
           : (
-              <Container fluid className="w-100 min-vh-100 bg-dark">
-                  <Loading/>
+              <Container fluid className="d-flex justify-content-center align-items-center vh-100 bg-dark">
+                  <Spinner
+                      animation="border"
+                      role="status"
+                      style={{ color: 'red' }}
+                  >
+                  </Spinner>
               </Container>
           )
     );
