@@ -126,6 +126,49 @@ const discoverTvShows = async (page) => {
 }
 
 /**
+ * API used to get the details of a media. The API defines if the media
+ * is a movie or a tv show.
+ *
+ * @param id id of the media.
+ * @return returns a json with media details.
+ * */
+const mediaDetails = async (id) => {
+    try {
+        let response = await fetch(`https://api.themoviedb.org/3/movie/${id}?language=en-US`, {
+            headers: {
+                Authorization: `Bearer ${tmdb_read_token}`,
+                Accept: "application/json"
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return await response.json();
+    } catch (error) {
+        console.error("First request failed, retrying...", error);
+
+        try {
+            let retryResponse = await fetch(`https://api.themoviedb.org/3/tv/${id}?language=en-US`, {
+                headers: {
+                    Authorization: `Bearer ${tmdb_read_token}`,
+                    Accept: "application/json"
+                }
+            });
+
+            if (!retryResponse.ok) {
+                throw new Error(`HTTP error on retry! status: ${retryResponse.status}`);
+            }
+            return await retryResponse.json();
+        } catch (retryError) {
+            console.error("Second request failed as well", retryError);
+            return { error: "Failed to fetch movie details" };
+        }
+    }
+};
+
+
+/**
  * API used to get media genres.
  *
  * @param id id of the media.
@@ -240,4 +283,4 @@ const getMovieIdBraflix = async (server, query, year, type, episode, season, mov
 };
 
 
-export {getPopularMovies, getPopularTvShows, getTopRatedMovies, getTopRatedTvShows, getTrendingMovies, getTvShowDetails, discoverMovies, discoverTvShows, getMovieId, getMovieSources, getMovieIdBraflix, search, getTrailerKey, mediaGenres}
+export {getPopularMovies, getPopularTvShows, getTopRatedMovies, getTopRatedTvShows, getTrendingMovies, getTvShowDetails, discoverMovies, discoverTvShows, getMovieId, getMovieSources, getMovieIdBraflix, search, getTrailerKey, mediaGenres, mediaDetails}

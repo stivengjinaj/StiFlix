@@ -1,6 +1,7 @@
 import * as API from "../API.js";
 import FetchedMovie from "../models/FetchedMovie.mjs";
 import {sortByVoteAverage} from "../helper/miscs.js";
+import {json} from "react-router-dom";
 
 class FetchedMovieController {
 
@@ -172,6 +173,35 @@ class FetchedMovieController {
             });
         }
         return fetchedMovies;
+    }
+
+    /**
+     * Function used to get movie details given an id.
+     *
+     * @param movieId Id of the media.
+     * @return media details.
+     * */
+    async getMediaDetails(movieId) {
+        const media = await API.mediaDetails(movieId);
+        const isSeries = media.release_date === undefined;
+        const mediaJson = {
+            id: media.id,
+            original_name: media.original_name,
+            original_title: media.original_title,
+            overview: media.overview,
+            backdrop_path: media.backdrop_path,
+            poster_path: media.poster_path,
+            genres_ids: media.genres,
+            release_date: media.release_date,
+            first_air_date: media.first_air_date,
+            vote_average: media.vote_average,
+        }
+        return new FetchedMovie(
+            mediaJson,
+            isSeries,
+            isSeries ? media.number_of_seasons: 0,
+            isSeries ? media.number_of_episodes : 0
+        )
     }
 
     /**
