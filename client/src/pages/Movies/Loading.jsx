@@ -2,7 +2,7 @@ import {Container, Spinner} from "react-bootstrap";
 
 function Loading() {
     return (
-        <Container fluid className="d-flex justify-content-center align-items-center vh-100 bg-dark">
+        <Container fluid className="d-flex bg-gradient-dark-radius justify-content-center align-items-center vh-100">
             <Spinner
                 animation="border"
                 role="status"
