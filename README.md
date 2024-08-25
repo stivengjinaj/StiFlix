@@ -106,6 +106,7 @@ You can check out the links in console.
 | Search            | Search for a movie                                                                                                  | High     | Done        |
 | Category Filter   | Filter videos by category                                                                                           | Medium   | Not started |
 | UI for tv show    | Page where you can select the season/episode of a tv show. Can be simply video player with season/episode dropdowns | Medium   | Not started |
+| My account        | Page where you can see/change your account details.                                                                 | Medium   | Done        |
 
 
 
