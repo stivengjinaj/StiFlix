@@ -1,12 +1,13 @@
 class User {
-    constructor(fullName, email, verified) {
+    constructor(fullName, email, verified, avatar=null) {
         this.fullName = fullName;
         this.email = email;
         this.verified = verified;
+        this.avatar = avatar;
     }
 
-    getUsername() {
-        return this.username;
+    getFullName() {
+        return this.fullName;
     }
 
     getEmail() {

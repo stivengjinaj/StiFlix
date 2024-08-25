@@ -8,6 +8,7 @@ import Login from "./pages/Authentication/Login.jsx";
 import Register from "./pages/Authentication/Register.jsx";
 import MovieDetails from "./pages/MoviePlaying/MovieDetails.jsx";
 import MoviePlaying from "./pages/MoviePlaying/MoviePlaying.jsx";
+import MyAccount from "./pages/Account/MyAccount.jsx";
 
 function App() {
     return (
@@ -18,6 +19,7 @@ function App() {
             <Route path={'/movies/:movieId'} element={<MoviePlaying />} />
             <Route path={'/login'} element={<Login />} />
             <Route path={'/register'} element={<Register />} />
+            <Route path={'/account'} element={<MyAccount />} />
         </Routes>
     );
 }
