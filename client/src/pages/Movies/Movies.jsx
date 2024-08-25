@@ -10,6 +10,7 @@ import MoviesCarousel from "./MoviesCarousel.jsx";
 import FetchedMovieController from "../../controllers/FetchedMovieController.js";
 import {sortByVoteAverage, stringQuery} from "../../helper/miscs.js";
 import SeachResults from "./SeachResults.jsx";
+import StiflixFooter from "../Miscs/StiflixFooter.jsx";
 
 function Movies() {
     const fetcher = new FetchedMovieController();
@@ -129,15 +130,7 @@ function HomePage(props) {
                         props.allTrending.length > 0 && <SeachResults movies={searchedMovies}/>
                     )
             }
-
-            <footer className="text-white text-center p-3 mt-5">
-                <Container>
-                    <Row>
-                        <h6>Stiflix does not store any of the contents present in the site.</h6>
-                        <strong>Copyright © Stiflix 2024</strong>
-                    </Row>
-                </Container>
-            </footer>
+            <StiflixFooter />
         </Container>
     );
 }
