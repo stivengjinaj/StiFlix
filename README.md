@@ -91,22 +91,28 @@ You can check out the links in console.
 
 ## Task List
 
-| Task              | Description                                                                                                         | Priority | Status      |
-|-------------------|---------------------------------------------------------------------------------------------------------------------|----------|-------------|
-| Video Player Skin | Add personalized skin to the iframe vide                                                                            | Optional | Not started |
-| Video Progress    | Save the progress of the video watched                                                                              | High     | Not started |
-| Login/Register    | Add users                                                                                                           | High     | Done        |
-| More info         | Show movie info                                                                                                     | Medium   | Done        |
-| Favourites        | Add a video to the favourites list                                                                                  | High     | Done        |
-| Favourites page   | View favourite movies                                                                                               | Medium   | Not started |
-| WatchList         | Add a video to the watch list                                                                                       | High     | Done        |
-| Watchlist page    | View watchlist movies                                                                                               | Medium   | Not started |
-| Watch later       | Add a video to the to watch list                                                                                    | High     | Done        |
-| Watch later page  | View movies to watch later                                                                                          | Medium   | Not started |
-| Search            | Search for a movie                                                                                                  | High     | Done        |
-| Category Filter   | Filter videos by category                                                                                           | Medium   | Not started |
-| UI for tv show    | Page where you can select the season/episode of a tv show. Can be simply video player with season/episode dropdowns | Medium   | Not started |
-| My account        | Page where you can see/change your account details.                                                                 | Medium   | Done        |
+| Task                      | Description                                                                                                                         | Priority | Status      |
+|---------------------------|-------------------------------------------------------------------------------------------------------------------------------------|----------|-------------|
+| Video Player Skin         | Add personalized skin to the iframe vide                                                                                            | Optional | Not started |
+| Video Progress            | Save the progress of the video watched                                                                                              | High     | Not started |
+| Login/Register            | Add users                                                                                                                           | High     | Done        |
+| More info                 | Show movie info                                                                                                                     | Medium   | Done        |
+| Favourites                | Add a video to the favourites list                                                                                                  | High     | Done        |
+| Favourites page           | View favourite movies                                                                                                               | Medium   | Done        |
+| WatchList                 | Add a video to the watch list                                                                                                       | High     | Done        |
+| Watchlist page            | View watchlist movies                                                                                                               | Medium   | Done        |
+| Watch later               | Add a video to the to watch list                                                                                                    | High     | Done        |
+| Watch later page          | View movies to watch later                                                                                                          | Medium   | Done        |
+| Search                    | Search for a movie                                                                                                                  | High     | Done        |
+| Category Filter           | Filter videos by category                                                                                                           | Medium   | Not started |
+| UI for tv show            | Page where you can select the season/episode of a tv show. Can be simply video player with season/episode dropdowns                 | Medium   | Not started |
+| My account                | Page where you can see/change your account details.                                                                                 | Medium   | Done        |
+| Route blocker             | Block navigation by link if user is not logged in. E.g: Navigating to favourites takes you to login.                                | High     | Not started |
+| Remove stacked navigation | Remove stack navigation. E.g: After navigating: home > my account > favourites, back button must take me to home, not to my account | Low      | Not started |
+| GSAP animations           | GSAP animations tend to lag on pages where UI appears after asynchronous requests are done. Refresh is needed to remove lag.        | Medium   | Not started |
+| Watch movie UI            | Simple UI to watch a movie/tv show, with switch server dropdown.                                                                    | High     | Not started |
+
+
 
 
 
