@@ -9,6 +9,7 @@ import Register from "./pages/Authentication/Register.jsx";
 import MovieDetails from "./pages/MoviePlaying/MovieDetails.jsx";
 import MoviePlaying from "./pages/MoviePlaying/MoviePlaying.jsx";
 import MyAccount from "./pages/Account/MyAccount.jsx";
+import PersonalMovies from "./pages/Personal/PersonalMovies.jsx";
 
 function App() {
     return (
@@ -20,6 +21,9 @@ function App() {
             <Route path={'/login'} element={<Login />} />
             <Route path={'/register'} element={<Register />} />
             <Route path={'/account'} element={<MyAccount />} />
+            <Route path={'/favourites'} element={<PersonalMovies type={'favourites'} />} />
+            <Route path={'/watchLater'} element={<PersonalMovies type={'watchLater'} />} />
+            <Route path={'/watchlist'} element={<PersonalMovies type={'watchlist'} />} />
         </Routes>
     );
 }
