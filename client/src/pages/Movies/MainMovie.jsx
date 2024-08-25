@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Loading from "./Loading.jsx";
 import MoreInfo from "./MoreInfo.jsx";
+import {useGSAP} from "@gsap/react";
 
 function MainMovie({ mainMovie }) {
     const [currentMovie, setCurrentMovie] = useState(null);
@@ -18,41 +19,35 @@ function MainMovie({ mainMovie }) {
         }
     }, [mainMovie]);
 
-    useEffect(() => {
-        if(currentMovie && currentMovie.backdrop_path) {
+    useGSAP(() => {
             gsap.from('.main-banner', {
                 x: 100,
-                opacity: 0,
+                autoAlpha: 0,
             });
             gsap.from('.main-banner-title', {
-                delay: 0.2,
-                y: 50,
-                opacity: 0,
+                x: 100,
+                autoAlpha: 0,
             });
             gsap.from('.main-banner-category', {
-                delay: 0.4,
-                y: 50,
-                opacity: 0,
+                x: 100,
+                autoAlpha: 0,
             });
             gsap.from('.main-banner-description', {
-                delay: 0.8,
-                y: 50,
-                opacity: 0,
+                x: 100,
+                autoAlpha: 0,
             });
             gsap.from('button', {
-                delay: 1.0,
-                y: 50,
-                opacity: 0,
+                x: 100,
+                autoAlpha: 0,
             });
-        }
     }, [currentMovie]);
 
     useEffect(() => {
         if (playMovieSplash) {
             gsap.fromTo('.splash-screen', {
-                opacity: 0,
+                autoAlpha: 0,
             }, {
-                opacity: 1,
+                autoAlpha: 1,
                 duration: 2,
                 ease: 'ease-in-out',
                 onComplete: () => {
