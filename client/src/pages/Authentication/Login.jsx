@@ -1,7 +1,7 @@
 {/*eslint-disable react/prop-types*/}
 import {useNavigate} from "react-router-dom";
 import {useState} from "react";
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword, setPersistence, browserLocalPersistence, browserSessionPersistence } from 'firebase/auth';
 import {auth, db} from "../../../firebaseConfiguration.js";
 import { doc, updateDoc } from "firebase/firestore";
 import {Button, Col, Container, Form, Row} from "react-bootstrap";
@@ -16,6 +16,7 @@ function Login() {
     const [password, setPassword] = useState("");
     const [wrongCredentials, setWrongCredentials] = useState(false);
     const [currentUserState, setCurrentUserState ] = useState("")
+    const [rememberMe, setRememberMe] = useState(false);
 
     useGSAP(() => {
         gsap.from('img', {
@@ -35,6 +36,7 @@ function Login() {
 
     const handleLogin = async (e) => {
         e.preventDefault()
+        setPersistence(auth, rememberMe ? browserLocalPersistence : browserSessionPersistence);
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 if(!userCredential.user.emailVerified){
@@ -129,6 +131,7 @@ function Login() {
                             <Form.Check
                                 type={"checkbox"}
                                 label={`Remember me`}
+                                onChange={(event) => setRememberMe(event.target.checked)}
                             />
                         </Form.Group>
                         <Container className="mt-3 mx-4">
