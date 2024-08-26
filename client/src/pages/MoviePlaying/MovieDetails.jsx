@@ -1,73 +1,68 @@
+{/*eslint-disable react/prop-types*/}
 import {Button, Col, Container, Navbar, Row, Spinner} from "react-bootstrap";
 import {useNavigate, useParams} from "react-router-dom";
 import FetchedMovieController from "../../controllers/FetchedMovieController.js";
 import {useEffect, useState} from "react";
 import Loading from "../Movies/Loading.jsx";
-import {auth, db} from "../../../firebaseConfiguration.js";
+import {db} from "../../../firebaseConfiguration.js";
 import {collection, doc, addDoc, deleteDoc, query, where, getDocs} from "firebase/firestore";
 import {gsap} from "gsap";
 import {useGSAP} from "@gsap/react";
 
-function MovieDetails() {
+function MovieDetails(props) {
     const fetcher = new FetchedMovieController();
     const navigate = useNavigate();
-    const {movieId} = useParams();
+    const {mediaType, movieId} = useParams();
     const [movie, setMovie] = useState(null);
     const [trailer, setTrailer] = useState('');
-
+    const [noTrailer, setNoTrailer] = useState(false);
     const [isFavourite, setIsFavourite] = useState(false);
     const [isWatched, setIsWatched] = useState(false);
     const [toWatch, setToWatch] = useState(false);
 
-    const [user, setUser] = useState(auth.currentUser);
     const [playMovieSplash, setPlayMovieSplash] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
-            const fetchedMovie = await fetcher.getMediaDetails(movieId);
+            const fetchedMovie = await fetcher.getMediaDetails(movieId, mediaType);
             const trailer = await fetcher.getTrailer(fetchedMovie.id, fetchedMovie.isSeries ? 'tv' : 'movie');
-
+            trailer === null ? setNoTrailer(false) : setNoTrailer(true);
             setMovie(fetchedMovie);
             setTrailer(trailer);
         }
 
         fetchData();
 
-        auth.onAuthStateChanged(async (usr) => {
-            if (usr) {
-                setUser(usr);
+        const getUserPresonalData = async () => {
+            const userDocRef = doc(db, 'users', props.user.uid);
 
-                const userDocRef = doc(db, 'users', usr.uid);
+            try {
+                const favouritesSnapshot = await getDocs(collection(userDocRef, 'favourites'));
+                const watchedSnapshot = await getDocs(collection(userDocRef, 'watched'));
+                const toWatchSnapshot = await getDocs(collection(userDocRef, 'toWatch'));
 
-                try {
-                    const favouritesSnapshot = await getDocs(collection(userDocRef, 'favourites'));
-                    const watchedSnapshot = await getDocs(collection(userDocRef, 'watched'));
-                    const toWatchSnapshot = await getDocs(collection(userDocRef, 'toWatch'));
+                const favourites = favouritesSnapshot.docs.map(doc => doc.data());
+                const watched = watchedSnapshot.docs.map(doc => doc.data());
+                const toWatch = toWatchSnapshot.docs.map(doc => doc.data());
 
-                    const favourites = favouritesSnapshot.docs.map(doc => doc.data());
-                    const watched = watchedSnapshot.docs.map(doc => doc.data());
-                    const toWatch = toWatchSnapshot.docs.map(doc => doc.data());
+                favourites.map(favourite => {
+                    favourite.movieId === movieId ? setIsFavourite(true) : setIsFavourite(false);
+                });
 
-                    favourites.map(favourite => {
-                        favourite.movieId === movieId ? setIsFavourite(true) : setIsFavourite(false);
-                    });
+                watched.map(watched => {
+                    watched.movieId === movieId ? setIsWatched(true) : setIsWatched(false);
+                });
 
-                    watched.map(watched => {
-                        watched.movieId === movieId ? setIsWatched(true) : setIsWatched(false);
-                    });
+                toWatch.map(toWatch => {
+                    toWatch.movieId === movieId ? setToWatch(true) : setToWatch(false);
+                });
 
-                    toWatch.map(toWatch => {
-                        toWatch.movieId === movieId ? setToWatch(true) : setToWatch(false);
-                    });
-
-                } catch (error) {
-                    console.error('Error fetching user collections:', error);
-                }
-            } else {
-                setUser(null);
+            } catch (error) {
+                console.error('Error fetching user collections:', error);
             }
-        });
-    }, []);
+        }
+        props.user && getUserPresonalData();
+    }, [props.user]);
 
     useEffect(() => {
         if (playMovieSplash) {
@@ -89,9 +84,9 @@ function MovieDetails() {
     }
 
     const onFavourite = async () => {
-        if (user) {
+        if (props.user) {
             try {
-                const userDocRef = doc(db, 'users', user.uid);
+                const userDocRef = doc(db, 'users', props.user.uid);
                 const favouritesRef = collection(userDocRef, 'favourites');
 
                 const favouritesQuery = query(favouritesRef, where("movieId", "==", movie.id.toString()));
@@ -101,7 +96,7 @@ function MovieDetails() {
                     await deleteDoc(favouritesSnapshot.docs[0].ref);
                     setIsFavourite(false);
                 } else {
-                    await addDoc(favouritesRef, { movieId: movie.id.toString() });
+                    await addDoc(favouritesRef, { movieId: movie.id.toString(), mediaType: mediaType });
                     setIsFavourite(true);
                 }
             } catch (error) {
@@ -113,9 +108,9 @@ function MovieDetails() {
     };
 
     const onWatchlist = async () => {
-        if (user) {
+        if (props.user) {
             try {
-                const userDocRef = doc(db, 'users', user.uid);
+                const userDocRef = doc(db, 'users', props.user.uid);
                 const watchedRef = collection(userDocRef, 'watched');
                 const toWatchRef = collection(userDocRef, 'toWatch');
 
@@ -133,7 +128,7 @@ function MovieDetails() {
                         await deleteDoc(toWatchSnapshot.docs[0].ref);
                         setToWatch(false);
                     }
-                    await addDoc(watchedRef, { movieId: movie.id.toString() });
+                    await addDoc(watchedRef, { movieId: movie.id.toString(), mediaType: mediaType });
                     setIsWatched(true);
                 }
             } catch (error) {
@@ -145,10 +140,10 @@ function MovieDetails() {
     };
 
 
-    const onWatchlater = async () => {
-        if (user) {
+    const onWatchLater = async () => {
+        if (props.user) {
             try {
-                const userDocRef = doc(db, 'users', user.uid);
+                const userDocRef = doc(db, 'users', props.user.uid);
                 const toWatchRef = collection(userDocRef, 'toWatch');
                 const watchedRef = collection(userDocRef, 'watched');
 
@@ -167,7 +162,7 @@ function MovieDetails() {
                         setIsWatched(false);
                     }
 
-                    await addDoc(toWatchRef, { movieId: movie.id.toString() });
+                    await addDoc(toWatchRef, { movieId: movie.id.toString(), mediaType: mediaType });
                     setToWatch(true);
                 }
             } catch (error) {
@@ -241,7 +236,7 @@ function MovieDetails() {
                           <Container className="mt-5">
                               <h1 className="text-white main-banner-title mt-5">{movie.title}</h1>
                           </Container>
-                          <Container className="mt-5">
+                          {noTrailer && <Container className="mt-5">
                               {trailer ? (
                                   <iframe
                                       src={trailer}
@@ -253,7 +248,7 @@ function MovieDetails() {
                                       style={{marginBottom: '20px'}}
                                   ></iframe>
                               ) : (<Loading/>)}
-                          </Container>
+                          </Container>}
                           <Container className="mt-2">
                               {movie.genres_ids.map((genre, index) => (
                                   <span key={index} className="categories badge bg-danger me-2 opacity-75">{genre.name}</span>
@@ -271,43 +266,47 @@ function MovieDetails() {
                                       <h4 className="text-dark mb-0 d-none d-md-inline">Play</h4>
                                   </Button>
                               </Col>
-                              <Col xs="auto">
-                                  <Button onClick={onWatchlater} variant={toWatch ? "danger" : "light"}
-                                          className="d-flex align-items-center px-3">
-                                      <i className={`bi bi-clock-fill fs-2 ${toWatch ? "text-light" : "text-danger"}`}></i>
-                                      <h4 className={`${toWatch ? "text-light" : "text-dark"} mb-0 d-none d-md-inline mx-1`}>Watch Later</h4>
-                                  </Button>
-                              </Col>
-                              <Col xs="auto">
-                                  <Button onClick={onWatchlist} variant={isWatched ? "danger" : "light"}
-                                          className="d-flex align-items-center px-3">
-                                      <i className={`bi bi-eye-fill fs-2 ${isWatched ? "text-light" : "text-danger"}`}></i>
-                                      <h4 className={`${isWatched ? "text-light" : "text-dark"} mb-0 d-none d-md-inline mx-1`}>Watchlist</h4>
-                                  </Button>
-                              </Col>
-                              <Col xs="auto">
-                                  <Button onClick={onFavourite} variant={isFavourite ? "danger" : "light"}
-                                          className="d-flex align-items-center px-3">
-                                      <i className={`bi fs-2 ${isFavourite ? "text-light bi-star-fill" : "text-danger bi-star"}`}></i>
-                                      <h4 className={`${isFavourite ? "text-light" : "text-dark"} mb-0 d-none d-md-inline mx-1`}>Favourites</h4>
-                                  </Button>
-                              </Col>
+                              {
+                                  props.user && (
+                                      <>
+                                          <Col xs="auto">
+                                              <Button onClick={onWatchLater} variant={toWatch ? "danger" : "light"}
+                                                      className="d-flex align-items-center px-3">
+                                                  <i className={`bi bi-clock-fill fs-2 ${toWatch ? "text-light" : "text-danger"}`}></i>
+                                                  <h4 className={`${toWatch ? "text-light" : "text-dark"} mb-0 d-none d-md-inline mx-1`}>Watch Later</h4>
+                                              </Button>
+                                          </Col>
+                                          <Col xs="auto">
+                                              <Button onClick={onWatchlist} variant={isWatched ? "danger" : "light"}
+                                                      className="d-flex align-items-center px-3">
+                                                  <i className={`bi bi-eye-fill fs-2 ${isWatched ? "text-light" : "text-danger"}`}></i>
+                                                  <h4 className={`${isWatched ? "text-light" : "text-dark"} mb-0 d-none d-md-inline mx-1`}>Watchlist</h4>
+                                              </Button>
+                                          </Col>
+                                          <Col xs="auto">
+                                              <Button onClick={onFavourite} variant={isFavourite ? "danger" : "light"}
+                                                      className="d-flex align-items-center px-3">
+                                                  <i className={`bi fs-2 ${isFavourite ? "text-light bi-star-fill" : "text-danger bi-star"}`}></i>
+                                                  <h4 className={`${isFavourite ? "text-light" : "text-dark"} mb-0 d-none d-md-inline mx-1`}>Favourites</h4>
+                                              </Button>
+                                          </Col>
+                                      </>
+                                  )
+                              }
                           </Row>
 
                       </Container>
                   </Container>
               </>
           )
-          : (
-              <Container fluid className="d-flex justify-content-center align-items-center vh-100 bg-dark">
-                  <Spinner
-                      animation="border"
-                      role="status"
-                      style={{ color: 'red' }}
-                  >
-                  </Spinner>
-              </Container>
-          )
+          : (<Container fluid className="d-flex justify-content-center align-items-center vh-100 bg-dark">
+              <Spinner
+                  animation="border"
+                  role="status"
+                  style={{ color: 'red' }}
+              >
+              </Spinner>
+          </Container>)
     );
 }
 
