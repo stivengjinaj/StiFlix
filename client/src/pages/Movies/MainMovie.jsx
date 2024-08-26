@@ -1,11 +1,10 @@
 /* eslint-disable react/prop-types */
 import { Button, Col, Container, Row } from "react-bootstrap";
 import { gsap } from "gsap";
-import { useEffect, useState } from "react";
+import { useLayoutEffect, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Loading from "./Loading.jsx";
 import MoreInfo from "./MoreInfo.jsx";
-import {useGSAP} from "@gsap/react";
 
 function MainMovie({ mainMovie }) {
     const [currentMovie, setCurrentMovie] = useState(null);
@@ -19,27 +18,19 @@ function MainMovie({ mainMovie }) {
         }
     }, [mainMovie]);
 
-    useGSAP(() => {
-            gsap.from('.main-banner', {
-                x: 100,
-                autoAlpha: 0,
+    useLayoutEffect(() => {
+        if (currentMovie) {
+            const ctx = gsap.context(() => {
+                gsap.fromTo('.main-banner', { x: 100, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: 1.5 });
+                gsap.fromTo('.main-banner-title', { x: 100, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: 1.5, delay: 0.2 });
+                gsap.fromTo('.main-banner-category', { x: 100, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: 1.5, delay: 0.4 });
+                gsap.fromTo('.main-banner-description', { x: 100, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: 1.5, delay: 0.6 });
+                gsap.fromTo('button', { x: 100, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: 1.5, delay: 0.8 });
             });
-            gsap.from('.main-banner-title', {
-                x: 100,
-                autoAlpha: 0,
-            });
-            gsap.from('.main-banner-category', {
-                x: 100,
-                autoAlpha: 0,
-            });
-            gsap.from('.main-banner-description', {
-                x: 100,
-                autoAlpha: 0,
-            });
-            gsap.from('button', {
-                x: 100,
-                autoAlpha: 0,
-            });
+
+            // Cleanup animations on unmount
+            return () => ctx.revert();
+        }
     }, [currentMovie]);
 
     useEffect(() => {
