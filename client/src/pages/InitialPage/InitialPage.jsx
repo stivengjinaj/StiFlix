@@ -67,11 +67,11 @@ function InitialPage(props) {
                                         </Dropdown.Toggle>
 
                                         <Dropdown.Menu className="mt-2 bg-dark">
-                                            <Dropdown.Item className="text-white" href="/movies">Home</Dropdown.Item>
-                                            <Dropdown.Item className="text-white" href="/account">Account</Dropdown.Item>
-                                            <Dropdown.Item className="text-white" href="/favourites">Favourites</Dropdown.Item>
-                                            <Dropdown.Item className="text-white" href="/watched-list">Watched List</Dropdown.Item>
-                                            <Dropdown.Item className="text-white" href="/to-watch-list">To Watch List</Dropdown.Item>
+                                            <Dropdown.Item className="text-white dropdown-item" href="/movies">Home</Dropdown.Item>
+                                            <Dropdown.Item className="text-white dropdown-item" href="/account">Account</Dropdown.Item>
+                                            <Dropdown.Item className="text-white dropdown-item" href="/favourites">Favourites</Dropdown.Item>
+                                            <Dropdown.Item className="text-white dropdown-item" href="/watchlist">Watchlist</Dropdown.Item>
+                                            <Dropdown.Item className="text-white dropdown-item" href="/watchLater">Watch Later</Dropdown.Item>
                                             <Dropdown.Item onClick={props.handleSignOut} className="text-danger">Logout</Dropdown.Item>
                                         </Dropdown.Menu>
                                     </Dropdown>
