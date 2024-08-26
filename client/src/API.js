@@ -130,11 +130,13 @@ const discoverTvShows = async (page) => {
  * is a movie or a tv show.
  *
  * @param id id of the media.
+ * @param mediaType movie or tv show.
  * @return returns a json with media details.
  * */
-const mediaDetails = async (id) => {
+const mediaDetails = async (id, mediaType) => {
+    const baseUrl = mediaType === 'movie' ? 'https://api.themoviedb.org/3/movie/' : 'https://api.themoviedb.org/3/tv/';
     try {
-        let response = await fetch(`https://api.themoviedb.org/3/movie/${id}?language=en-US`, {
+        const response = await fetch(`${baseUrl}${id}?language=en-US`, {
             headers: {
                 Authorization: `Bearer ${tmdb_read_token}`,
                 Accept: "application/json"
@@ -144,26 +146,11 @@ const mediaDetails = async (id) => {
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
+
         return await response.json();
     } catch (error) {
-        console.error("First request failed, retrying...", error);
-
-        try {
-            let retryResponse = await fetch(`https://api.themoviedb.org/3/tv/${id}?language=en-US`, {
-                headers: {
-                    Authorization: `Bearer ${tmdb_read_token}`,
-                    Accept: "application/json"
-                }
-            });
-
-            if (!retryResponse.ok) {
-                throw new Error(`HTTP error on retry! status: ${retryResponse.status}`);
-            }
-            return await retryResponse.json();
-        } catch (retryError) {
-            console.error("Second request failed as well", retryError);
-            return { error: "Failed to fetch movie details" };
-        }
+        console.error("Failed to fetch media details:", error);
+        return { error: "Failed to fetch media details" };
     }
 };
 
@@ -199,10 +186,12 @@ const mediaGenres = async (id, media_type) => {
  * API used to get movie trailer.
  *
  * @param movieId id of the movie.
+ * @param mediaType movie or tv show.
  * @return youtube key of the trailer.
  * */
-const getTrailerKey = async (movieId) => {
-    const response = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/videos?language=en-US`, {
+const getTrailerKey = async (movieId, mediaType) => {
+    const baseUrl = mediaType === 'movie' ? 'https://api.themoviedb.org/3/movie/' : 'https://api.themoviedb.org/3/tv/';
+    const response = await fetch(`${baseUrl}${movieId}/videos?language=en-US`, {
         headers: {
             Authorization: `Bearer ${tmdb_read_token}`,
             Accept: "application/json"

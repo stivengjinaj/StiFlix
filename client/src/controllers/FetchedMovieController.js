@@ -178,10 +178,11 @@ class FetchedMovieController {
      * Function used to get movie details given an id.
      *
      * @param movieId Id of the media.
+     * @param mediaType movie or tv show.
      * @return media details.
      * */
-    async getMediaDetails(movieId) {
-        const media = await API.mediaDetails(movieId);
+    async getMediaDetails(movieId, mediaType) {
+        const media = await API.mediaDetails(movieId, mediaType);
         const isSeries = media.release_date === undefined;
         const mediaJson = {
             id: media.id,
@@ -207,10 +208,11 @@ class FetchedMovieController {
      * Function used to get the trailer of a movie.
      *
      * @param movieId Id of the movie.
+     * @param mediaType movie or tv show.
      * @return youtube link of the trailer.
      * */
-    async getTrailer(movieId) {
-        const videoResults = await API.getTrailerKey(movieId);
+    async getTrailer(movieId, mediaType) {
+        const videoResults = await API.getTrailerKey(movieId, mediaType);
         const youtubeLink = "https://www.youtube.com/embed/";
         return videoResults.results.length > 0 ? youtubeLink+videoResults.results[0].key : null;
     }
