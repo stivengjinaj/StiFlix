@@ -61,7 +61,7 @@ function PersonalMovies(props) {
                             return;
                     }
 
-                    const moviePromises = snapshot.docs.map((doc) => movieFetcher.getMediaDetails(doc.data().movieId));
+                    const moviePromises = snapshot.docs.map((doc) => movieFetcher.getMediaDetails(doc.data().movieId, doc.data().mediaType));
                     movies = await Promise.all(moviePromises);
 
                     switch (props.type) {
@@ -88,29 +88,13 @@ function PersonalMovies(props) {
                 }
             }
         };
+        fetchMovies(props.user);
+    }, [props.type, props.user]);
 
-        if (props.user) {
-            fetchMovies(props.user);
-        }
-    }, [props.user, props.type]);
-
-
-
-
-    useEffect(() => {
-        favourites.length > 0
-            ? setLoading(false)
-            : watchLater.length > 0
-                ? setLoading(false)
-                : watchlist.length > 0
-                    ? setLoading(false)
-                    : setLoading(true)
-    }, [favourites, watchlist, watchLater]);
 
     const handleMovieTypeSelection = (type) => {
         navigate(`/${type}`);
-    }
-
+    };
 
     return (
         <Container fluid className="min-vh-100 bg-gradient-dark-radius main-banner overflow-x-hidden">
@@ -166,26 +150,20 @@ function PersonalMovies(props) {
             }
             {
                 loading
-                    ? (
-                        <Loading />
-                    )
+                    ? <Loading />
                     : (
                         noMovies
-                            ? (
-                                <Container fluid className="d-flex justify-content-center bg-gradient-dark-radius">
-                                    <h2 className="text-white mt-5 mx-3">
-                                        No movies in {props.type === "favourites" ? "Favourites" : props.type === "watchLater" ? "Watch Later" : "Watchlist"}
-                                    </h2>
-                                </Container>
-                            )
-                            : (
-                                <Container fluid className="mx-2">
-                                    <h2 className="text-white mt-5 mx-3">
-                                        {props.type === "favourites" ? "Favourites" : props.type === "watchLater" ? "Watch Later" : "Watchlist"}
-                                    </h2>
-                                    <GridMovies movies={props.type === "favourites" ? favourites : props.type === "watchLater" ? watchLater : watchlist} />
-                                </Container>
-                            )
+                            ? <Container fluid className="d-flex justify-content-center bg-gradient-dark-radius">
+                                <h2 className="text-white mt-5 mx-3">
+                                    No movies in {props.type === "favourites" ? "Favourites" : props.type === "watchLater" ? "Watch Later" : "Watchlist"}
+                                </h2>
+                            </Container>
+                            : <Container fluid className="mx-2">
+                                <h2 className="text-white mt-5 mx-3">
+                                    {props.type === "favourites" ? "Favourites" : props.type === "watchLater" ? "Watch Later" : "Watchlist"}
+                                </h2>
+                                <GridMovies movies={props.type === "favourites" ? favourites : props.type === "watchLater" ? watchLater : watchlist} />
+                            </Container>
                     )
             }
         </Container>
