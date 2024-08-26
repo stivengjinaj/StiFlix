@@ -52,16 +52,16 @@ function App() {
                 !user ? <Register /> : <Navigate to={'/'} />
             } />
             <Route path={'/account'} element={
-                user ? <MyAccount /> : <Navigate to={'/login'} />
+                user ? <MyAccount user={user} handleSignOut={handleSignOut}/> : <Navigate to={'/login'} />
             } />
             <Route path={'/favourites'} element={
-                user ? <PersonalMovies type={'favourites'} /> : <Navigate to={'/login'} />
+                user ? <PersonalMovies user={user} type={'favourites'} /> : <Navigate to={'/login'} />
             } />
             <Route path={'/watchLater'} element={
-                user ? <PersonalMovies type={'watchLater'} /> : <Navigate to={'/login'} />
+                user ? <PersonalMovies user={user} type={'watchLater'} /> : <Navigate to={'/login'} />
             } />
             <Route path={'/watchlist'} element={
-                user ? <PersonalMovies type={'watchlist'} /> : <Navigate to={'/login'} />
+                user ? <PersonalMovies user={user} type={'watchlist'} /> : <Navigate to={'/login'} />
             } />
         </Routes>
     );

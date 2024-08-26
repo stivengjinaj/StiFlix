@@ -3,7 +3,7 @@ import Loading from "../Movies/Loading.jsx";
 {/* eslint-disable react/prop-types */}
 import logo from "../../assets/images/logo.png";
 import {useEffect, useState} from "react";
-import {auth, db} from "../../../firebaseConfiguration.js";
+import {db} from "../../../firebaseConfiguration.js";
 import {collection, doc, getDocs} from "firebase/firestore";
 import {Button, Container, Nav, Navbar} from "react-bootstrap";
 import GridMovies from "../Movies/GridMovies.jsx";
@@ -15,7 +15,6 @@ function PersonalMovies(props) {
     const navigate = useNavigate();
     const [screen, setScreen] = useState('desktop');
     const movieFetcher = new FetchedMovieController();
-    const [user, setUser] = useState(null);
     const [favourites, setFavourites] = useState([]);
     const [watchLater, setWatchLater] = useState([]);
     const [watchlist, setWatchlist] = useState([]);
@@ -40,7 +39,6 @@ function PersonalMovies(props) {
     useEffect(() => {
         const fetchMovies = async (usr) => {
             if (usr) {
-                // Reset noMovies state to false when starting the fetch
                 setNoMovies(false);
                 setLoading(true);
 
@@ -48,52 +46,54 @@ function PersonalMovies(props) {
                 let snapshot;
                 let movies = [];
 
-                switch (props.type) {
-                    case "watchLater":
-                        snapshot = await getDocs(collection(userDocRef, 'toWatch'));
-                        break;
-                    case "watchlist":
-                        snapshot = await getDocs(collection(userDocRef, 'watched'));
-                        break;
-                    case "favourites":
-                        snapshot = await getDocs(collection(userDocRef, 'favourites'));
-                        break;
-                    default:
-                        return;
-                }
+                try {
+                    switch (props.type) {
+                        case "watchLater":
+                            snapshot = await getDocs(collection(userDocRef, 'toWatch'));
+                            break;
+                        case "watchlist":
+                            snapshot = await getDocs(collection(userDocRef, 'watched'));
+                            break;
+                        case "favourites":
+                            snapshot = await getDocs(collection(userDocRef, 'favourites'));
+                            break;
+                        default:
+                            return;
+                    }
 
-                const moviePromises = snapshot.docs.map((doc) => movieFetcher.getMediaDetails(doc.data().movieId));
-                movies = await Promise.all(moviePromises);
+                    const moviePromises = snapshot.docs.map((doc) => movieFetcher.getMediaDetails(doc.data().movieId));
+                    movies = await Promise.all(moviePromises);
 
-                switch (props.type) {
-                    case "watchLater":
-                        setWatchLater(movies);
-                        break;
-                    case "watchlist":
-                        setWatchlist(movies);
-                        break;
-                    case "favourites":
-                        setFavourites(movies);
-                        break;
-                    default:
-                        return;
-                }
+                    switch (props.type) {
+                        case "watchLater":
+                            setWatchLater(movies);
+                            break;
+                        case "watchlist":
+                            setWatchlist(movies);
+                            break;
+                        case "favourites":
+                            setFavourites(movies);
+                            break;
+                        default:
+                            return;
+                    }
 
-                // Set noMovies to true if there are no movies in the fetched list
-                if (movies.length === 0) {
-                    setNoMovies(true);
+                    if (movies.length === 0) {
+                        setNoMovies(true);
+                    }
+                } catch (error) {
+                    console.error("Error fetching movies:", error);
+                } finally {
+                    setLoading(false);
                 }
-                setLoading(false);
             }
         };
 
-        const unsubscribe = auth.onAuthStateChanged((usr) => {
-            setUser(usr);
-            fetchMovies(usr);
-        });
+        if (props.user) {
+            fetchMovies(props.user);
+        }
+    }, [props.user, props.type]);
 
-        return () => unsubscribe();
-    }, [props.type]);
 
 
 

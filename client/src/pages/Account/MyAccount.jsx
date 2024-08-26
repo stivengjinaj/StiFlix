@@ -1,19 +1,19 @@
+{/* eslint-disable react/prop-types */}
 import {Button, Col, Container, Form, Navbar, Row} from "react-bootstrap";
 import logo from "../../assets/images/logo.png";
 import smallLogo from "../../assets/images/titleLogo.png";
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
-import {auth, db} from "../../../firebaseConfiguration.js";
+import {db} from "../../../firebaseConfiguration.js";
 import {updatePassword} from "firebase/auth";
 import {doc, getDoc} from "firebase/firestore";
 import User from "../../models/User.js";
 import Loading from "../Movies/Loading.jsx";
 
 
-function MyAccount() {
+function MyAccount(props) {
     const navigate = useNavigate();
     const [screen, setScreen] = useState('desktop');
-    const [user, setUser] = useState(auth.currentUser);
     const [userDetails, setUserDetails] = useState(null);
     const [changingPassword, setChangingPassword] = useState(false);
     const [newPassword, setNewPassword] = useState('')
@@ -21,30 +21,25 @@ function MyAccount() {
     const [wrongCredentials, setWrongCredentials] = useState(false)
 
     useEffect(() => {
-        auth.onAuthStateChanged(async (usr) => {
-            if (usr) {
-                setUser(usr);
+        const fetchUserDetails = async (usr) => {
+            const userDocRef = doc(db, 'users', usr.uid);
 
-                const userDocRef = doc(db, 'users', usr.uid);
+            try {
+                const userDocSnap = await getDoc(userDocRef);
 
-                try {
-                    const userDocSnap = await getDoc(userDocRef);
-
-                    if (userDocSnap.exists()) {
-                        const userData = userDocSnap.data();
-                        const userDetails = new User(userData.fullName, usr.email, userData.verified, userData.avatar);
-                        setUserDetails(userDetails);
-                    } else {
-                        console.log('No such document!');
-                    }
-                } catch (error) {
-                    console.error('Error fetching user document:', error);
+                if (userDocSnap.exists()) {
+                    const userData = userDocSnap.data();
+                    const userDetails = new User(userData.fullName, usr.email, userData.verified, userData.avatar);
+                    setUserDetails(userDetails);
+                } else {
+                    console.log('No such document!');
                 }
-            } else {
-                setUser(null);
-                setUserDetails(null);
+            } catch (error) {
+                console.error('Error fetching user document:', error);
             }
-        });
+        }
+
+        fetchUserDetails(props.user);
     }, []);
 
     useEffect(() => {
@@ -65,7 +60,7 @@ function MyAccount() {
     const handlePasswordChange = async (e) => {
         e.preventDefault();
         if(newPassword === confirmPassword) {
-            updatePassword(user, newPassword).then(() => {
+            updatePassword(props.user, newPassword).then(() => {
                 setChangingPassword(false);
             }).catch(() => {
                 console.log('Error changing password');
@@ -197,7 +192,7 @@ function MyAccount() {
                                             </Container>
                                         </Col>
                                         <Col xs={12} md={4} className="mb-3">
-                                            <Button variant="danger" className="px-3 py-2">
+                                            <Button onClick={props.handleSignOut} variant="danger" className="px-3 py-2">
                                                 Sign Out
                                             </Button>
                                         </Col>
