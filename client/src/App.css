@@ -124,6 +124,10 @@ video {
   font-family: "Netflix Sans1", serif;
 }
 
+.dropdown-item:hover {
+  color: #000 !important;
+}
+
 form .search-input {
   border: 1px solid white;
   background-color: transparent;
