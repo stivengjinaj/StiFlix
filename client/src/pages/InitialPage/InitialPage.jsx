@@ -9,32 +9,23 @@ import { useGSAP } from "@gsap/react";
 import FeatureRow from "./FeatureRow.jsx";
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import {useNavigate} from "react-router-dom";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {doc, getDoc} from "firebase/firestore";
 
 gsap.registerPlugin(ScrollTrigger);
 
-function InitialPage() {
+function InitialPage(props) {
     const navigate = useNavigate();
-    const [user, setUser] = useState(auth.currentUser);
-    const [avatar, setAvatar] = useState(null)
+    const [avatar, setAvatar] = useState(null);
 
-    auth.onAuthStateChanged((usr) => {
-        if (usr) {
-            setUser(usr);
-            getDoc(doc(db, "users", usr.uid)).then((doc) => {
-               setAvatar(doc.data().avatar);
+    useEffect(() => {
+        if (props.user) {
+            getDoc(doc(db, "users", props.user.uid)).then((doc) => {
+                setAvatar(doc.data().avatar);
             });
         }
-    })
+    }, [props.user]);
 
-    const handleSignOut = async (e) => {
-        e.preventDefault()
-        await auth.signOut().then(() => {
-            setUser(null)
-            navigate("/");
-        });
-    }
 
     useGSAP(() => {
         gsap.from("#feature1", {
@@ -67,7 +58,7 @@ function InitialPage() {
                     </Col>
                     <Col className="d-flex justify-content-evenly align-items-center py-3">
                         {
-                            user
+                            props.user
                                 ? (
                                     <Dropdown align={{lg: 'start'}}>
                                         <Dropdown.Toggle className="p-0 btn-avatar">
@@ -81,7 +72,7 @@ function InitialPage() {
                                             <Dropdown.Item className="text-white" href="/favourites">Favourites</Dropdown.Item>
                                             <Dropdown.Item className="text-white" href="/watched-list">Watched List</Dropdown.Item>
                                             <Dropdown.Item className="text-white" href="/to-watch-list">To Watch List</Dropdown.Item>
-                                            <Dropdown.Item onClick={handleSignOut} className="text-danger">Logout</Dropdown.Item>
+                                            <Dropdown.Item onClick={props.handleSignOut} className="text-danger">Logout</Dropdown.Item>
                                         </Dropdown.Menu>
                                     </Dropdown>
                                 )
