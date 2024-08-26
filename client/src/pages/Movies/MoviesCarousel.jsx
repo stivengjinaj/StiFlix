@@ -61,7 +61,7 @@ const MoviesCarousel = (props) => {
                         <tbody>
                         <tr id={`movie-carousel-row-${carouselScope}`} ref={rowRef}>
                             {props.movies.slice(0, columnsToShow).map((item, index) => (
-                                <td key={index} className="carousel-slider-cover" onClick={() => navigate(`/movies/info/${item.id}`)}>
+                                <td key={index} className="carousel-slider-cover" onClick={() => navigate(`/movies/info/${item.isSeries ? "tv" : "movie"}/${item.id}`)}>
                                     <img className="mx-3" alt="" src={`https://image.tmdb.org/t/p/w500/${item.poster_path}`} />
                                 </td>
                             ))}

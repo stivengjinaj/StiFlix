@@ -39,7 +39,7 @@ function GridMovies(props) {
                         {
                             props.movies && props.movies.map(movie => (
                                     <Col xs={4} sm={4} md={3} lg={2} key={movie.id} className="mb-4">
-                                        <Card className="h-100 border-0" onClick={() => navigate(`/movies/info/${movie.id}`)} key={`${movie.id}_card`}>
+                                        <Card className="h-100 border-0" onClick={() => navigate(`/movies/info/${movie.isSeries ? "tv" : "movie"}/${movie.id}`)} key={`${movie.id}_card`}>
                                             <Card.Img
                                                 variant="top"
                                                 src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
