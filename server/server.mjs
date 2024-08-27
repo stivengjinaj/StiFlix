@@ -38,6 +38,7 @@ app.get('/api/getMovieSources', async (req, res) => {
  * */
 app.get('/api/getMovieIdBraflix', async (req, res) => {
     const { server, query, year, type, episode, season, movieId } = req.query;
+    //TO BE CHECKED. TO BE ADDED A .slice() to return spaces as + ecc.
     const encodedQuery = encodeURIComponent(query);
     try {
         const response = await fetch(`https://api.braflix.ru/${server}/sources-with-title?title=${query}&year=${year}&mediaType=${type}&episodeId=${episode}&seasonId=${season}&tmdbId=${movieId}`);
