@@ -240,7 +240,7 @@ const search = async (query) => {
 }
 
 /**
- * API used to get movie ID.
+ * API used to get movie ID from Piracy server.
  *
  * @param query search query for the movie to search.
  * @param type move type.
