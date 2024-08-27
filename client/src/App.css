@@ -250,6 +250,16 @@ form .search-input:focus {
   z-index: -1;
 }
 
+.no-scrollbar {
+  overflow-x: auto !important;
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none !important;
+}
+
 #carousel-slider {
   overflow-x: hidden;
   overflow-y: hidden;
@@ -268,6 +278,15 @@ form .search-input:focus {
 
 tr {
   display: inline-flex;
+}
+
+.tv-images>img {
+  transition: transform 0.3s ease-in-out !important;
+}
+
+.tv-images>img:hover {
+  transform: scale(1.5) !important;
+  transition: transform 0.3s ease-in-out !important;
 }
 
 .carousel-slider-cover {
@@ -293,6 +312,12 @@ tr {
   transition: transform 0.3s ease-in-out !important;
 }
 
+.custom-toggle {
+  border: none !important;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 
 @media (max-width: 768px) {
   .main-banner {
