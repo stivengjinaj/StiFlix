@@ -3,7 +3,7 @@ import GridMovies from "./GridMovies.jsx";
 {/* eslint-disable react/prop-types */}
 import {useEffect, useState} from "react";
 import SplashScreen from "./SplashScreen.jsx";
-import {Container, Row} from "react-bootstrap";
+import {Container} from "react-bootstrap";
 import NavBar from "../Navbars/NavBar.jsx";
 import MainMovie from "./MainMovie.jsx";
 import MoviesCarousel from "./MoviesCarousel.jsx";
