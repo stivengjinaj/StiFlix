@@ -92,7 +92,7 @@ https://github.com/stivengjinaj/StiFlix/blob/deploy-test/screenshots/movieDemo_m
 ### Movies page on desktop
 ![](/screenshots/moviesPage_desktop.png)
 ### Clicking "More Info" on the main movie on the movies page.
-![](/screenshots/moreInfo_desktop.png)
+![](/screenshots/moreinfo_desktop.png)
 ### Clicking a random movie on the movies page.
 ![](/screenshots/movieClicked_desktop.png)
 ### Tv show clicked
