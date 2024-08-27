@@ -1,5 +1,5 @@
 class FetchedMovie {
-    constructor(jsonMovie, isSeries, seasons, episodes) {
+    constructor(jsonMovie, isSeries, number_of_seasons, number_of_episodes, seasons=null) {
         this.id = jsonMovie.id;
         this.title = isSeries ? jsonMovie.original_name : jsonMovie.original_title;
         this.overview = jsonMovie.overview;
@@ -9,52 +9,9 @@ class FetchedMovie {
         this.release_date = isSeries ? jsonMovie.first_air_date : jsonMovie.release_date;
         this.vote_average = jsonMovie.vote_average;
         this.isSeries = isSeries;
+        this.number_of_seasons = number_of_seasons;
+        this.number_of_episodes = number_of_episodes;
         this.seasons = seasons;
-        this.episodes = episodes;
-    }
-
-    getId() {
-        return this.id;
-    }
-
-    getTitle() {
-        return this.title;
-    }
-
-    getOverview() {
-        return this.overview;
-    }
-
-    getBackdropPath() {
-        return this.backdrop_path;
-    }
-
-    getPosterPath() {
-        return this.poster_path;
-    }
-
-    getGenresIds() {
-        return this.genres_ids;
-    }
-
-    getReleaseDate() {
-        return this.release_date;
-    }
-
-    getVoteAverage() {
-        return this.vote_average;
-    }
-
-    getMediaType() {
-        return this.isSeries ? 'tv' : 'movie';
-    }
-
-    getSeasons() {
-        return this.seasons;
-    }
-
-    getEpisodes() {
-        return this.episodes;
     }
 }
 
