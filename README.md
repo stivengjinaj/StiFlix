@@ -67,26 +67,41 @@ useEffect(() => {
 ```
 You can check out the links in console.
 
-## Screenshots
+## Screenshots and demo
 
-### First page
-![First page](/screenshots/initial%20scr.png)
+### DEMO DESKTOP
+https://github.com/stivengjinaj/StiFlix/blob/deploy-test/screenshots/demo_desktop.mp4
+
+### DEMO MOBILE
+https://github.com/stivengjinaj/StiFlix/blob/deploy-test/screenshots/movieDemo_mobile.mov
+
+### First page desktop
+![](/screenshots/initialPage_desktop.png)
 ### Login page on desktop
-![Login page](/screenshots/login%20scr.png)
+![](/screenshots/loginPage_desktop.png)
 ### Login page on mobile
-![Login movile](/screenshots/signin%20mobile.png)
-### Sign up page
-![Sign up](/screenshots/signup%20scr.png)
-### Movies page
-![Movies page](/screenshots/main%20scr.png)
-### Movies page on mobile
-![Movies page mobile](/screenshots/main%20mobile.png)
+![](/screenshots/loginPage_mobile.png)  
+### Sign up page on desktop
+![](/screenshots/signupPage_desktop.png)
+### Sign up page on mobile
+![](/screenshots/signupPage_mobile.png)
+### Account page on desktop
+![](/screenshots/accountPage_desktop.png)
+### Account page on mobile
+![](/screenshots/accountPage_mobile.png)
+### Movies page on desktop
+![](/screenshots/moviesPage_desktop.png)
 ### Clicking "More Info" on the main movie on the movies page.
-![More info of main movie](/screenshots/mainmoreinfo%20scr.png)
+![](/screenshots/moreInfo_desktop.png)
 ### Clicking a random movie on the movies page.
-![Movie clicked](/screenshots/movieinfo%20scr.png)
-### Adding a movie to favourites
-![Favourite movie](/screenshots/moviefavourite%20scr.png)
+![](/screenshots/movieClicked_desktop.png)
+### Tv show clicked
+![](/screenshots/tvshowClicked_desktop.png)
+### Tv show clicked when user is not logged in
+![](/screenshots/notLoggedIn_desktop.png)
+### User favourites
+![](/screenshots/userFavourites_desktop.png)
+
 
 
 ## Task List
