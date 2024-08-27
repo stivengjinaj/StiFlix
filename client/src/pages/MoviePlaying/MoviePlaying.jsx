@@ -1,73 +1,62 @@
 import {useEffect, useRef, useState} from "react";
-import FetchedMovieController from "../../controllers/FetchedMovieController.js";
 import FetchLinksController from "../../controllers/FetchLinksController.js";
 import {useParams} from "react-router-dom";
+import FetchedMovieController from "../../controllers/FetchedMovieController.js";
+import {getYearFromDate} from "../../helper/miscs.js";
+import Loading from "../Movies/Loading.jsx";
 
 function MoviePlaying() {
-    const {movieId} = useParams();
     const iframeRef = useRef(null);
-    const fetcher = new FetchedMovieController();
-    const [links, setLinks] = useState([]);
+    const {mediaType, movieId, season, episode} = useParams();
     const linkFetcher = new FetchLinksController();
+    const movieFetcher = new FetchedMovieController();
+    const [movie, setMovie] = useState(null);
+    const [links, setLinks] = useState([]);
 
     useEffect(() => {
-        const fetchLinks = async () => {
-            const links = await linkFetcher.fetchLinks("Bad Boys", "movie", 2021, 1);
-            setLinks(links);
-        }
-    }, [])
+        const fetchLinks = async (fetchedMovie) => {
+            if (mediaType === 'movie') {
+                try {
+                    const response = await linkFetcher.fetchAllLinks(fetchedMovie.title, mediaType, getYearFromDate(fetchedMovie.release_date), movieId);
+                    setLinks(response);
+                    const response2 = await linkFetcher.fetchSpecialLinks(fetchedMovie.title, mediaType, getYearFromDate(fetchedMovie.release_date), movieId);
+                    setLinks([...links, ...response2]);
+                }catch (error) {
+                    console.error('Error fetching data:', error);
+                }
+            } else {
+                const response = await linkFetcher.fetchTvShowSpecific(fetchedMovie.title, mediaType, getYearFromDate(fetchedMovie.release_date), movieId, season, episode);
+                setLinks(response);
+            }
+        };
+
+        const movieDetails = async () => {
+            const fetchedMovie = await movieFetcher.getMediaDetails(movieId, mediaType);
+            setMovie(fetchedMovie);
+            await fetchLinks(fetchedMovie);
+        };
+
+        movieDetails();
+    }, [mediaType, movieId]);
+
+    useEffect(() => {
+        console.log(links);
+    }, [links]);
+
 
     return (
-        <div>
-
-        </div>
+        links.length === 0
+            ? <Loading />
+            : <div className="video-container">
+                <iframe
+                    ref={iframeRef}
+                    className="video"
+                    src={links[0]}
+                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                ></iframe>
+            </div>
     );
 }
-
-
-/**
- * <div
- *             className="video-container"
- *         >
- *             <iframe
- *                 ref={iframeRef}
- *                 className="video"
- *                 src="https://rabbitstream.net/v2/embed-4/ez7zI9L4Jg2q?_debug=true"
- *                 allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
- *             ></iframe>
- *         </div>
- *
- *
- * .video-container {
- *   position: relative;
- *   width: 100vw;
- *   height: 100vh;
- *   overflow: hidden;
- * }
- *
- * .video {
- *   width: 100%;
- *   height: 100%;
- *   border: none;
- * }
- *
- *
- * .control-btn {
- *   background-color: rgba(0, 0, 0, 0.5);
- *   color: white;
- *   border: none;
- *   padding: 10px 20px;
- *   font-size: 18px;
- *   cursor: pointer;
- *   border-radius: 5px;
- *   transition: background-color 0.3s ease;
- * }
- *
- * .control-btn:hover {
- *   background-color: rgba(0, 0, 0, 0.8);
- * }
- *
- * */
 
 export default MoviePlaying;
 

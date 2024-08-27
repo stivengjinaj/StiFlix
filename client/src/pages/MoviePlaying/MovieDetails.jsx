@@ -21,6 +21,8 @@ function MovieDetails(props) {
     const [toWatch, setToWatch] = useState(false);
     const [playMovieSplash, setPlayMovieSplash] = useState(false);
     const [screen, setScreen] = useState("desktop");
+    const [currentSeason, setCurrentSeason] = useState(null);
+    const [currentEpisode, setCurrentEpisode] = useState(null);
 
     window.addEventListener('resize', () => {
         if (window.innerWidth < 768) {
@@ -81,13 +83,17 @@ function MovieDetails(props) {
                 duration: 2,
                 ease: 'ease-in-out',
                 onComplete: () => {
-                    navigate(`/movies/${movie.id}`);
+                    mediaType === 'movie' ? navigate(`/movies/movie/${movieId}/1/1`) : navigate(`/movies/tv/${movieId}/${currentSeason}/${currentEpisode}`);
                 }
             });
         }
     }, [playMovieSplash, navigate]);
 
-    const onPlay = () => {
+    const onPlay = (season=null, episode=null) => {
+        if(season && episode) {
+            setCurrentSeason(season);
+            setCurrentEpisode(episode);
+        }
         setPlayMovieSplash(true);
     }
 
@@ -422,7 +428,7 @@ function TvShow(props) {
             <Container fluid className="mt-3 no-scrollbar">
                 <div className="d-flex">
                     {currentSeason.episodes.map((episode, index) => (
-                        <EpisodeCard key={index} episode={episode} />
+                        <EpisodeCard key={index} onPlay={props.onPlay} season={currentSeason.season_number} episode={episode} />
                     ))}
                 </div>
             </Container>
@@ -434,7 +440,11 @@ function TvShow(props) {
 function EpisodeCard(props) {
     return (
         <Container className="episode-card me-auto">
-            <Container className="tv-images" style={{overflow: "hidden"}}>
+            <Container
+                className="tv-images"
+                style={{overflow: "hidden"}}
+                onClick={() => props.onPlay(props.season, props.episode.episode_number)}
+            >
                 <img
                     src={`https://image.tmdb.org/t/p/w500/${props.episode.still_path}`}
                     alt={props.episode.name}
