@@ -154,6 +154,28 @@ const mediaDetails = async (id, mediaType) => {
     }
 };
 
+/**
+ * API used to get the episodes of a tv show.
+ *
+ * @param id id of the tv show.
+ * @param seasons season of the tv show.
+ * @return json with tv show seasons/episodes.
+ * */
+const getTvShowsSeasons = async (id, seasons) => {
+    const allSeasons = [];
+    for (let i = 1; i <= seasons; i++) {
+        const response = await fetch(`https://api.themoviedb.org/3/tv/${id}/season/${i}?language=en-US`, {
+            headers: {
+                Authorization: `Bearer ${tmdb_read_token}`,
+                Accept: "application/json"
+            }
+        });
+        const seasonData = await response.json();
+        allSeasons.push(seasonData);
+    }
+    return allSeasons;
+}
+
 
 /**
  * API used to get media genres.
@@ -272,4 +294,4 @@ const getMovieIdBraflix = async (server, query, year, type, episode, season, mov
 };
 
 
-export {getPopularMovies, getPopularTvShows, getTopRatedMovies, getTopRatedTvShows, getTrendingMovies, getTvShowDetails, discoverMovies, discoverTvShows, getMovieId, getMovieSources, getMovieIdBraflix, search, getTrailerKey, mediaGenres, mediaDetails}
+export {getPopularMovies, getPopularTvShows, getTopRatedMovies, getTopRatedTvShows, getTrendingMovies, getTvShowDetails, discoverMovies, discoverTvShows, getMovieId, getMovieSources, getMovieIdBraflix, search, getTrailerKey, mediaGenres, mediaDetails, getTvShowsSeasons};

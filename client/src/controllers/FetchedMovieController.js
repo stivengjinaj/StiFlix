@@ -1,6 +1,8 @@
 import * as API from "../API.js";
 import FetchedMovie from "../models/FetchedMovie.mjs";
 import {sortByVoteAverage} from "../helper/miscs.js";
+import Episode from "../models/Episode.js";
+import Season from "../models/Season.js";
 
 class FetchedMovieController {
 
@@ -183,7 +185,6 @@ class FetchedMovieController {
      * */
     async getMediaDetails(movieId, mediaType) {
         const media = await API.mediaDetails(movieId, mediaType);
-        const isSeries = media.release_date === undefined;
         const mediaJson = {
             id: media.id,
             original_name: media.original_name,
@@ -196,12 +197,38 @@ class FetchedMovieController {
             first_air_date: media.first_air_date,
             vote_average: media.vote_average,
         }
-        return new FetchedMovie(
-            mediaJson,
-            isSeries,
-            isSeries ? media.number_of_seasons: 0,
-            isSeries ? media.number_of_episodes : 0
-        )
+        if(mediaType === "tv") {
+            const tvShowDetails = await API.getTvShowsSeasons(movieId, media.number_of_seasons);
+            const seasons = [];
+            tvShowDetails.forEach(season => {
+                const episodes = [];
+                season.episodes.forEach(episode => {
+                    const currentEpisode = new Episode(
+                        episode.air_date,
+                        episode.episode_number,
+                        episode.id,
+                        episode.name,
+                        episode.overview,
+                        episode.runtime,
+                        episode.still_path,
+                        episode.vote_average
+                    );
+                    episodes.push(currentEpisode);
+                });
+                seasons.push(new Season(
+                    season.id,
+                    season.name,
+                    season.overview,
+                    season.poster_path,
+                    season.season_number,
+                    season.vote_average,
+                    episodes
+                ));
+            });
+            return new FetchedMovie(mediaJson, true, media.number_of_seasons, media.number_of_episodes, seasons);
+        }else {
+            return new FetchedMovie(mediaJson, false, 0, 0)
+        }
     }
 
     /**
