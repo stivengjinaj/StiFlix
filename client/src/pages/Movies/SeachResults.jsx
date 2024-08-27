@@ -1,26 +1,17 @@
 {/*eslint-disable react/prop-types */}
-import FetchLinksController from "../../controllers/FetchLinksController.js";
+import {useNavigate} from "react-router-dom";
 import {useGSAP} from "@gsap/react";
 import {gsap} from "gsap";
-import {getYearFromDate, stringQuery} from "../../helper/miscs.js";
 import {Card, Col, Container, Row} from "react-bootstrap";
 
 function SeachResults(props) {
-
-    const linkFetcher = new FetchLinksController();
-
+    const navigate = useNavigate();
     useGSAP(() => {
         gsap.from('.allMovies', {
             y: 100,
             opacity: 0,
         })
     }, []);
-
-    const getMovieLinks = async (movie) => {
-        const links = await linkFetcher.fetchLinks(stringQuery(movie.title), "movie", getYearFromDate(movie.release_date), movie.id);
-        console.log(links);
-        return links;
-    }
 
 
     return (
@@ -34,7 +25,7 @@ function SeachResults(props) {
                                     variant="top"
                                     src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
                                     alt={movie.title}
-                                    onClick={() => getMovieLinks(movie)}
+                                    onClick={() => navigate(`/movies/info/${movie.isSeries ? "tv" : "movie"}/${movie.id}`)}
                                 />
                             </Card>
                         </Col>
