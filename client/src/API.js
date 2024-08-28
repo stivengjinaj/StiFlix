@@ -135,23 +135,18 @@ const discoverTvShows = async (page) => {
  * */
 const mediaDetails = async (id, mediaType) => {
     const baseUrl = mediaType === 'movie' ? 'https://api.themoviedb.org/3/movie/' : 'https://api.themoviedb.org/3/tv/';
-    try {
-        const response = await fetch(`${baseUrl}${id}?language=en-US`, {
-            headers: {
-                Authorization: `Bearer ${tmdb_read_token}`,
-                Accept: "application/json"
-            }
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+    const response = await fetch(`${baseUrl}${id}?language=en-US`, {
+        headers: {
+            Authorization: `Bearer ${tmdb_read_token}`,
+            Accept: "application/json"
         }
+    });
 
-        return await response.json();
-    } catch (error) {
-        console.error("Failed to fetch media details:", error);
-        return { error: "Failed to fetch media details" };
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
     }
+
+    return await response.json();
 };
 
 /**
@@ -247,8 +242,21 @@ const search = async (query) => {
  * @param year release year.
  * @return json with movie data.
  * */
+/**
+ * API used to get movie ID from Piracy server.
+ *
+ * @param query search query for the movie to search.
+ * @param type movie type.
+ * @param year release year.
+ * @return json with movie data or an error message.
+ */
 const getMovieId = async (query, type, year) => {
     const response = await fetch(`${remote_url}/api/getMovieId?query=${query}&type=${type}&year=${year}`);
+
+    if (!response.ok) {
+        throw new Error(`Failed to fetch movie`);
+    }
+
     return await response.json();
 };
 
@@ -261,6 +269,11 @@ const getMovieId = async (query, type, year) => {
  * */
 const getMovieSources = async (movieId, server) => {
     const response = await fetch(`${remote_url}/api/getMovieSources?movieId=${movieId}&server=${server}`);
+
+    if (!response.ok) {
+        throw new Error(`Failed to fetch movie sources`);
+    }
+
     return await response.json();
 };
 /**
@@ -277,20 +290,15 @@ const getMovieSources = async (movieId, server) => {
  * @return braflix movie id.
  * */
 const getMovieIdBraflix = async (server, query, year, type, episode, season, movieId) => {
-    try {
-        const response = await fetch(`${remote_url}/api/getMovieIdBraflix?server=${server}&query=${query}&year=${year}&type=${type}&episode=${episode}&season=${season}&movieId=${movieId}`);
+    const response = await fetch(`${remote_url}/api/getMovieIdBraflix?server=${server}&query=${query}&year=${year}&type=${type}&episode=${episode}&season=${season}&movieId=${movieId}`);
 
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        const data = await response.json();
-
-        return data.id;
-    } catch (error) {
-        console.error('Error fetching data:', error);
-        throw error;
+    if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
     }
+
+    const data = await response.json();
+
+    return data.id;
 };
 
 
