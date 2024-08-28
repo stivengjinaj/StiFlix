@@ -390,7 +390,7 @@ function TvShow(props) {
                 <h1 className="text-white tv-title">{props.movie.title}</h1>
             </Container>
             <Container fluid className={`${props.user && "d-flex justify-content-around"} mt-3 mx-3`}>
-                <Dropdown className="tv-season " style={{ position: 'relative', zIndex: 1050 }} align="start" onSelect={(eventKey) => handleSeasonChange(eventKey)}>
+                <Dropdown className="tv-season" style={{ position: 'relative', zIndex: 1050 }} align="start" onSelect={(eventKey) => handleSeasonChange(eventKey)}>
                     <Dropdown.Toggle variant="dark" className="py-3 px-5 custom-toggle d-flex align-items-center">
                         <h3 className="mb-0">Season {currentSeason.season_number}</h3>
                     </Dropdown.Toggle>
