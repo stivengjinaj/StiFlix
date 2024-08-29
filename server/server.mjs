@@ -38,12 +38,21 @@ app.get('/api/getMovieSources', async (req, res) => {
  * */
 app.get('/api/getMovieIdBraflix', async (req, res) => {
     const { server, query, year, type, episode, season, movieId } = req.query;
-    //TO BE CHECKED. TO BE ADDED A .slice() to return spaces as + ecc.
-    const encodedQuery = encodeURIComponent(query);
+    //const encodedQuery = encodeURIComponent(query).replace(/%20/g, '+');
     try {
         const response = await fetch(`https://api.braflix.ru/${server}/sources-with-title?title=${query}&year=${year}&mediaType=${type}&episodeId=${episode}&seasonId=${season}&tmdbId=${movieId}`);
         const textData = await response.text();
-        const jsonData = { id: textData };
+
+        let jsonData;
+        try {
+            jsonData = JSON.parse(textData);
+            if (jsonData.error) {
+                return res.status(500).json({ error: jsonData.error, message: jsonData.message, statusCode: jsonData.statusCode });
+            }
+        } catch (e) {
+            jsonData = { id: textData };
+        }
+
         res.json(jsonData);
     } catch (error) {
         console.error('Error fetching data:', error);
