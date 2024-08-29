@@ -1,3 +1,6 @@
+import {addDoc, collection, doc, getDoc, setDoc, updateDoc} from "firebase/firestore";
+
+{/*eslint-disable react/prop-types*/}
 import {useEffect, useRef, useState} from "react";
 import FetchLinksController from "../../controllers/FetchLinksController.js";
 import {useParams} from "react-router-dom";
@@ -5,8 +8,9 @@ import FetchedMovieController from "../../controllers/FetchedMovieController.js"
 import {getYearFromDate} from "../../helper/miscs.js";
 import Loading from "../Movies/Loading.jsx";
 import {Container, Dropdown} from "react-bootstrap";
+import {db} from "../../../firebaseConfiguration.js";
 
-function MoviePlaying() {
+function MoviePlaying(props) {
     const iframeRef = useRef(null);
     const { mediaType, movieId, season, episode } = useParams();
     const linkFetcher = new FetchLinksController();
@@ -15,6 +19,40 @@ function MoviePlaying() {
     const [links, setLinks] = useState([]);
     const [currentServer, setCurrentServer] = useState(null);
     const [noLinks, setNoLinks] = useState(false);
+
+    const handleProgressSave = async () => {
+        if (props.user) {
+            try {
+                const userDocRef = doc(db, 'users', props.user.uid);
+                const continueWatchingCollection = collection(userDocRef, 'continueWatching');
+                const movieDocRef = doc(continueWatchingCollection, movie.movieId); // Assuming movieId is used as document ID
+
+                const docSnapshot = await getDoc(movieDocRef);
+
+                if (docSnapshot.exists()) {
+                    const currentData = docSnapshot.data();
+                    const newProgress = (currentData.progress || 0) + 60000;
+                    await updateDoc(movieDocRef, { progress: newProgress });
+                } else {
+                    await setDoc(movieDocRef, {
+                        movieId: movie.movieId,
+                        mediaType: mediaType,
+                        progress: 60000
+                    });
+                }
+            } catch (error) {
+                console.log("Error on progress.")
+                console.error('Error fetching or updating data:', error);
+            }
+        }
+    };
+
+    useEffect(() => {
+        if(props.user) {
+            const intervalId = setInterval(handleProgressSave, 60000);
+            return () => clearInterval(intervalId);
+        }
+    }, []);
 
     useEffect(() => {
         const fetchLinks = async (fetchedMovie) => {
@@ -42,7 +80,6 @@ function MoviePlaying() {
 
             if (validLinks.length > 0) {
                 setLinks(validLinks);
-
                 setCurrentServer(validLinks[0]);
             } else {
                 setNoLinks(true);
@@ -60,7 +97,7 @@ function MoviePlaying() {
         };
 
         movieDetails();
-    }, [mediaType, movieId, season, episode]);
+    }, []);
 
     const handleServerChange = (server) => {
         const selectedServer = links.find(link => link.server === server);
@@ -71,7 +108,7 @@ function MoviePlaying() {
         noLinks
             ? (
                 <Container fluid className="d-flex justify-content-center align-items-center bg-gradient-dark-radius" style={{ height: '100vh' }}>
-                    <h1>Movie not found. We are sorry :(</h1>
+                    <h1 className="text-white text-center">Movie not found. We are sorry :(</h1>
                 </Container>
             )
             : (
