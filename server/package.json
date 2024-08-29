@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "start": "node server.mjs",
+    "start": "nodemon server.mjs",
     "dev": "nodemon server.mjs",
     "prod": "NODE_ENV=production nodemon server.mjs"
   },
