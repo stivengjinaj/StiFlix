@@ -12,7 +12,8 @@ app.get('/api/getMovieId', async (req, res) => {
     const { query, type, year } = req.query;
     const response = await fetch(`https://vsrc.piracy.su/search?query=${query}&type=${type}&year=${year}`, {
         headers: {
-            Accept: "application/json"
+            Accept: "application/json",
+            UserAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 13_4_1) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.5.2 Safari/605.1.15"
         }
     });
     const data = await response.json();
@@ -26,7 +27,8 @@ app.get('/api/getMovieSources', async (req, res) => {
     const { movieId, server } = req.query;
     const response = await fetch(`https://vsrc.piracy.su/movie?id=${movieId}&server=${server}`, {
         headers: {
-            Accept: "application/json"
+            Accept: "application/json",
+            UserAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 13_4_1) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.5.2 Safari/605.1.15"
         }
     });
     const data = await response.json();
@@ -40,7 +42,12 @@ app.get('/api/getMovieIdBraflix', async (req, res) => {
     const { server, query, year, type, episode, season, movieId } = req.query;
     //const encodedQuery = encodeURIComponent(query).replace(/%20/g, '+');
     try {
-        const response = await fetch(`https://api.braflix.ru/${server}/sources-with-title?title=${query}&year=${year}&mediaType=${type}&episodeId=${episode}&seasonId=${season}&tmdbId=${movieId}`);
+        const response = await fetch(`https://api.braflix.ru/${server}/sources-with-title?title=${query}&year=${year}&mediaType=${type}&episodeId=${episode}&seasonId=${season}&tmdbId=${movieId}`, {
+            headers: {
+                Accept: "application/json",
+                UserAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 13_4_1) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.5.2 Safari/605.1.15"
+            }
+        });
         const textData = await response.text();
 
         let jsonData;
@@ -65,8 +72,12 @@ app.get('/api/getMovieIdBraflix', async (req, res) => {
  * */
 app.get('/api/getRabbitStream', async (req, res) => {
     const { id } = req.query;
-    console.log(`https://rabbitstream.net/v2/embed-4/${id}?_debug=true`);
-    const response = await fetch(`https://rabbitstream.net/v2/embed-4/${id}?_debug=true`);
+    const response = await fetch(`https://rabbitstream.net/v2/embed-4/${id}?_debug=true`, {
+        headers: {
+            Accept: "application/json",
+            UserAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 13_4_1) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.5.2 Safari/605.1.15"
+        }
+    });
     const data = await response;
     res.json(data);
 });
@@ -76,7 +87,12 @@ app.get('/api/getRabbitStream', async (req, res) => {
  * */
 app.get('/api/getMegacloud', async (req, res) => {
     const { id } = req.query;
-    const response = await fetch(`https://megacloud.tv/embed-1/e-1/${id}?_debug=true`);
+    const response = await fetch(`https://megacloud.tv/embed-1/e-1/${id}?_debug=true`, {
+        headers: {
+            Accept: "application/json",
+            UserAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 13_4_1) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.5.2 Safari/605.1.15"
+        }
+    });
     const data = await response;
     res.json(data);
 });
