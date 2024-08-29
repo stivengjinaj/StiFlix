@@ -3,7 +3,7 @@ import fetch from 'node-fetch';
 import cors from 'cors';
 
 const app = express();
-app.use(cors());
+app.use(cors({credentials: true, origin: true}));
 
 /**
  *  Cross proxy used to get movie id from Piracy server.
