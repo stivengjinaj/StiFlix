@@ -5,95 +5,44 @@ import {createProxyMiddleware, responseInterceptor} from 'http-proxy-middleware'
 const app = express();
 
 const corsOptions = {
-    origin: "stiflix.onrender.com",
+    origin: "http://localhost:5173",
     methods: 'GET,POST,PUT,DELETE,OPTIONS',
     allowedHeaders: 'Content-Type,Authorization',
     credentials: true,
     optionsSuccessStatus: 200
 };
 
-// Apply CORS with options to all routes
 app.use(cors(corsOptions));
-
-
-app.use(cors({
-    origin: "*",
-}));
 
 /**
  *  Cross proxy used to get movie id from Piracy server.
  * */
-app.use('/api/getMovieId', createProxyMiddleware({
-    target: 'https://vsrc.piracy.su',
-    changeOrigin: true,
-    pathRewrite: (path, req) => {
-        const { query, type, year } = req.query;
-        return `/search?query=${query}&type=${type}&year=${year}`;
-    },
-    selfHandleResponse: true,
-    on: {
-        proxyRes: responseInterceptor(async (responseBuffer, proxyRes, req, res) => {
-            try {
-                if (!responseBuffer || typeof responseBuffer !== 'object' || responseBuffer.length === 0) {
-                    throw new Error('Invalid or empty response from target server');
-                }
-                const response = responseBuffer.toString('utf8');
-
-                // Inject CORS headers
-                res.setHeader('Access-Control-Allow-Origin', '*');
-                res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-                res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-
-                return JSON.stringify(JSON.parse(response));
-            } catch (error) {
-                res.statusCode = 500;
-                return JSON.stringify({ error: 'Failed to process response from target server' });
-            }
-        }),
-    },
-    headers: {
-        Accept: "application/json",
-        'User-Agent': "Mozilla/5.0 (Macintosh; Intel Mac OS X 13_4_1) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.5.2 Safari/605.1.15",
-    }
-}));
-
+app.get('/api/getMovieId', async (req, res) => {
+    const { query, type, year } = req.query;
+    const response = await fetch(`https://vsrc.piracy.su/search?query=${query}&type=${type}&year=${year}`, {
+        headers: {
+            Accept: "application/json",
+            UserAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 13_4_1) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.5.2 Safari/605.1.15"
+        }
+    });
+    const data = await response.json();
+    res.json(data);
+});
 
 /**
  *  Cross proxy used to get movie links from Piracy servers.
  * */
-app.use('/api/getMovieSources', createProxyMiddleware({
-    target: 'https://vsrc.piracy.su',
-    changeOrigin: true,
-    pathRewrite: (path, req) => {
-        const { movieId, server } = req.query;
-        return `/movie?id=${movieId}&server=${server}`;
-    },
-    selfHandleResponse: true,
-    on: {
-        proxyRes: responseInterceptor(async (responseBuffer, proxyRes, req, res) => {
-            try {
-                if (!responseBuffer || typeof responseBuffer !== 'object' || responseBuffer.length === 0) {
-                    throw new Error('Invalid or empty response from target server');
-                }
-                const response = responseBuffer.toString('utf8');
-
-                // Inject CORS headers
-                res.setHeader('Access-Control-Allow-Origin', '*');
-                res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-                res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-
-                return JSON.stringify(JSON.parse(response));
-            } catch (error) {
-                res.statusCode = 500;
-                return JSON.stringify({ error: 'Failed to process response from target server' });
-            }
-        }),
-    },
-    headers: {
-        Accept: "application/json",
-        'User-Agent': "Mozilla/5.0 (Macintosh; Intel Mac OS X 13_4_1) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.5.2 Safari/605.1.15",
-    }
-}));
+app.get('/api/getMovieSources', async (req, res) => {
+    const { movieId, server } = req.query;
+    const response = await fetch(`https://vsrc.piracy.su/movie?id=${movieId}&server=${server}`, {
+        headers: {
+            Accept: "application/json",
+            UserAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 13_4_1) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.5.2 Safari/605.1.15"
+        }
+    });
+    const data = await response.json();
+    res.json(data);
+});
 
 /**
  *  Cross proxy used to get movie id from Braflix server. (without proxy middleware)
