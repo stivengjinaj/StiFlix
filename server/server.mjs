@@ -5,7 +5,9 @@ import {createProxyMiddleware, responseInterceptor} from 'http-proxy-middleware'
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+    origin: "*",
+}));
 
 /**
  *  Cross proxy used to get movie id from Piracy server.
@@ -40,7 +42,7 @@ app.get('/api/getMovieSources', async (req, res) => {
 /**
  *  Cross proxy used to get movie id from Braflix server.
  * */
-app.get('/api/getMovieIdBraflix', async (req, res) => {
+/*app.get('/api/getMovieIdBraflix', async (req, res) => {
     const { server, query, year, type, episode, season, movieId } = req.query;
     //const encodedQuery = encodeURIComponent(query).replace(/%20/g, '+');
     try {
@@ -67,12 +69,12 @@ app.get('/api/getMovieIdBraflix', async (req, res) => {
         console.error('Error fetching data:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
-});
+});*/
 
 /**
  *  Cross proxy used to get movie id from Braflix server.
  * */
-/*app.use('/api/getMovieIdBraflix', createProxyMiddleware({
+app.use('/api/getMovieIdBraflix', createProxyMiddleware({
     target: 'https://api.braflix.ru',
     changeOrigin: true,
     pathRewrite: (path, req) => {
@@ -83,12 +85,15 @@ app.get('/api/getMovieIdBraflix', async (req, res) => {
     on: {
         proxyRes: responseInterceptor(async (responseBuffer, proxyRes, req, res) => {
             try {
+                if (!responseBuffer || typeof responseBuffer !== 'object' || responseBuffer.length === 0) {
+                    throw new Error('Invalid or empty response from target server');
+                }
                 const response = responseBuffer.toString('utf8');
 
-                return response || '';
+                return JSON.stringify({ id: response });
             } catch (error) {
-                console.error('Error processing response:', error.message);
-                return '';
+                res.statusCode = 500;
+                return JSON.stringify({ error: 'Failed to process response from target server' });
             }
         }),
     },
@@ -96,7 +101,7 @@ app.get('/api/getMovieIdBraflix', async (req, res) => {
         Accept: "application/json",
         'User-Agent': "Mozilla/5.0 (Macintosh; Intel Mac OS X 13_4_1) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.5.2 Safari/605.1.15"
     }
-}));*/
+}));
 
 /**
  *  Cross proxy used to get movie link from RabbitStream using Braflix's movie id.
