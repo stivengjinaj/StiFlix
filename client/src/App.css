@@ -1,6 +1,6 @@
 body {
-  background-color: #242424;
-  min-height: 100%;
+  background-color: #000000 !important;
+  height: 100%;
 }
 
 .splash-container {
@@ -73,7 +73,7 @@ body {
 }
 
 .bg-gradient-dark-radius-transparent {
-  background-color: #000000;
+  background-color: #000000 !important;
     opacity: 0.8;
 }
 
@@ -207,6 +207,7 @@ form .search-input:focus {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  min-height: 100vh;
   height: 85vh;
   filter: drop-shadow(200px 0px 500px rgba(0, 0, 0, 0.5));
   display: flex;
@@ -221,6 +222,10 @@ form .search-input:focus {
   filter: drop-shadow(200px 0px 500px rgba(0, 0, 0, 0.5));
   display: flex;
   flex-direction: column;
+}
+
+.carousels {
+  margin-top: 130px;
 }
 
 .main-banner::before {
@@ -362,12 +367,22 @@ tr {
   background-color: rgba(0, 0, 0, 0.8);
 }
 
+@media (max-width: 1580px) {
+  .carousels {
+    margin-top: 50px;
+  }
+}
+
 @media (max-width: 768px) {
+
+  .carousels {
+    margin-top: 50px;
+  }
   .main-banner {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    height: 80%;
+    height: 80vh;
     filter: drop-shadow(200px 0px 500px rgba(0, 0, 0, 0.5));
   }
 
@@ -390,6 +405,9 @@ tr {
 }
 
 @media (max-width: 576px) {
+  .carousels {
+    margin-top: 20px;
+  }
 
   .movie-details {
     height: 100vh;

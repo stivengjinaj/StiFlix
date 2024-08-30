@@ -5,18 +5,22 @@ import { useLayoutEffect, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Loading from "./Loading.jsx";
 import MoreInfo from "./MoreInfo.jsx";
+import MoviesCarousel from "./MoviesCarousel.jsx";
+import GridMovies from "./GridMovies.jsx";
+import SeachResults from "./SeachResults.jsx";
+import StiflixFooter from "../Miscs/StiflixFooter.jsx";
 
-function MainMovie({ mainMovie }) {
+function MainMovie(props) {
     const [currentMovie, setCurrentMovie] = useState(null);
     const [playMovieSplash, setPlayMovieSplash] = useState(false);
     const [showMoreInfo, setShowMoreInfo] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (mainMovie && mainMovie.length > 0) {
-            setCurrentMovie(mainMovie[0]);
+        if (props.mainMovie && props.mainMovie.length > 0) {
+            setCurrentMovie(props.mainMovie[0]);
         }
-    }, [mainMovie]);
+    }, [props.mainMovie]);
 
     useLayoutEffect(() => {
         if (currentMovie) {
@@ -41,7 +45,7 @@ function MainMovie({ mainMovie }) {
                 duration: 2,
                 ease: 'ease-in-out',
                 onComplete: () => {
-                    navigate(`/${mainMovie[0].isSeries ? 'tv' : 'movie'}/${mainMovie[0].id}/1/1`);
+                    navigate(`/${props.mainMovie[0].isSeries ? 'tv' : 'movie'}/${props.mainMovie[0].id}/1/1`);
                 }
             });
         }
@@ -68,7 +72,7 @@ function MainMovie({ mainMovie }) {
                     ? (
                         <Container fluid className="d-flex flex-column main-banner position-relative"
                                    style={{backgroundImage: `url(https://image.tmdb.org/t/p/original/${currentMovie.backdrop_path})`}}>
-                            <Container fluid className="px-0 pt-5 mt-5 mx-0">
+                            <Container fluid className="px-0 pt-5 mt-5 mx-0 min-vh-100">
                                 <Row className="justify-content-start align-items-center mt-2 px-5">
                                     <Col xs={12} md={8} lg={6} xl={5} className="mt-3 text-center text-md-start">
                                         <h1 className="text-white main-banner-title mt-5">{currentMovie.title}</h1>
@@ -111,6 +115,36 @@ function MainMovie({ mainMovie }) {
                                         </div>
                                     </Col>
                                 </Row>
+                                <Container fluid className="px-0 carousels">
+                                    {
+                                        !props.isSearching
+                                            ? (
+                                                (() => {
+                                                    switch (props.section) {
+                                                        case 'home':
+                                                            return (
+                                                                <>
+                                                                    <MoviesCarousel title={"Popular on Stiflix"} movies={props.allPopular} moving={true} scrollable={false}/>
+                                                                    <MoviesCarousel title={"Trending Now"} movies={props.allTrending} moving={false} scrollable={true}/>
+                                                                    <MoviesCarousel title={"Top Rated Movies"} movies={props.topRatedMovies} moving={false} scrollable={true}/>
+                                                                    <MoviesCarousel title={"Top Rated TV Shows"} movies={props.topRatedSeries} moving={false} scrollable={true}/>
+                                                                    <StiflixFooter />
+                                                                </>
+                                                            );
+                                                        case 'movies':
+                                                            return <GridMovies movies={props.onlyMovies} />;
+                                                        case 'tvShows':
+                                                            return <GridMovies movies={props.onlySeries} />;
+                                                        default:
+                                                            return <div>Section not found</div>;
+                                                    }
+                                                })()
+                                            )
+                                            : (
+                                                props.allTrending.length > 0 && <SeachResults movies={props.searchedMovies}/>
+                                            )
+                                    }
+                                </Container>
                             </Container>
                         </Container>
                     )
