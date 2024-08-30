@@ -1,16 +1,11 @@
-import GridMovies from "./GridMovies.jsx";
-
 {/* eslint-disable react/prop-types */}
 import {useEffect, useState} from "react";
 import SplashScreen from "./SplashScreen.jsx";
 import {Container} from "react-bootstrap";
 import NavBar from "../Navbars/NavBar.jsx";
 import MainMovie from "./MainMovie.jsx";
-import MoviesCarousel from "./MoviesCarousel.jsx";
 import FetchedMovieController from "../../controllers/FetchedMovieController.js";
 import {sortByVoteAverage, stringQuery} from "../../helper/miscs.js";
-import SeachResults from "./SeachResults.jsx";
-import StiflixFooter from "../Miscs/StiflixFooter.jsx";
 
 function Movies() {
     const fetcher = new FetchedMovieController();
@@ -95,42 +90,23 @@ function HomePage(props) {
     };
 
     return (
-        <Container fluid className="p-0 bg-gradient-dark-radius min-vh-100">
+        <Container fluid className="p-0">
             <NavBar
                 section={props.section}
                 handleSectionChange={props.handleSectionChange}
                 handleSearch={handleSearch}
                 startSearching={startSearching}
             />
-            <MainMovie mainMovie={props.allTrending}/>
-            {
-                !isSearching
-                    ? (
-                        (() => {
-                            switch (props.section) {
-                                case 'home':
-                                    return (
-                                        <>
-                                            <MoviesCarousel title={"Popular on Stiflix"} movies={props.allPopular} moving={true} scrollable={false}/>
-                                            <MoviesCarousel title={"Trending Now"} movies={props.allTrending} moving={false} scrollable={true}/>
-                                            <MoviesCarousel title={"Top Rated Movies"} movies={props.topRatedMovies} moving={false} scrollable={true}/>
-                                            <MoviesCarousel title={"Top Rated TV Shows"} movies={props.topRatedSeries} moving={false} scrollable={true}/>
-                                        </>
-                                    );
-                                case 'movies':
-                                    return <GridMovies movies={props.onlyMovies} />;
-                                case 'tvShows':
-                                    return <GridMovies movies={props.onlySeries} />;
-                                default:
-                                    return <div>Section not found</div>;
-                            }
-                        })()
-                    )
-                    : (
-                        props.allTrending.length > 0 && <SeachResults movies={searchedMovies}/>
-                    )
-            }
-            <StiflixFooter />
+            <MainMovie
+                mainMovie={props.allTrending}
+                isSearching={isSearching}
+                section={props.section}
+                allPopular={props.allPopular}
+                allTrending={props.allTrending}
+                topRatedMovies={props.topRatedMovies}
+                topRatedSeries={props.topRatedSeries}
+                searchedMovies={searchedMovies}
+            />
         </Container>
     );
 }
