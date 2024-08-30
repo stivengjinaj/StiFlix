@@ -72,7 +72,7 @@ function MyAccount(props) {
     }
 
     return (
-        <Container fluid className="min-vh-100 p-0">
+        <Container fluid className="min-vh-100 p-0 bg-white">
             <Navbar className="bg-gradient-dark-radius">
                 <Container fluid className="justify-content-start align-items-center">
                     <Navbar.Brand>
