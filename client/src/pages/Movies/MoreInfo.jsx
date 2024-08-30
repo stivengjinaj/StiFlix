@@ -3,7 +3,7 @@ import FetchedMovieController from "../../controllers/FetchedMovieController.js"
 {/*eslint-disable react/prop-types*/}
 import { Modal } from "react-bootstrap";
 import { useEffect, useState } from "react";
-import Loading from "./Loading.jsx";
+import Loading from "../Miscs/Loading.jsx";
 
 function MoreInfo(props) {
     const fetcher = new FetchedMovieController();

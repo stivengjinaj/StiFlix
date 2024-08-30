@@ -6,7 +6,7 @@ import FetchLinksController from "../../controllers/FetchLinksController.js";
 import {useParams} from "react-router-dom";
 import FetchedMovieController from "../../controllers/FetchedMovieController.js";
 import {getYearFromDate} from "../../helper/miscs.js";
-import Loading from "../Movies/Loading.jsx";
+import Loading from "../Miscs/Loading.jsx";
 import {Container, Dropdown} from "react-bootstrap";
 import {db} from "../../../firebaseConfiguration.js";
 

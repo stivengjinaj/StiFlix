@@ -3,7 +3,7 @@ import { Button, Col, Container, Row } from "react-bootstrap";
 import { gsap } from "gsap";
 import { useLayoutEffect, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Loading from "./Loading.jsx";
+import Loading from "../Miscs/Loading.jsx";
 import MoreInfo from "./MoreInfo.jsx";
 import MoviesCarousel from "./MoviesCarousel.jsx";
 import GridMovies from "./GridMovies.jsx";

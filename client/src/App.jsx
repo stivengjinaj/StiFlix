@@ -12,7 +12,7 @@ import MyAccount from "./pages/Account/MyAccount.jsx";
 import PersonalMovies from "./pages/Personal/PersonalMovies.jsx";
 import {useEffect, useState} from "react";
 import {auth} from "../firebaseConfiguration.js";
-import Loading from "./pages/Movies/Loading.jsx";
+import Loading from "./pages/Miscs/Loading.jsx";
 import NotFound from "./pages/NotFound.jsx";
 
 function App() {

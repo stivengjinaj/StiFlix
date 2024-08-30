@@ -3,7 +3,7 @@ import {useGSAP} from "@gsap/react";
 {/* eslint-disable react/prop-types */}
 import {Card, Col, Container, Row} from "react-bootstrap";
 import {gsap} from "gsap";
-import Loading from "./Loading.jsx";
+import Loading from "../Miscs/Loading.jsx";
 import FetchLinksController from "../../controllers/FetchLinksController.js";
 import {getYearFromDate, stringQuery} from "../../helper/miscs.js";
 import {useEffect} from "react";

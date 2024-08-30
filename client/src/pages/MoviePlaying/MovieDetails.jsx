@@ -3,7 +3,7 @@ import {Button, Col, Container, Dropdown, Navbar, Row, Spinner} from "react-boot
 import {useNavigate, useParams} from "react-router-dom";
 import FetchedMovieController from "../../controllers/FetchedMovieController.js";
 import {useEffect, useState} from "react";
-import Loading from "../Movies/Loading.jsx";
+import Loading from "../Miscs/Loading.jsx";
 import {db} from "../../../firebaseConfiguration.js";
 import {collection, doc, addDoc, deleteDoc, query, where, getDocs} from "firebase/firestore";
 import {gsap} from "gsap";
@@ -278,7 +278,7 @@ function MovieDetails(props) {
                   </Container>
               </>
           )
-          : (<Container fluid className="d-flex justify-content-center align-items-center vh-100 bg-dark">
+          : (<Container fluid className="d-flex justify-content-center align-items-center vh-100 loading">
               <Spinner
                   animation="border"
                   role="status"

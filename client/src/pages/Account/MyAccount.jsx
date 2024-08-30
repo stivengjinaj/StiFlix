@@ -8,7 +8,7 @@ import {db} from "../../../firebaseConfiguration.js";
 import {updatePassword} from "firebase/auth";
 import {doc, getDoc} from "firebase/firestore";
 import User from "../../models/User.js";
-import Loading from "../Movies/Loading.jsx";
+import Loading from "../Miscs/Loading.jsx";
 
 
 function MyAccount(props) {

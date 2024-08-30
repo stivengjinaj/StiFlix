@@ -1,4 +1,4 @@
-import Loading from "../Movies/Loading.jsx";
+import Loading from "../Miscs/Loading.jsx";
 
 {/* eslint-disable react/prop-types */}
 import logo from "../../assets/images/logo.png";
