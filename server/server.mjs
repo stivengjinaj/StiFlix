@@ -1,8 +1,10 @@
 import express from 'express';
 import fetch from 'node-fetch';
 import cors from 'cors';
+import {createProxyMiddleware, responseInterceptor} from 'http-proxy-middleware';
 
 const app = express();
+
 app.use(cors());
 
 /**
@@ -59,13 +61,42 @@ app.get('/api/getMovieIdBraflix', async (req, res) => {
         } catch (e) {
             jsonData = { id: textData };
         }
-
+        console.log(jsonData);
         res.json(jsonData);
     } catch (error) {
         console.error('Error fetching data:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
 });
+
+/**
+ *  Cross proxy used to get movie id from Braflix server.
+ * */
+/*app.use('/api/getMovieIdBraflix', createProxyMiddleware({
+    target: 'https://api.braflix.ru',
+    changeOrigin: true,
+    pathRewrite: (path, req) => {
+        const { server, query, year, type, episode, season, movieId } = req.query;
+        return `/${server}/sources-with-title?title=${query}&year=${year}&mediaType=${type}&episodeId=${episode}&seasonId=${season}&tmdbId=${movieId}`;
+    },
+    selfHandleResponse: true,
+    on: {
+        proxyRes: responseInterceptor(async (responseBuffer, proxyRes, req, res) => {
+            try {
+                const response = responseBuffer.toString('utf8');
+
+                return response || '';
+            } catch (error) {
+                console.error('Error processing response:', error.message);
+                return '';
+            }
+        }),
+    },
+    headers: {
+        Accept: "application/json",
+        'User-Agent': "Mozilla/5.0 (Macintosh; Intel Mac OS X 13_4_1) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.5.2 Safari/605.1.15"
+    }
+}));*/
 
 /**
  *  Cross proxy used to get movie link from RabbitStream using Braflix's movie id.
