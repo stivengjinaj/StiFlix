@@ -2,7 +2,8 @@
   "scripts": {
     "start": "nodemon server.mjs",
     "dev": "nodemon server.mjs",
-    "prod": "NODE_ENV=production nodemon server.mjs"
+    "prod": "NODE_ENV=production nodemon server.mjs",
+    "build": "npm install build --output public"
   },
   "dependencies": {
     "build": "^0.1.4",
@@ -10,6 +11,7 @@
     "express": "^4.19.2",
     "http-proxy-middleware": "^3.0.0",
     "node-fetch": "^3.3.2",
-    "nodemon": "^3.1.4"
+    "nodemon": "^3.1.4",
+    "public": "^0.1.5"
   }
 }
