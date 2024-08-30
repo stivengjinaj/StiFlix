@@ -1,9 +1,20 @@
 import express from 'express';
-import fetch from 'node-fetch';
 import cors from 'cors';
 import {createProxyMiddleware, responseInterceptor} from 'http-proxy-middleware';
 
 const app = express();
+
+const corsOptions = {
+    origin: "stiflix.onrender.com",
+    methods: 'GET,POST,PUT,DELETE,OPTIONS',
+    allowedHeaders: 'Content-Type,Authorization',
+    credentials: true,
+    optionsSuccessStatus: 200
+};
+
+// Apply CORS with options to all routes
+app.use(cors(corsOptions));
+
 
 app.use(cors({
     origin: "*",
@@ -12,35 +23,80 @@ app.use(cors({
 /**
  *  Cross proxy used to get movie id from Piracy server.
  * */
-app.get('/api/getMovieId', async (req, res) => {
-    const { query, type, year } = req.query;
-    const response = await fetch(`https://vsrc.piracy.su/search?query=${query}&type=${type}&year=${year}`, {
-        headers: {
-            Accept: "application/json",
-            UserAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 13_4_1) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.5.2 Safari/605.1.15"
-        }
-    });
-    const data = await response.json();
-    res.json(data);
-});
+app.use('/api/getMovieId', createProxyMiddleware({
+    target: 'https://vsrc.piracy.su',
+    changeOrigin: true,
+    pathRewrite: (path, req) => {
+        const { query, type, year } = req.query;
+        return `/search?query=${query}&type=${type}&year=${year}`;
+    },
+    selfHandleResponse: true,
+    on: {
+        proxyRes: responseInterceptor(async (responseBuffer, proxyRes, req, res) => {
+            try {
+                if (!responseBuffer || typeof responseBuffer !== 'object' || responseBuffer.length === 0) {
+                    throw new Error('Invalid or empty response from target server');
+                }
+                const response = responseBuffer.toString('utf8');
+
+                // Inject CORS headers
+                res.setHeader('Access-Control-Allow-Origin', '*');
+                res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+                res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+                return JSON.stringify(JSON.parse(response));
+            } catch (error) {
+                res.statusCode = 500;
+                return JSON.stringify({ error: 'Failed to process response from target server' });
+            }
+        }),
+    },
+    headers: {
+        Accept: "application/json",
+        'User-Agent': "Mozilla/5.0 (Macintosh; Intel Mac OS X 13_4_1) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.5.2 Safari/605.1.15",
+    }
+}));
+
 
 /**
  *  Cross proxy used to get movie links from Piracy servers.
  * */
-app.get('/api/getMovieSources', async (req, res) => {
-    const { movieId, server } = req.query;
-    const response = await fetch(`https://vsrc.piracy.su/movie?id=${movieId}&server=${server}`, {
-        headers: {
-            Accept: "application/json",
-            UserAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 13_4_1) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.5.2 Safari/605.1.15"
-        }
-    });
-    const data = await response.json();
-    res.json(data);
-});
+app.use('/api/getMovieSources', createProxyMiddleware({
+    target: 'https://vsrc.piracy.su',
+    changeOrigin: true,
+    pathRewrite: (path, req) => {
+        const { movieId, server } = req.query;
+        return `/movie?id=${movieId}&server=${server}`;
+    },
+    selfHandleResponse: true,
+    on: {
+        proxyRes: responseInterceptor(async (responseBuffer, proxyRes, req, res) => {
+            try {
+                if (!responseBuffer || typeof responseBuffer !== 'object' || responseBuffer.length === 0) {
+                    throw new Error('Invalid or empty response from target server');
+                }
+                const response = responseBuffer.toString('utf8');
+
+                // Inject CORS headers
+                res.setHeader('Access-Control-Allow-Origin', '*');
+                res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+                res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+                return JSON.stringify(JSON.parse(response));
+            } catch (error) {
+                res.statusCode = 500;
+                return JSON.stringify({ error: 'Failed to process response from target server' });
+            }
+        }),
+    },
+    headers: {
+        Accept: "application/json",
+        'User-Agent': "Mozilla/5.0 (Macintosh; Intel Mac OS X 13_4_1) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.5.2 Safari/605.1.15",
+    }
+}));
 
 /**
- *  Cross proxy used to get movie id from Braflix server.
+ *  Cross proxy used to get movie id from Braflix server. (without proxy middleware)
  * */
 /*app.get('/api/getMovieIdBraflix', async (req, res) => {
     const { server, query, year, type, episode, season, movieId } = req.query;
@@ -72,7 +128,7 @@ app.get('/api/getMovieSources', async (req, res) => {
 });*/
 
 /**
- *  Cross proxy used to get movie id from Braflix server.
+ *  Cross proxy used to get movie id from Braflix server. (with proxy middleware)
  * */
 app.use('/api/getMovieIdBraflix', createProxyMiddleware({
     target: 'https://api.braflix.ru',
@@ -108,36 +164,6 @@ app.use('/api/getMovieIdBraflix', createProxyMiddleware({
     }
 }));
 
-
-/**
- *  Cross proxy used to get movie link from RabbitStream using Braflix's movie id.
- * */
-app.get('/api/getRabbitStream', async (req, res) => {
-    const { id } = req.query;
-    const response = await fetch(`https://rabbitstream.net/v2/embed-4/${id}?_debug=true`, {
-        headers: {
-            Accept: "application/json",
-            UserAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 13_4_1) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.5.2 Safari/605.1.15"
-        }
-    });
-    const data = await response;
-    res.json(data);
-});
-
-/**
- *  Cross proxy used to get movie link from Megacloud using Braflix's movie id.
- * */
-app.get('/api/getMegacloud', async (req, res) => {
-    const { id } = req.query;
-    const response = await fetch(`https://megacloud.tv/embed-1/e-1/${id}?_debug=true`, {
-        headers: {
-            Accept: "application/json",
-            UserAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 13_4_1) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.5.2 Safari/605.1.15"
-        }
-    });
-    const data = await response;
-    res.json(data);
-});
 
 app.listen(3000, () => {
     console.log('Proxy server is online on port 3000');
