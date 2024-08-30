@@ -37,35 +37,12 @@ don't include watching movies. To run the app, follow the steps below:
 
 1. Clone the repository.
 2. Run `npm install` in the server directory to install dependencies.
-3. Run `nodemon server.mjs` or `node server.mjs` in the server directory to run the server.
+3. Run `nodemon server.mjs` or `npm start` in the server directory to run the server.
 
 ### Running client and server
 
 1. Open two terminals.
 2. Do the steps in [Running client](#running-client) and [Running server](#running-server).
-
-If you want to check out both client and server, and get the links for a movie, you have to modify `MoviePlaying.jsx`.
-This file contains the route to watch a movie. You need the movieId. Check out the documentation on `FetchedMovieController.js` 
-on how the movie data is obtained. **TLDR**: Http requests to tmdb.org APIs that respond with a json that contains an ID among other data. You can 
-navigate to this route in this way: localhost:5137/movies/:movieId. `MoviePlaying.jsx` will retrieve the movie id parameter. 
-Afterward, check out the APIs in client directory and `FetchedMovieController.js` in client/src/controllers directory. Read the 
-documentation to understand how to get the movie details of a movie given the id. Then check out the documentation in 
-`FetchLinksControllers.js` in client/src/controllers directory to understand how to get the links. There is a function called 
-`fetchLinks` that you have to use. Afterward, add the following code under linkFetcher in `MoviePlaying.jsx`:
-
-```javascript
-useEffect(() => {
-    // Add the code to retrieve movie details here
-    
-    // After getting the movie details use fetchLinks to get the links.
-    const fetchLinks = async () => {
-        const links = await linkFetcher.fetchLinks(movie.title, "movie", movie.release_date, movie.id);
-        setLinks(links);
-        console.log(links);
-    }
-}, [])
-```
-You can check out the links in console.
 
 ## Screenshots and demo
 
@@ -108,10 +85,10 @@ https://github.com/stivengjinaj/StiFlix/blob/deploy-test/screenshots/movieDemo_m
 
 | Task                                                  | Description                                                                                                                                                                                                                        | Priority | Status               |
 |-------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|----------------------|
-| Video Player Skin                                     | Add personalized skin to the iframe vide                                                                                                                                                                                           | Optional | Not started          |
-| Video Progress                                        | Save the progress of the video watched                                                                                                                                                                                             | High     | Not started          |
-| Watch movie UI                                        | Simple UI to watch a movie/tv show, with switch server dropdown.                                                                                                                                                                   | High     | Not started          |
+| Watch movie UI                                        | Simple UI to watch a movie/tv show, with switch server dropdown.                                                                                                                                                                   | High     | Done                 |
 | Category Filter                                       | Filter videos by category                                                                                                                                                                                                          | Medium   | Not started          |
+| Change season/episode while watching tv show          | User can change season/episode while watching.                                                                                                                                                                                     | Medium   | Not started          |
+| Save movie history                                    | Users view the movies they didn't finish                                                                                                                                                                                           | Medium   | Not started          |
 | Login/Register                                        | Add users                                                                                                                                                                                                                          | High     | Done                 |
 | More info                                             | Show movie info                                                                                                                                                                                                                    | Medium   | Done                 |
 | Favourites                                            | Add a video to the favourites list                                                                                                                                                                                                 | High     | Done                 |
@@ -126,6 +103,7 @@ https://github.com/stivengjinaj/StiFlix/blob/deploy-test/screenshots/movieDemo_m
 | Route blocker                                         | Block navigation by link if user is not logged in. E.g: Navigating to favourites takes you to login.                                                                                                                               | High     | Done                 |
 | GSAP animations on movies page                        | GSAP animations tend to lag on pages where UI appears after asynchronous requests are done. Refresh is needed to remove lag.                                                                                                       | Medium   | Need further testing |
 | Pass user/user authentication state from root App.jsx | User log in state is initially handle from root file App.jsx. Also it is handle in other pages where logged in user is required. Modification is needed to manage this only on App.jsx and pass user state as prop to other routes | Medium   | Done                 |
+
 
 
 
