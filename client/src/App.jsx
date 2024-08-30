@@ -13,6 +13,7 @@ import PersonalMovies from "./pages/Personal/PersonalMovies.jsx";
 import {useEffect, useState} from "react";
 import {auth} from "../firebaseConfiguration.js";
 import Loading from "./pages/Movies/Loading.jsx";
+import NotFound from "./pages/NotFound.jsx";
 
 function App() {
     const navigate = useNavigate();
@@ -44,7 +45,7 @@ function App() {
             <Route index element={<InitialPage user={user} handleSignOut={handleSignOut}/>} />
             <Route path={'/movies'} element={<Movies />} />
             <Route path={'/movies/info/:mediaType/:movieId'} element={<MovieDetails user={user}/>} />
-            <Route path={'/movies/:mediaType/:movieId/:season/:episode'} element={<MoviePlaying user={user}/>} />
+            <Route path={'/:mediaType/:movieId/:season/:episode'} element={<MoviePlaying user={user}/>} />
             <Route path={'/login'} element={
                 !user ? <Login /> : <Navigate to={'/'} />
             } />
@@ -63,6 +64,7 @@ function App() {
             <Route path={'/watchlist'} element={
                 user ? <PersonalMovies user={user} type={'watchlist'} /> : <Navigate to={'/login'} />
             } />
+            <Route path={'*'} element={<NotFound />} />
         </Routes>
     );
 }
