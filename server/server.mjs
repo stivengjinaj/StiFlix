@@ -75,6 +75,7 @@ app.get('/api/getMovieSources', async (req, res) => {
  *  Cross proxy used to get movie id from Braflix server.
  * */
 app.use('/api/getMovieIdBraflix', createProxyMiddleware({
+    mode: 'no-cors',
     target: 'https://api.braflix.ru',
     changeOrigin: true,
     pathRewrite: (path, req) => {
