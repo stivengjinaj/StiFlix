@@ -1,4 +1,4 @@
-import {addDoc, collection, doc, getDoc, setDoc, updateDoc} from "firebase/firestore";
+import {collection, doc, getDoc, setDoc, updateDoc} from "firebase/firestore";
 
 {/*eslint-disable react/prop-types*/}
 import {useEffect, useRef, useState} from "react";
