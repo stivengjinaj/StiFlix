@@ -241,8 +241,18 @@ class FetchedMovieController {
     async getTrailer(movieId, mediaType) {
         const videoResults = await API.getTrailerKey(movieId, mediaType);
         const youtubeLink = "https://www.youtube.com/embed/";
-        return videoResults.results.length > 0 ? youtubeLink+videoResults.results[0].key : null;
+
+        if (videoResults.results.length > 0) {
+            const trailerVideo = videoResults.results.find(video =>
+                video.name.toLowerCase().includes("trailer")
+            );
+
+            return youtubeLink + (trailerVideo ? trailerVideo.key : videoResults.results[0].key);
+        }
+
+        return null;
     }
+
 
     /**
      * Function used to get genres for a movie or tv show.
