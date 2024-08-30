@@ -41,7 +41,7 @@ function MainMovie({ mainMovie }) {
                 duration: 2,
                 ease: 'ease-in-out',
                 onComplete: () => {
-                    navigate(`/movies/${mainMovie[0].isSeries ? 'tv' : 'movie'}/${mainMovie[0].id}/1/1`);
+                    navigate(`/${mainMovie[0].isSeries ? 'tv' : 'movie'}/${mainMovie[0].id}/1/1`);
                 }
             });
         }

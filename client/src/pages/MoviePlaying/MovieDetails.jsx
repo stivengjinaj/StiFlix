@@ -83,7 +83,7 @@ function MovieDetails(props) {
                 duration: 2,
                 ease: 'ease-in-out',
                 onComplete: () => {
-                    mediaType === 'movie' ? navigate(`/movies/movie/${movieId}/1/1`) : navigate(`/movies/tv/${movieId}/${currentSeason}/${currentEpisode}`);
+                    mediaType === 'movie' ? navigate(`/movie/${movieId}/1/1`) : navigate(`/tv/${movieId}/${currentSeason}/${currentEpisode}`);
                 }
             });
         }
