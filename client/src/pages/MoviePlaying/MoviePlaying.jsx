@@ -7,8 +7,9 @@ import {useParams} from "react-router-dom";
 import FetchedMovieController from "../../controllers/FetchedMovieController.js";
 import {getYearFromDate} from "../../helper/miscs.js";
 import Loading from "../Miscs/Loading.jsx";
-import {Container, Dropdown} from "react-bootstrap";
+import {Button, Container, Dropdown} from "react-bootstrap";
 import {db} from "../../../firebaseConfiguration.js";
+import ChangeSeasonEpisode from "./ChangeSeasonEpisode.jsx";
 
 function MoviePlaying(props) {
     const iframeRef = useRef(null);
@@ -19,6 +20,7 @@ function MoviePlaying(props) {
     const [links, setLinks] = useState([]);
     const [currentServer, setCurrentServer] = useState(null);
     const [noLinks, setNoLinks] = useState(false);
+    const [changeSeasonEpisode, setChangeSeasonEpisode] = useState(false);
 
     const handleProgressSave = async () => {
         if (props.user) {
@@ -134,8 +136,15 @@ function MoviePlaying(props) {
                                     ))}
                                 </Dropdown.Menu>
                             </Dropdown>
+                            {
+                                movie.isSeries &&
+                                <Button onClick={() => setChangeSeasonEpisode(true)} variant="dark" className="p-3 mx-3">
+                                    <h5>Season/Episode</h5>
+                                </Button>
+                            }
                         </Container>
                         {currentServer && (
+                            <>
                             <iframe
                                 ref={iframeRef}
                                 className="video"
@@ -143,6 +152,15 @@ function MoviePlaying(props) {
                                 allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
                                 style={{ width: '100%', height: '100%', border: 'none' }}
                             ></iframe>
+                                {movie.isSeries &&
+                                    <ChangeSeasonEpisode
+                                    movie={movie}
+                                    show={changeSeasonEpisode}
+                                    hide={() => setChangeSeasonEpisode(false)}
+                                    onHide={() => setChangeSeasonEpisode(false)}
+                                    />
+                                }
+                            </>
                         )}
                     </Container>
             )
