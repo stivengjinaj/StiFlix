@@ -43,7 +43,7 @@ function App() {
     return (
         <Routes>
             <Route index element={<InitialPage user={user} handleSignOut={handleSignOut}/>} />
-            <Route path={'/movies'} element={<Movies />} />
+            <Route path={'/movies'} element={<Movies user={user} />} />
             <Route path={'/movies/info/:mediaType/:movieId'} element={<MovieDetails user={user}/>} />
             <Route path={'/:mediaType/:movieId/:season/:episode'} element={<MoviePlaying user={user}/>} />
             <Route path={'/login'} element={

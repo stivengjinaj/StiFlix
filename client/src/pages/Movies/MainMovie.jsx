@@ -9,11 +9,16 @@ import MoviesCarousel from "./MoviesCarousel.jsx";
 import GridMovies from "./GridMovies.jsx";
 import SeachResults from "./SeachResults.jsx";
 import StiflixFooter from "../Miscs/StiflixFooter.jsx";
+import {collection, doc, getDocs} from "firebase/firestore";
+import {db} from "../../../firebaseConfiguration.js";
+import FetchedMovieController from "../../controllers/FetchedMovieController.js";
 
 function MainMovie(props) {
+    const movieFetcher = new FetchedMovieController();
     const [currentMovie, setCurrentMovie] = useState(null);
     const [playMovieSplash, setPlayMovieSplash] = useState(false);
     const [showMoreInfo, setShowMoreInfo] = useState(false);
+    const [moviesInProgress, setMoviesInProgress] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -21,6 +26,31 @@ function MainMovie(props) {
             setCurrentMovie(props.mainMovie[0]);
         }
     }, [props.mainMovie]);
+
+    useEffect(() => {
+        if (props.user?.uid) {
+            const fetchMoviesInProgress = async () => {
+                try {
+                    const userDocRef = doc(db, 'users', props.user.uid);
+                    const continueWatchingCollection = collection(userDocRef, 'continueWatching');
+
+                    const querySnapshot = await getDocs(continueWatchingCollection);
+
+                    const movies = querySnapshot.docs.map(doc => doc.data());
+
+                    const movieDetailsPromises = movies.map(movie => movieFetcher.getMediaDetails(movie.movieId, movie.mediaType));
+                    const movieDetails = await Promise.all(movieDetailsPromises);
+
+                    setMoviesInProgress(movieDetails);
+                } catch (error) {
+                    console.error('Error fetching movie IDs:', error);
+                }
+            };
+
+            fetchMoviesInProgress();
+        }
+    }, [props.user]);
+
 
     useLayoutEffect(() => {
         if (currentMovie) {

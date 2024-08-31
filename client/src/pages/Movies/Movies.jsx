@@ -7,7 +7,7 @@ import MainMovie from "./MainMovie.jsx";
 import FetchedMovieController from "../../controllers/FetchedMovieController.js";
 import {sortByVoteAverage, stringQuery} from "../../helper/miscs.js";
 
-function Movies() {
+function Movies(props) {
     const fetcher = new FetchedMovieController();
     const [showSplash, setShowSplash] = useState(true);
     const [section, setSection] = useState('home');
@@ -62,6 +62,7 @@ function Movies() {
         showSplash
             ? (<SplashScreen />)
             : (<HomePage
+                user={props.user}
                 allTrending={allTrending}
                 allPopular={allPopular}
                 topRatedMovies={topRatedMovies}
@@ -98,6 +99,7 @@ function HomePage(props) {
                 startSearching={startSearching}
             />
             <MainMovie
+                user={props.user}
                 mainMovie={props.allTrending}
                 isSearching={isSearching}
                 section={props.section}

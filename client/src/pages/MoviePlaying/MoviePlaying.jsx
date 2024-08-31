@@ -1,4 +1,4 @@
-import {collection, doc, getDoc, setDoc, updateDoc} from "firebase/firestore";
+import {collection, doc, getDocs, query, setDoc, where} from "firebase/firestore";
 
 {/*eslint-disable react/prop-types*/}
 import {useEffect, useRef, useState} from "react";
@@ -23,38 +23,32 @@ function MoviePlaying(props) {
     const [changeSeasonEpisode, setChangeSeasonEpisode] = useState(false);
 
     const handleProgressSave = async () => {
-        if (props.user) {
+        if (props.user && movie.id) {
             try {
                 const userDocRef = doc(db, 'users', props.user.uid);
                 const continueWatchingCollection = collection(userDocRef, 'continueWatching');
-                const movieDocRef = doc(continueWatchingCollection, movie.movieId); // Assuming movieId is used as document ID
 
-                const docSnapshot = await getDoc(movieDocRef);
+                const querySnapshot = await getDocs(query(continueWatchingCollection, where('movieId', '==', movie.id)));
 
-                if (docSnapshot.exists()) {
-                    const currentData = docSnapshot.data();
-                    const newProgress = (currentData.progress || 0) + 60000;
-                    await updateDoc(movieDocRef, { progress: newProgress });
-                } else {
-                    await setDoc(movieDocRef, {
-                        movieId: movie.movieId,
+                if (querySnapshot.empty) {
+                    await setDoc(doc(continueWatchingCollection), {
+                        movieId: movie.id,
                         mediaType: mediaType,
-                        progress: 60000
                     });
                 }
             } catch (error) {
-                console.log("Error on progress.")
-                console.error('Error fetching or updating data:', error);
+                console.error('Error adding movie:', error);
             }
         }
     };
 
     useEffect(() => {
-        if(props.user) {
-            const intervalId = setInterval(handleProgressSave, 60000);
-            return () => clearInterval(intervalId);
+        if (props.user) {
+            const countdownId = setTimeout(handleProgressSave, 3000);
+
+            return () => clearTimeout(countdownId);
         }
-    }, []);
+    }, [currentServer]);
 
     useEffect(() => {
         const fetchLinks = async (fetchedMovie) => {
