@@ -149,7 +149,7 @@ function MoviePlaying(props) {
                                 ref={iframeRef}
                                 className="video"
                                 src={currentServer.link}
-                                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen"
                                 style={{ width: '100%', height: '100%', border: 'none' }}
                             ></iframe>
                                 {movie.isSeries &&
