@@ -37,7 +37,7 @@ function FeatureRow(props) {
     }, []);
 
     return (
-        <Row className="justify-content-center mx-0 flex-column flex-lg-row mb-4">
+        <Row className="justify-content-center mx-0 flex-column flex-lg-row mt-4">
             {
                 props.textDirection === "left"
                     ? (
