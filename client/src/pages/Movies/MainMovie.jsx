@@ -9,9 +9,11 @@ import MoviesCarousel from "./MoviesCarousel.jsx";
 import GridMovies from "./GridMovies.jsx";
 import SeachResults from "./SeachResults.jsx";
 import StiflixFooter from "../Miscs/StiflixFooter.jsx";
-import {collection, doc, getDocs} from "firebase/firestore";
+import {collection, deleteDoc, doc, getDocs} from "firebase/firestore";
 import {db} from "../../../firebaseConfiguration.js";
 import FetchedMovieController from "../../controllers/FetchedMovieController.js";
+import ContinueWatching from "./ContinueWatching.jsx";
+import {parseDateString} from "../../helper/miscs.js";
 
 function MainMovie(props) {
     const movieFetcher = new FetchedMovieController();
@@ -40,8 +42,26 @@ function MainMovie(props) {
 
                     const movieDetailsPromises = movies.map(movie => movieFetcher.getMediaDetails(movie.movieId, movie.mediaType));
                     const movieDetails = await Promise.all(movieDetailsPromises);
+                    const currentDate = new Date();
+                    const moviesInProgress = movies.map((movie) => {
+                        const foundMovieDetails = movieDetails.find(details => details.id === movie.movieId);
+                        const movieDate = parseDateString(movie.date);
+                        const timeDiff = currentDate - movieDate;
+                        const daysDiff = timeDiff / (1000 * 60 * 60 * 24);
+                        if(daysDiff > 5) {
+                            deleteDoc(doc(continueWatchingCollection, movie.id));
+                        } else {
+                            return {
+                                movie: foundMovieDetails,
+                                season: movie.season,
+                                episode: movie.episode,
+                                date: movie.date,
+                            }
+                        }
+                    });
 
-                    setMoviesInProgress(movieDetails);
+                    setMoviesInProgress(moviesInProgress);
+                    console.log('Movies in progress:', moviesInProgress);
                 } catch (error) {
                     console.error('Error fetching movie IDs:', error);
                 }
@@ -49,7 +69,7 @@ function MainMovie(props) {
 
             fetchMoviesInProgress();
         }
-    }, [props.user]);
+    }, []);
 
 
     useLayoutEffect(() => {
@@ -155,6 +175,7 @@ function MainMovie(props) {
                                                             return (
                                                                 <>
                                                                     <MoviesCarousel title={"Popular on Stiflix"} movies={props.allPopular} moving={true} scrollable={false}/>
+                                                                    {props.user && moviesInProgress.length > 0 && <ContinueWatching movies={moviesInProgress}/>}
                                                                     <MoviesCarousel title={"Trending Now"} movies={props.allTrending} moving={false} scrollable={true}/>
                                                                     <MoviesCarousel title={"Top Rated Movies"} movies={props.topRatedMovies} moving={false} scrollable={true}/>
                                                                     <MoviesCarousel title={"Top Rated TV Shows"} movies={props.topRatedSeries} moving={false} scrollable={true}/>
