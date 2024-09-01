@@ -91,3 +91,28 @@ export function getYearFromDate(date) {
 export function randomAvatar(avatars) {
     return avatars[Math.floor(Math.random() * avatars.length)];
 }
+
+/**
+ * Function used to get the current date in the format of dd-mm-yyyy.
+ *
+ * @return current date in the format of dd-mm-yyyy.
+ */
+export function getCurrentDateString() {
+    const date = new Date();
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+
+    return `${day}-${month}-${year}`;
+}
+/**
+ * Function used to parse a date string into a Date object.
+ *
+ * @param dateString - The date string to parse.
+ * @return Date object.
+ */
+export function parseDateString(dateString) {
+    const [day, month, year] = dateString.split('-').map(Number);
+    return new Date(year, month - 1, day);
+}
+
