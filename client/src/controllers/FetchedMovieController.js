@@ -25,7 +25,6 @@ class FetchedMovieController {
     async getAllTrending() {
         const fetchedMovies = [];
         const movies = await API.getTrendingMovies();
-        console.log("API Trending movies:", movies);
         movies.results.forEach(movie => {
             const detailsExist = movie.media_type === "movie" ? this.checkMovieData(movie) : this.checkTvShowData(movie);
             if(detailsExist) {
@@ -44,7 +43,6 @@ class FetchedMovieController {
                 }
             }
         });
-        console.log("Fetched trending movies:", fetchedMovies);
         return fetchedMovies;
     }
 
@@ -260,14 +258,15 @@ class FetchedMovieController {
         const videoResults = await API.getTrailerKey(movieId, mediaType);
         const youtubeLink = "https://www.youtube.com/embed/";
 
-        if (videoResults.results.length > 0) {
-            const trailerVideo = videoResults.results.find(video =>
-                video.name.toLowerCase().includes("trailer")
-            );
+        if(videoResults.results){
+            if (videoResults.results.length > 0) {
+                const trailerVideo = videoResults.results.find(video =>
+                    video.name.toLowerCase().includes("trailer")
+                );
 
-            return youtubeLink + (trailerVideo ? trailerVideo.key : videoResults.results[0].key);
+                return youtubeLink + (trailerVideo ? trailerVideo.key : videoResults.results[0].key);
+            }
         }
-
         return null;
     }
 
