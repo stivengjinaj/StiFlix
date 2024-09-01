@@ -1,11 +1,11 @@
-import {collection, doc, getDocs, query, setDoc, where} from "firebase/firestore";
+import {collection, doc, getDocs, query, setDoc, updateDoc, where} from "firebase/firestore";
 
 {/*eslint-disable react/prop-types*/}
 import {useEffect, useRef, useState} from "react";
 import FetchLinksController from "../../controllers/FetchLinksController.js";
 import {useParams} from "react-router-dom";
 import FetchedMovieController from "../../controllers/FetchedMovieController.js";
-import {getYearFromDate} from "../../helper/miscs.js";
+import {getCurrentDateString, getYearFromDate} from "../../helper/miscs.js";
 import Loading from "../Miscs/Loading.jsx";
 import {Button, Container, Dropdown} from "react-bootstrap";
 import {db} from "../../../firebaseConfiguration.js";
@@ -23,28 +23,38 @@ function MoviePlaying(props) {
     const [changeSeasonEpisode, setChangeSeasonEpisode] = useState(false);
 
     const handleProgressSave = async () => {
-        if (props.user && movie.id) {
+        if (props.user && movieId) {
             try {
                 const userDocRef = doc(db, 'users', props.user.uid);
                 const continueWatchingCollection = collection(userDocRef, 'continueWatching');
 
-                const querySnapshot = await getDocs(query(continueWatchingCollection, where('movieId', '==', movie.id)));
+                const querySnapshot = await getDocs(query(continueWatchingCollection, where('movieId', '==', parseInt(movieId))));
 
                 if (querySnapshot.empty) {
                     await setDoc(doc(continueWatchingCollection), {
-                        movieId: movie.id,
+                        movieId: parseInt(movieId),
                         mediaType: mediaType,
+                        season: mediaType === 'tv' ? season : 1,
+                        episode: mediaType === 'tv' ? episode : 1,
+                        date: getCurrentDateString(),
+                    });
+                } else if (mediaType === 'tv') {
+                    const docRef = querySnapshot.docs[0].ref;
+                    await updateDoc(docRef, {
+                        season: season,
+                        episode: episode,
+                        date: getCurrentDateString(),
                     });
                 }
             } catch (error) {
-                console.error('Error adding movie:', error);
+                console.error('Error handling progress save:', error);
             }
         }
     };
 
     useEffect(() => {
         if (props.user) {
-            const countdownId = setTimeout(handleProgressSave, 3000);
+            const countdownId = setTimeout(handleProgressSave, 60000);
 
             return () => clearTimeout(countdownId);
         }
