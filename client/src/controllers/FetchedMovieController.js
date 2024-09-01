@@ -25,6 +25,7 @@ class FetchedMovieController {
     async getAllTrending() {
         const fetchedMovies = [];
         const movies = await API.getTrendingMovies();
+        console.log("API Trending movies:", movies);
         movies.results.forEach(movie => {
             const detailsExist = movie.media_type === "movie" ? this.checkMovieData(movie) : this.checkTvShowData(movie);
             if(detailsExist) {
@@ -43,6 +44,7 @@ class FetchedMovieController {
                 }
             }
         });
+        console.log("Fetched trending movies:", fetchedMovies);
         return fetchedMovies;
     }
 
