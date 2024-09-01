@@ -61,7 +61,6 @@ function MainMovie(props) {
                     });
 
                     setMoviesInProgress(moviesInProgress);
-                    console.log('Movies in progress:', moviesInProgress);
                 } catch (error) {
                     console.error('Error fetching movie IDs:', error);
                 }
