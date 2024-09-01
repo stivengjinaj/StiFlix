@@ -15,6 +15,11 @@ const getPopularMovies = async () => {
             Accept: "application/json"
         }
     });
+
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
     return await response.json();
 }
 
@@ -30,6 +35,11 @@ const getPopularTvShows = async () => {
             Accept: "application/json"
         }
     });
+
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
     return await response.json();
 }
 
@@ -45,6 +55,11 @@ const getTopRatedMovies = async () => {
             Accept: "application/json"
         }
     });
+
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
     return await response.json();
 }
 
@@ -60,6 +75,11 @@ const getTopRatedTvShows = async () => {
             Accept: "application/json"
         }
     });
+
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
     return await response.json();
 }
 
@@ -75,6 +95,11 @@ const getTrendingMovies = async () => {
             Accept: "application/json"
         }
     });
+
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
     return await response.json();
 }
 
@@ -91,6 +116,11 @@ const getTvShowDetails = async (tvShowId) => {
             Accept: "application/json"
         }
     });
+
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
     return await response.json();
 }
 
@@ -107,6 +137,11 @@ const discoverMovies = async (page) => {
             Accept: "application/json"
         }
     });
+
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
     return await response.json();
 }
 
@@ -123,6 +158,11 @@ const discoverTvShows = async (page) => {
             Accept: "application/json"
         }
     });
+
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
     return await response.json();
 }
 

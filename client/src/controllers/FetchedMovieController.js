@@ -153,25 +153,29 @@ class FetchedMovieController {
      * @return Array of tv shows.
      */
     async discoverTvShows() {
-        const fetchedMovies = []
+        const fetchedMovies = [];
         for (let i = 2; i < 6; i++) {
-            const tvShows = await API.discoverTvShows(i);
-            tvShows.results.forEach(tvShow => {
-                const detailsExist = this.checkTvShowData(tvShow);
-                if(detailsExist){
-                    API.getTvShowDetails(tvShow.id)
-                        .then(tvShowDetails => {
-                            fetchedMovies.push(
-                                new FetchedMovie(
-                                    tvShow,
-                                    true,
-                                    tvShowDetails.number_of_seasons,
-                                    tvShowDetails.number_of_episodes
-                                )
-                            );
-                        });
-                }
-            });
+            try {
+                const tvShows = await API.discoverTvShows(i);
+                tvShows.results.forEach(tvShow => {
+                    const detailsExist = this.checkTvShowData(tvShow);
+                    if (detailsExist) {
+                        API.getTvShowDetails(tvShow.id)
+                            .then(tvShowDetails => {
+                                fetchedMovies.push(
+                                    new FetchedMovie(
+                                        tvShow,
+                                        true,
+                                        tvShowDetails.number_of_seasons,
+                                        tvShowDetails.number_of_episodes
+                                    )
+                                );
+                            });
+                    }
+                });
+            } catch (error) {
+                console.error(`Error fetching TV shows for page ${i}:`, error);
+            }
         }
         return fetchedMovies;
     }
