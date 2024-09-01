@@ -3,6 +3,8 @@
 const tmdb_read_token = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI5MzAxZGRjN2MzYmYzOGZiZGYzMzNhZTE1YTkzNjc5MiIsIm5iZiI6MTcyMzM5NTY2NS40NTcyMDIsInN1YiI6IjY2YjhlZDY0ZmUyNGZlODUwNGY2ZWZjZiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.b8zxhQus7eZTVich0Jv9lMp3vXM2v-LQXPLLKB9cmaM"
 const remote_url = "stiflix.vercel.app"
 
+
+
 /**
  * API used to get popular movies(only).
  *
@@ -12,7 +14,10 @@ const getPopularMovies = async () => {
    const response = await fetch(`https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc`, {
         headers: {
             Authorization: `Bearer ${tmdb_read_token}`,
-            Accept: "application/json"
+            Accept: "application/json",
+            Headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; Trident/7.0; rv:11.0) like Gecko',
+            }
         }
     });
 
@@ -32,7 +37,10 @@ const getPopularTvShows = async () => {
     const response = await fetch(`https://api.themoviedb.org/3/discover/tv?include_adult=false&include_null_first_air_dates=false&language=en-US&page=1&sort_by=popularity.desc`, {
         headers: {
             Authorization: `Bearer ${tmdb_read_token}`,
-            Accept: "application/json"
+            Accept: "application/json",
+            Headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.5845.110 Safari/537.36',
+            }
         }
     });
 
@@ -52,7 +60,10 @@ const getTopRatedMovies = async () => {
     const response = await fetch(`https://api.themoviedb.org/3/movie/top_rated?language=en-US&page=1`, {
         headers: {
             Authorization: `Bearer ${tmdb_read_token}`,
-            Accept: "application/json"
+            Accept: "application/json",
+            Headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.5845.110 Safari/537.36',
+            }
         }
     });
 
@@ -72,7 +83,10 @@ const getTopRatedTvShows = async () => {
     const response = await fetch(`https://api.themoviedb.org/3/discover/tv?include_adult=false&language=en-US&page=1&sort_by=vote_average.desc&vote_count.gte=200`, {
         headers: {
             Authorization: `Bearer ${tmdb_read_token}`,
-            Accept: "application/json"
+            Accept: "application/json",
+            Headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.5845.110 Safari/537.36',
+            }
         }
     });
 
@@ -92,7 +106,10 @@ const getTrendingMovies = async () => {
     const response = await fetch(`https://api.themoviedb.org/3/trending/all/day?language=en-US`, {
         headers: {
             Authorization: `Bearer ${tmdb_read_token}`,
-            Accept: "application/json"
+            Accept: "application/json",
+            Headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.5845.110 Safari/537.36',
+            }
         }
     });
 
@@ -113,7 +130,8 @@ const getTvShowDetails = async (tvShowId) => {
     const response = await fetch(`https://api.themoviedb.org/3/tv/${tvShowId}?language=en-US`, {
         headers: {
             Authorization: `Bearer ${tmdb_read_token}`,
-            Accept: "application/json"
+            Accept: "application/json",
+            "User-Agent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.5845.110 Safari/537.36',
         }
     });
 
@@ -134,7 +152,8 @@ const discoverMovies = async (page) => {
     const response = await fetch(`https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=${page}&sort_by=popularity.desc`, {
         headers: {
             Authorization: `Bearer ${tmdb_read_token}`,
-            Accept: "application/json"
+            Accept: "application/json",
+            "User-Agent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.5845.110 Safari/537.36'
         }
     });
 
@@ -155,7 +174,8 @@ const discoverTvShows = async (page) => {
     const response = await fetch(`https://api.themoviedb.org/3/discover/tv?include_adult=false&include_null_first_air_dates=false&language=en-US&page=${page}&sort_by=popularity.desc`, {
         headers: {
             Authorization: `Bearer ${tmdb_read_token}`,
-            Accept: "application/json"
+            Accept: "application/json",
+            "User-Agent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.5845.110 Safari/537.36'
         }
     });
 
@@ -179,7 +199,8 @@ const mediaDetails = async (id, mediaType) => {
     const response = await fetch(`${baseUrl}${id}?language=en-US`, {
         headers: {
             Authorization: `Bearer ${tmdb_read_token}`,
-            Accept: "application/json"
+            Accept: "application/json",
+            "User-Agent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.5845.110 Safari/537.36'
         }
     });
 
@@ -203,7 +224,8 @@ const getTvShowsSeasons = async (id, seasons) => {
         const response = await fetch(`https://api.themoviedb.org/3/tv/${id}/season/${i}?language=en-US`, {
             headers: {
                 Authorization: `Bearer ${tmdb_read_token}`,
-                Accept: "application/json"
+                Accept: "application/json",
+                "User-Agent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.5845.110 Safari/537.36'
             }
         });
         const seasonData = await response.json();
@@ -226,14 +248,16 @@ const mediaGenres = async (id, media_type) => {
         response = await fetch(`https://api.themoviedb.org/3/tv/${id}?language=en-US`, {
             headers: {
                 Authorization: `Bearer ${tmdb_read_token}`,
-                Accept: "application/json"
+                Accept: "application/json",
+                "User-Agent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.5845.110 Safari/537.36'
             }
         });
     } else {
         response = await fetch(`https://api.themoviedb.org/3/movie/${id}?language=en-US`, {
             headers: {
                 Authorization: `Bearer ${tmdb_read_token}`,
-                Accept: "application/json"
+                Accept: "application/json",
+                "User-Agent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.5845.110 Safari/537.36'
             }
         });
     }
@@ -252,7 +276,8 @@ const getTrailerKey = async (movieId, mediaType) => {
     const response = await fetch(`${baseUrl}${movieId}/videos?language=en-US`, {
         headers: {
             Authorization: `Bearer ${tmdb_read_token}`,
-            Accept: "application/json"
+            Accept: "application/json",
+            "User-Agent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.5845.110 Safari/537.36'
         }
     });
     return await response.json();
@@ -268,7 +293,8 @@ const search = async (query) => {
     const response = await fetch(`https://api.themoviedb.org/3/search/multi?include_adult=false&language=en-US&page=1&query=${query}`, {
         headers: {
             Authorization: `Bearer ${tmdb_read_token}`,
-            Accept: "application/json"
+            Accept: "application/json",
+            "User-Agent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.5845.110 Safari/537.36'
         }
     });
     return await response.json();
@@ -292,7 +318,12 @@ const search = async (query) => {
  * @return json with movie data or an error message.
  */
 const getMovieId = async (query, type, year) => {
-    const response = await fetch(`${remote_url}/api/getMovieId?query=${query}&type=${type}&year=${year}`);
+    const response = await fetch(`${remote_url}/api/getMovieId?query=${query}&type=${type}&year=${year}`, {
+        headers: {
+            Accept: "application/json",
+            UserAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 13_4_1) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.5.2 Safari/605.1.15"
+        }
+    });
 
     if (!response.ok) {
         throw new Error(`Failed to fetch movie`);
@@ -309,7 +340,12 @@ const getMovieId = async (query, type, year) => {
  * @return json with data.
  * */
 const getMovieSources = async (movieId, server) => {
-    const response = await fetch(`${remote_url}/api/getMovieSources?movieId=${movieId}&server=${server}`);
+    const response = await fetch(`${remote_url}/api/getMovieSources?movieId=${movieId}&server=${server}`, {
+        headers: {
+            Accept: "application/json",
+            UserAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 13_4_1) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.5.2 Safari/605.1.15"
+        }
+    });
 
     if (!response.ok) {
         throw new Error(`Failed to fetch movie sources`);
