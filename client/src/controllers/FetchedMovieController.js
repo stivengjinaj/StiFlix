@@ -53,11 +53,15 @@ class FetchedMovieController {
      * */
     async getPopularMovies() {
         const fetchedMovies = [];
-        const movies = await API.getPopularMovies();
-        movies.results.forEach(movie => {
-            const detailsExist = this.checkMovieData(movie);
-            detailsExist && fetchedMovies.push(new FetchedMovie(movie, false, 0, 0))
-        });
+        try {
+            const movies = await API.getPopularMovies();
+            movies.results.forEach(movie => {
+                const detailsExist = this.checkMovieData(movie);
+                detailsExist && fetchedMovies.push(new FetchedMovie(movie, false, 0, 0));
+            });
+        } catch (error) {
+            console.error('Error fetching popular movies:', error);
+        }
         return fetchedMovies;
     }
 
@@ -68,23 +72,27 @@ class FetchedMovieController {
      * */
     async getPopularTvShows() {
         const fetchedMovies = [];
-        const tvShows = await API.getPopularTvShows();
-        tvShows.results.forEach(tvShow => {
-            const detailsExist = this.checkTvShowData(tvShow);
-            if(detailsExist){
-                API.getTvShowDetails(tvShow.id)
-                    .then(tvShowDetails => {
-                        fetchedMovies.push(
-                            new FetchedMovie(
-                                tvShow,
-                                true,
-                                tvShowDetails.number_of_seasons,
-                                tvShowDetails.number_of_episodes
-                            )
-                        );
-                    });
-            }
-        });
+        try {
+            const tvShows = await API.getPopularTvShows();
+            tvShows.results.forEach(tvShow => {
+                const detailsExist = this.checkTvShowData(tvShow);
+                if (detailsExist) {
+                    API.getTvShowDetails(tvShow.id)
+                        .then(tvShowDetails => {
+                            fetchedMovies.push(
+                                new FetchedMovie(
+                                    tvShow,
+                                    true,
+                                    tvShowDetails.number_of_seasons,
+                                    tvShowDetails.number_of_episodes
+                                )
+                            );
+                        });
+                }
+            });
+        } catch (error) {
+            console.error('Error fetching popular TV shows:', error);
+        }
         return fetchedMovies;
     }
 
@@ -94,12 +102,16 @@ class FetchedMovieController {
      * @returns Array of top-rated movies.
      * */
     async getTopRatedMovies() {
-        const fetchedMovies = []
-        const movies = await API.getTopRatedMovies();
-        movies.results.forEach(movie => {
-            const detailsExist = this.checkMovieData(movie);
-            detailsExist && fetchedMovies.push(new FetchedMovie(movie, false, 0, 0));
-        });
+        const fetchedMovies = [];
+        try {
+            const movies = await API.getTopRatedMovies();
+            movies.results.forEach(movie => {
+                const detailsExist = this.checkMovieData(movie);
+                detailsExist && fetchedMovies.push(new FetchedMovie(movie, false, 0, 0));
+            });
+        } catch (error) {
+            console.error('Error fetching top-rated movies:', error);
+        }
         return fetchedMovies;
     }
 
