@@ -1,7 +1,7 @@
 //const tmdb_api_key = "9301ddc7c3bf38fbdf333ae15a936792"
 
 const tmdb_read_token = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI5MzAxZGRjN2MzYmYzOGZiZGYzMzNhZTE1YTkzNjc5MiIsIm5iZiI6MTcyMzM5NTY2NS40NTcyMDIsInN1YiI6IjY2YjhlZDY0ZmUyNGZlODUwNGY2ZWZjZiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.b8zxhQus7eZTVich0Jv9lMp3vXM2v-LQXPLLKB9cmaM"
-const remote_url = "stiflix-git-deploy-test-stivens-projects-6a373bae.vercel.app"
+const remote_url = "https://stiflix.vercel.app"
 
 
 
