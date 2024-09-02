@@ -405,7 +405,8 @@ app.use('/api/getMovieIdBraflix', createProxyMiddleware({
     changeOrigin: true,
     pathRewrite: (path, req) => {
         const { server, query, year, type, episode, season, movieId } = req.query;
-        return `/${server}/sources-with-title?title=${query}&year=${year}&mediaType=${type}&episodeId=${episode}&seasonId=${season}&tmdbId=${movieId}`;
+
+        return `/${server}/sources-with-title?title=${query.trim().replace(/\s+/g, '+').replace(/&/g, '%26')}&year=${year}&mediaType=${type}&episodeId=${episode}&seasonId=${season}&tmdbId=${movieId}`;
     },
     selfHandleResponse: true,
     on: {
