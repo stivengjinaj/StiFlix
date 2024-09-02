@@ -16,7 +16,8 @@ class FetchLinksController {
         const handleError = (server, error) => links.push({ server, link: null, error });
 
         try {
-            const movieIdResponse = await API.getMovieId(query, type, year);
+            // This is movied ID from Piracy server. NOT WORKING.
+            //const movieIdResponse = await API.getMovieId(query, type, year);
 
             const promises = [
                 API.getMovieIdBraflix("upcloud", query, year, type, 1, 1, movieId)
@@ -31,8 +32,8 @@ class FetchLinksController {
                     .then(response => links.push({ server: "Gamma", link: `https://megacloud.tv/embed-1/e-1/${response}?_debug=true`, error: null }))
                     .catch(error => links.push({ server: "megacloud", link: null, error }))
             ];
-
-            if (movieIdResponse[0]?.id) {
+            // If piracy server is working, we can fetch links from it. NOT WORKING.
+            /*if (movieIdResponse[0]?.id) {
                 const piracyId = movieIdResponse[0].id;
 
                 promises.push(
@@ -44,9 +45,10 @@ class FetchLinksController {
                         .then(response => links.push({ server: "Epsilon", link: response, error: null }))
                         .catch(error => links.push({ server: "megacloud", link: null, error }))
                 );
-            }
+            } */
             await Promise.all(promises);
         } catch (error) {
+            console.log("Error here")
             handleError("All", error);
         }
         return links;
