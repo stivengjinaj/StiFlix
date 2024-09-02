@@ -10,7 +10,7 @@ const tmdb_read_token = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI5MzAxZGRjN2MzYmYzOGZiZG
 
 const corsOptions = {
     origin: "*",
-    methods: 'GET,POST,PUT,DELETE,OPTIONS',
+    methods: 'GET',
     allowedHeaders: 'Content-Type,Authorization',
     credentials: true,
     optionsSuccessStatus: 200
