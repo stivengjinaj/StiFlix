@@ -5,7 +5,7 @@ import {createProxyMiddleware, responseInterceptor} from 'http-proxy-middleware'
 const app = express();
 
 const corsOptions = {
-    origin: "stiflix.onrender.com",
+    origin: "https://stiflix.onrender.com",
     methods: 'GET,POST,PUT,DELETE,OPTIONS',
     allowedHeaders: 'Content-Type,Authorization',
     credentials: true,
