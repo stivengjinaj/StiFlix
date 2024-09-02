@@ -1,6 +1,4 @@
-import {stringQuery} from "./helper/miscs.js";
-
-const remote_url = "http://localhost:3000";
+const remote_url = "https://stiflix.vercel.app";
 
 
 /*const getPopularMovies = async () => {
