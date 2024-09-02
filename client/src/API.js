@@ -1,4 +1,6 @@
-const remote_url = "https://stiflix.vercel.app";
+import {stringQuery} from "./helper/miscs.js";
+
+const remote_url = "http://localhost:3000";
 
 
 /*const getPopularMovies = async () => {
@@ -440,7 +442,7 @@ const getMovieSources = async (movieId, server) => {
  * @return braflix movie id.
  * */
 const getMovieIdBraflix = async (server, query, year, type, episode, season, movieId) => {
-    const response = await fetch(`${remote_url}/api/getMovieIdBraflix?server=${server}&query=${query}&year=${year}&type=${type}&episode=${episode}&season=${season}&movieId=${movieId}`);
+    const response = await fetch(`${remote_url}/api/getMovieIdBraflix?server=${server}&query=${encodeURIComponent(query)}&year=${year}&type=${type}&episode=${episode}&season=${season}&movieId=${movieId}`);
     if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
     }
