@@ -1,8 +1,4 @@
-
-//const tmdb_api_key = "9301ddc7c3bf38fbdf333ae15a936792"
-//const tmdb_read_token = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI5MzAxZGRjN2MzYmYzOGZiZGYzMzNhZTE1YTkzNjc5MiIsIm5iZiI6MTcyMzM5NTY2NS40NTcyMDIsInN1YiI6IjY2YjhlZDY0ZmUyNGZlODUwNGY2ZWZjZiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.b8zxhQus7eZTVich0Jv9lMp3vXM2v-LQXPLLKB9cmaM"
-const remote_url = "https://stiflix-git-deploy-test-stivens-projects-6a373bae.vercel.app";
-
+const remote_url = "https://stiflix.vercel.app";
 
 
 /*const getPopularMovies = async () => {
@@ -393,15 +389,7 @@ const search = async (query) => {
 }
 
 /**
- * API used to get movie ID from Piracy server.
- *
- * @param query search query for the movie to search.
- * @param type move type.
- * @param year release year.
- * @return json with movie data.
- * */
-/**
- * API used to get movie ID from Piracy server.
+ * API used to get movie ID from Piracy server. NOT WORKING
  *
  * @param query search query for the movie to search.
  * @param type movie type.
@@ -409,7 +397,11 @@ const search = async (query) => {
  * @return json with movie data or an error message.
  */
 const getMovieId = async (query, type, year) => {
-    const response = await fetch(`${remote_url}/api/getMovieId?query=${query}&type=${type}&year=${year}`);
+    const response = await fetch(`${remote_url}/api/movieId?query=${query}&type=${type}&year=${year}`, {
+        headers: {
+            Accept: "application/json"
+        }
+    });
 
     if (!response.ok) {
         throw new Error(`Failed to fetch movie`);
@@ -449,7 +441,6 @@ const getMovieSources = async (movieId, server) => {
  * */
 const getMovieIdBraflix = async (server, query, year, type, episode, season, movieId) => {
     const response = await fetch(`${remote_url}/api/getMovieIdBraflix?server=${server}&query=${query}&year=${year}&type=${type}&episode=${episode}&season=${season}&movieId=${movieId}`);
-
     if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
     }
