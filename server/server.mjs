@@ -204,8 +204,9 @@ app.get('/api/mediaDetails', async (req, res) => {
         'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
     )
     const mediaType = req.query.mediaType;
+    const id = req.query.id;
     const baseUrl = mediaType === 'movie' ? 'https://api.themoviedb.org/3/movie/' : 'https://api.themoviedb.org/3/tv/';
-    const response = await fetch(`${baseUrl}${req.query.id}?language=en-US&api_key=${tmdb_api_key}`, {
+    const response = await fetch(`${baseUrl}${id}?language=en-US&api_key=${tmdb_api_key}`, {
         headers: {
             Authorization: `Bearer ${tmdb_read_token}`,
             Accept: "application/json"
@@ -330,9 +331,9 @@ app.get('/api/search', async (req, res) => {
 //----------------------MOVIES AND TV SHOWS LINKS----------------------//
 
 /**
- *  Cross proxy used to get movie id from Piracy server.
+ *  Cross proxy used to get movie id from Piracy server. (NOT WORKING)
  * */
-app.get('/api/getMovieId', async (req, res) => {
+app.get('/api/movieId', async (req, res) => {
     const { query, type, year } = req.query;
     const response = await fetch(`https://vsrc.piracy.su/search?query=${query}&type=${type}&year=${year}`, {
         headers: {
@@ -341,11 +342,16 @@ app.get('/api/getMovieId', async (req, res) => {
         }
     });
     const data = await response.json();
+
+    if (data.error) {
+        return res.status(500).json({ error: "Failed to fetch data" });
+    }
+
     res.json(data);
 });
 
 /**
- *  Cross proxy used to get movie links from Piracy servers.
+ *  Cross proxy used to get movie links from Piracy servers. (NOT WORKING)
  * */
 app.get('/api/getMovieSources', async (req, res) => {
     const { movieId, server } = req.query;
@@ -409,9 +415,8 @@ app.use('/api/getMovieIdBraflix', createProxyMiddleware({
                     throw new Error('Invalid or empty response from target server');
                 }
                 const response = responseBuffer.toString('utf8');
-
                 // Inject CORS headers
-                res.setHeader('Access-Control-Allow-Origin', 'https://stiflix.onrender.com');
+                res.setHeader('Access-Control-Allow-Origin', '*');
                 res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
                 res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
