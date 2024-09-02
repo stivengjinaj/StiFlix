@@ -59,10 +59,8 @@ export function sortByVoteAverage(arr) {
  * */
 export function stringQuery(str) {
     const trimmedString = str.trim();
-    if (trimmedString.includes(' ')) {
-        return trimmedString.replace(/\s+/g, '+');
-    }
-    return trimmedString;
+    const replacedString = trimmedString.replace(/&/g, '%26');
+    return replacedString.replace(/\s+/g, '+');
 }
 
 /**
