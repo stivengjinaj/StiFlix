@@ -24,6 +24,7 @@ app.use(cors(corsOptions));
 app.get('/api/popularMovies', async (req, res) => {
     const response = await fetch(`https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&api_key=${tmdb_api_key}`, {
         headers: {
+            AccessControlAllowOrigin: "https://stiflix.onrender.com",
             Authorization: `Bearer ${tmdb_read_token}`,
             Accept: "application/json"
         }
@@ -38,6 +39,7 @@ app.get('/api/popularMovies', async (req, res) => {
 app.get('/api/popularTvShows', async (req, res) => {
     const response = await fetch(`https://api.themoviedb.org/3/discover/tv?include_adult=false&include_null_first_air_dates=false&language=en-US&page=1&sort_by=popularity.desc&api_key=${tmdb_api_key}`, {
         headers: {
+            AccessControlAllowOrigin: "https://stiflix.onrender.com",
             Authorization: `Bearer ${tmdb_read_token}`,
             Accept: "application/json"
         }
@@ -53,6 +55,7 @@ app.get('/api/popularTvShows', async (req, res) => {
 app.get('/api/topRatedMovies', async (req, res) => {
     const response = await fetch(`https://api.themoviedb.org/3/movie/top_rated?language=en-US&page=1&api_key=${tmdb_api_key}`, {
         headers: {
+            AccessControlAllowOrigin: "https://stiflix.onrender.com",
             Authorization: `Bearer ${tmdb_read_token}`,
             Accept: "application/json"
         }
@@ -68,6 +71,7 @@ app.get('/api/topRatedMovies', async (req, res) => {
 app.get('/api/topRatedTvShows', async (req, res) => {
     const response = await fetch(`https://api.themoviedb.org/3/discover/tv?include_adult=false&language=en-US&page=1&sort_by=vote_average.desc&vote_count.gte=200&api_key=${tmdb_api_key}`, {
         headers: {
+            AccessControlAllowOrigin: "https://stiflix.onrender.com",
             Authorization: `Bearer ${tmdb_read_token}`,
             Accept: "application/json"
         }
@@ -83,6 +87,7 @@ app.get('/api/topRatedTvShows', async (req, res) => {
 app.get('/api/trendingMovies', async (req, res) => {
     const response = await fetch(`https://api.themoviedb.org/3/trending/all/day?language=en-US&api_key=${tmdb_api_key}`, {
         headers: {
+            AccessControlAllowOrigin: "https://stiflix.onrender.com",
             Authorization: `Bearer ${tmdb_read_token}`,
             Accept: "application/json"
         }
@@ -98,6 +103,7 @@ app.get('/api/trendingMovies', async (req, res) => {
 app.get('/api/tvShowDetails', async (req, res) => {
     const response = await fetch(`https://api.themoviedb.org/3/tv/${req.query.id}?language=en-US&api_key=${tmdb_api_key}`, {
         headers: {
+            AccessControlAllowOrigin: "https://stiflix.onrender.com",
             Authorization: `Bearer ${tmdb_read_token}`,
             Accept: "application/json"
         }
@@ -113,6 +119,7 @@ app.get('/api/tvShowDetails', async (req, res) => {
 app.get('/api/discoverMovies', async (req, res) => {
     const response = await fetch(`https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=${req.query.page}&sort_by=popularity.desc`, {
         headers: {
+            AccessControlAllowOrigin: "https://stiflix.onrender.com",
             Authorization: `Bearer ${tmdb_read_token}`,
             Accept: "application/json"
         }
@@ -128,6 +135,7 @@ app.get('/api/discoverMovies', async (req, res) => {
 app.get('/api/discoverTvShows', async (req, res) => {
     const response = await fetch(`https://api.themoviedb.org/3/discover/tv?include_adult=false&include_null_first_air_dates=false&language=en-US&page=${req.query.page}&sort_by=popularity.desc`, {
         headers: {
+            AccessControlAllowOrigin: "https://stiflix.onrender.com",
             Authorization: `Bearer ${tmdb_read_token}`,
             Accept: "application/json"
         }
@@ -145,6 +153,7 @@ app.get('/api/mediaDetails', async (req, res) => {
     const baseUrl = mediaType === 'movie' ? 'https://api.themoviedb.org/3/movie/' : 'https://api.themoviedb.org/3/tv/';
     const response = await fetch(`${baseUrl}${req.query.id}?language=en-US&api_key=${tmdb_api_key}`, {
         headers: {
+            AccessControlAllowOrigin: "https://stiflix.onrender.com",
             Authorization: `Bearer ${tmdb_read_token}`,
             Accept: "application/json"
         }
@@ -163,6 +172,7 @@ app.get('/api/tvShowsSeasons', async (req, res) => {
 
     const response = await fetch(`https://api.themoviedb.org/3/tv/${id}/season/${season}?language=en-US&api_key=${tmdb_api_key}`, {
         headers: {
+            AccessControlAllowOrigin: "https://stiflix.onrender.com",
             Authorization: `Bearer ${tmdb_read_token}`,
             Accept: "application/json"
         }
@@ -183,6 +193,7 @@ app.get('/api/mediaGenres', async (req, res) => {
     if (mediaType === 'movie') {
         response = await fetch(`https://api.themoviedb.org/3/movie/${id}?language=en-US&api_key=${tmdb_api_key}`, {
             headers: {
+                AccessControlAllowOrigin: "https://stiflix.onrender.com",
                 Authorization: `Bearer ${tmdb_read_token}`,
                 Accept: "application/json"
             }
@@ -190,6 +201,7 @@ app.get('/api/mediaGenres', async (req, res) => {
     } else {
         response = await fetch(`https://api.themoviedb.org/3/tv/${id}?language=en-US&api_key=${tmdb_api_key}`, {
             headers: {
+                AccessControlAllowOrigin: "https://stiflix.onrender.com",
                 Authorization: `Bearer ${tmdb_read_token}`,
                 Accept: "application/json"
             }
@@ -209,6 +221,7 @@ app.get('/api/trailerKey', async (req, res) => {
     const baseUrl = mediaType === 'movie' ? 'https://api.themoviedb.org/3/movie/' : 'https://api.themoviedb.org/3/tv/';
     const response = await fetch(`${baseUrl}${id}/videos?language=en-US&api_key=${tmdb_api_key}`, {
         headers: {
+            AccessControlAllowOrigin: "https://stiflix.onrender.com",
             Authorization: `Bearer ${tmdb_read_token}`,
             Accept: "application/json"
         }
@@ -225,6 +238,7 @@ app.get('/api/search', async (req, res) => {
     const query = req.query.query;
     const response = await fetch(`https://api.themoviedb.org/3/search/multi?include_adult=false&language=en-US&page=1&query=${query}&api_key=${tmdb_api_key}`, {
         headers: {
+            AccessControlAllowOrigin: "https://stiflix.onrender.com",
             Authorization: `Bearer ${tmdb_read_token}`,
             Accept: "application/json"
         }
