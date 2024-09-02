@@ -22,6 +22,10 @@ app.use(cors(corsOptions));
  * Cross proxy used to get popular movies from TMDB API.
  * */
 app.get('/api/popularMovies', async (req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type,Authorization');
+
     const response = await fetch(`https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&api_key=${tmdb_api_key}`, {
         headers: {
             Authorization: `Bearer ${tmdb_read_token}`,
@@ -36,6 +40,10 @@ app.get('/api/popularMovies', async (req, res) => {
 });
 
 app.get('/api/popularTvShows', async (req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type,Authorization');
+
     const response = await fetch(`https://api.themoviedb.org/3/discover/tv?include_adult=false&include_null_first_air_dates=false&language=en-US&page=1&sort_by=popularity.desc&api_key=${tmdb_api_key}`, {
         headers: {
             Authorization: `Bearer ${tmdb_read_token}`,
@@ -51,6 +59,10 @@ app.get('/api/popularTvShows', async (req, res) => {
 });
 
 app.get('/api/topRatedMovies', async (req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type,Authorization');
+
     const response = await fetch(`https://api.themoviedb.org/3/movie/top_rated?language=en-US&page=1&api_key=${tmdb_api_key}`, {
         headers: {
             Authorization: `Bearer ${tmdb_read_token}`,
@@ -66,6 +78,10 @@ app.get('/api/topRatedMovies', async (req, res) => {
 });
 
 app.get('/api/topRatedTvShows', async (req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type,Authorization');
+
     const response = await fetch(`https://api.themoviedb.org/3/discover/tv?include_adult=false&language=en-US&page=1&sort_by=vote_average.desc&vote_count.gte=200&api_key=${tmdb_api_key}`, {
         headers: {
             Authorization: `Bearer ${tmdb_read_token}`,
@@ -81,6 +97,10 @@ app.get('/api/topRatedTvShows', async (req, res) => {
 });
 
 app.get('/api/trendingMovies', async (req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type,Authorization');
+
     const response = await fetch(`https://api.themoviedb.org/3/trending/all/day?language=en-US&api_key=${tmdb_api_key}`, {
         headers: {
             Authorization: `Bearer ${tmdb_read_token}`,
@@ -96,6 +116,10 @@ app.get('/api/trendingMovies', async (req, res) => {
 });
 
 app.get('/api/tvShowDetails', async (req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type,Authorization');
+
     const response = await fetch(`https://api.themoviedb.org/3/tv/${req.query.id}?language=en-US&api_key=${tmdb_api_key}`, {
         headers: {
             Authorization: `Bearer ${tmdb_read_token}`,
@@ -111,6 +135,10 @@ app.get('/api/tvShowDetails', async (req, res) => {
 });
 
 app.get('/api/discoverMovies', async (req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type,Authorization');
+
     const response = await fetch(`https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=${req.query.page}&sort_by=popularity.desc`, {
         headers: {
             Authorization: `Bearer ${tmdb_read_token}`,
@@ -126,6 +154,10 @@ app.get('/api/discoverMovies', async (req, res) => {
 });
 
 app.get('/api/discoverTvShows', async (req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type,Authorization');
+
     const response = await fetch(`https://api.themoviedb.org/3/discover/tv?include_adult=false&include_null_first_air_dates=false&language=en-US&page=${req.query.page}&sort_by=popularity.desc`, {
         headers: {
             Authorization: `Bearer ${tmdb_read_token}`,
@@ -141,6 +173,10 @@ app.get('/api/discoverTvShows', async (req, res) => {
 });
 
 app.get('/api/mediaDetails', async (req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type,Authorization');
+
     const mediaType = req.query.mediaType;
     const baseUrl = mediaType === 'movie' ? 'https://api.themoviedb.org/3/movie/' : 'https://api.themoviedb.org/3/tv/';
     const response = await fetch(`${baseUrl}${req.query.id}?language=en-US&api_key=${tmdb_api_key}`, {
@@ -158,6 +194,10 @@ app.get('/api/mediaDetails', async (req, res) => {
 });
 
 app.get('/api/tvShowsSeasons', async (req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type,Authorization');
+
     const id = req.query.id;
     const season = req.query.season;
 
@@ -176,7 +216,11 @@ app.get('/api/tvShowsSeasons', async (req, res) => {
 });
 
 app.get('/api/mediaGenres', async (req, res) => {
-   let response;
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type,Authorization');
+
+    let response;
    const mediaType = req.query.mediaType;
    const id = req.query.id;
 
@@ -204,7 +248,11 @@ app.get('/api/mediaGenres', async (req, res) => {
 });
 
 app.get('/api/trailerKey', async (req, res) => {
-   const mediaType = req.query.mediaType;
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type,Authorization');
+
+    const mediaType = req.query.mediaType;
     const id = req.query.id;
     const baseUrl = mediaType === 'movie' ? 'https://api.themoviedb.org/3/movie/' : 'https://api.themoviedb.org/3/tv/';
     const response = await fetch(`${baseUrl}${id}/videos?language=en-US&api_key=${tmdb_api_key}`, {
@@ -222,6 +270,10 @@ app.get('/api/trailerKey', async (req, res) => {
 });
 
 app.get('/api/search', async (req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type,Authorization');
+
     const query = req.query.query;
     const response = await fetch(`https://api.themoviedb.org/3/search/multi?include_adult=false&language=en-US&page=1&query=${query}&api_key=${tmdb_api_key}`, {
         headers: {
