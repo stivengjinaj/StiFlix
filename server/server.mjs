@@ -96,7 +96,7 @@ app.use('/api/getMovieIdBraflix', createProxyMiddleware({
                 const response = responseBuffer.toString('utf8');
 
                 // Inject CORS headers
-                res.setHeader('Access-Control-Allow-Origin', '*');
+                res.setHeader('Access-Control-Allow-Origin', 'https://stiflix.onrender.com');
                 res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
                 res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
