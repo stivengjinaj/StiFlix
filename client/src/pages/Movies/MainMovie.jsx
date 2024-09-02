@@ -182,9 +182,9 @@ function MainMovie(props) {
                                                                 </>
                                                             );
                                                         case 'movies':
-                                                            return <GridMovies movies={props.onlyMovies} />;
+                                                            return props.onlyMovies ? <GridMovies movies={props.onlyMovies} /> : <Loading />;
                                                         case 'tvShows':
-                                                            return <GridMovies movies={props.onlySeries} />;
+                                                            return props.onlySeries ? <GridMovies movies={props.onlySeries} /> : <Loading />;
                                                         default:
                                                             return <div>Section not found</div>;
                                                     }

@@ -48,6 +48,7 @@ function Movies(props) {
     const handleSectionChange = (section) => {
         const getOnlyMovies = async () => {
             const movies = await fetcher.discoverMovies();
+            console.log("Movies: ", movies);
             setOnlyMovies([...movies]);
         }
         const getOnlySeries = async () => {
@@ -108,6 +109,8 @@ function HomePage(props) {
                 topRatedMovies={props.topRatedMovies}
                 topRatedSeries={props.topRatedSeries}
                 searchedMovies={searchedMovies}
+                onlyMovies={props.onlyMovies}
+                onlySeries={props.onlySeries}
             />
         </Container>
     );
