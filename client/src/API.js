@@ -1,16 +1,11 @@
+
 //const tmdb_api_key = "9301ddc7c3bf38fbdf333ae15a936792"
-
-const tmdb_read_token = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI5MzAxZGRjN2MzYmYzOGZiZGYzMzNhZTE1YTkzNjc5MiIsIm5iZiI6MTcyMzM5NTY2NS40NTcyMDIsInN1YiI6IjY2YjhlZDY0ZmUyNGZlODUwNGY2ZWZjZiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.b8zxhQus7eZTVich0Jv9lMp3vXM2v-LQXPLLKB9cmaM"
-const remote_url = "https://stiflix.vercel.app"
-
+//const tmdb_read_token = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI5MzAxZGRjN2MzYmYzOGZiZGYzMzNhZTE1YTkzNjc5MiIsIm5iZiI6MTcyMzM5NTY2NS40NTcyMDIsInN1YiI6IjY2YjhlZDY0ZmUyNGZlODUwNGY2ZWZjZiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.b8zxhQus7eZTVich0Jv9lMp3vXM2v-LQXPLLKB9cmaM"
+const remote_url = "https://stiflix.vercel.app";
 
 
-/**
- * API used to get popular movies(only).
- *
- * @returns JSON object of popular movies.
- * */
-const getPopularMovies = async () => {
+
+/*const getPopularMovies = async () => {
    const response = await fetch(`https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc`, {
         headers: {
             Authorization: `Bearer ${tmdb_read_token}`,
@@ -23,14 +18,23 @@ const getPopularMovies = async () => {
     }
 
     return await response.json();
-}
+}*/
 
 /**
- * API used to get popular TV shows(only).
+ * API used to get popular movies(only).
  *
- * @returns JSON object of popular TV shows.
+ * @returns JSON object of popular movies.
  * */
-const getPopularTvShows = async () => {
+const getPopularMovies = async () => {
+    const response = await fetch(`${remote_url}/api/popularMovies`, {
+        headers: {
+            Accept: "application/json"
+        }
+    });
+    return await response.json();
+}
+
+/*const getPopularTvShows = async () => {
     const response = await fetch(`https://api.themoviedb.org/3/discover/tv?include_adult=false&include_null_first_air_dates=false&language=en-US&page=1&sort_by=popularity.desc`, {
         headers: {
             Authorization: `Bearer ${tmdb_read_token}`,
@@ -38,20 +42,27 @@ const getPopularTvShows = async () => {
         }
     });
 
-    console.log(response);
     if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
     }
 
     return await response.json();
+}*/
+/**
+ * API used to get popular TV shows(only).
+ *
+ * @returns JSON object of popular TV shows.
+ * */
+const getPopularTvShows = async () => {
+    const response = await fetch(`${remote_url}/api/popularTvShows`, {
+        headers: {
+            Accept: "application/json"
+        }
+    });
+    return await response.json();
 }
 
-/**
- * API used to get top-rated movies(only).
- *
- * @returns JSON object of top-rated movies.
- * */
-const getTopRatedMovies = async () => {
+/*const getTopRatedMovies = async () => {
     const response = await fetch(`https://api.themoviedb.org/3/movie/top_rated?language=en-US&page=1`, {
         headers: {
             Authorization: `Bearer ${tmdb_read_token}`,
@@ -64,14 +75,22 @@ const getTopRatedMovies = async () => {
     }
 
     return await response.json();
+}*/
+/**
+ * API used to get top-rated movies(only).
+ *
+ * @returns JSON object of top-rated movies.
+ * */
+const getTopRatedMovies = async () => {
+    const response = await fetch(`${remote_url}/api/topRatedMovies`, {
+        headers: {
+            Accept: "application/json"
+        }
+    });
+    return await response.json();
 }
 
-/**
- * API used to get top-rated TV shows(only).
- *
- * @returns JSON object of top-rated TV shows.
- * */
-const getTopRatedTvShows = async () => {
+/*const getTopRatedTvShows = async () => {
     const response = await fetch(`https://api.themoviedb.org/3/discover/tv?include_adult=false&language=en-US&page=1&sort_by=vote_average.desc&vote_count.gte=200`, {
         headers: {
             Authorization: `Bearer ${tmdb_read_token}`,
@@ -84,14 +103,22 @@ const getTopRatedTvShows = async () => {
     }
 
     return await response.json();
+}*/
+/**
+ * API used to get top-rated TV shows(only).
+ *
+ * @returns JSON object of top-rated TV shows.
+ * */
+const getTopRatedTvShows = async () => {
+    const response = await fetch(`${remote_url}/api/topRatedTvShows`, {
+        headers: {
+            Accept: "application/json"
+        }
+    });
+    return await response.json();
 }
 
-/**
- * API used to get all trending movies and TV shows.
- *
- * @returns JSON object of trending movies and TV shows.
- * */
-const getTrendingMovies = async () => {
+/*const getTrendingMovies = async () => {
     const response = await fetch(`https://api.themoviedb.org/3/trending/all/day?language=en-US`, {
         headers: {
             Authorization: `Bearer ${tmdb_read_token}`,
@@ -104,15 +131,22 @@ const getTrendingMovies = async () => {
     }
 
     return await response.json();
+}*/
+/**
+ * API used to get all trending movies and TV shows.
+ *
+ * @returns JSON object of trending movies and TV shows.
+ * */
+const getTrendingMovies = async () => {
+    const response = await fetch(`${remote_url}/api/trendingMovies`, {
+        headers: {
+            Accept: "application/json"
+        }
+    });
+    return await response.json();
 }
 
-/**
- * API used to get TV show details.
- *
- * @param tvShowId - The ID of the TV show.
- * @returns JSON object of TV show details.
- * */
-const getTvShowDetails = async (tvShowId) => {
+/*const getTvShowDetails = async (tvShowId) => {
     const response = await fetch(`https://api.themoviedb.org/3/tv/${tvShowId}?language=en-US`, {
         headers: {
             Authorization: `Bearer ${tmdb_read_token}`,
@@ -125,15 +159,23 @@ const getTvShowDetails = async (tvShowId) => {
     }
 
     return await response.json();
+} */
+/**
+ * API used to get TV show details.
+ *
+ * @param tvShowId - The ID of the TV show.
+ * @returns JSON object of TV show details.
+ * */
+const getTvShowDetails = async (tvShowId) => {
+    const response = await fetch(`${remote_url}/api/tvShowDetails?id=${tvShowId}`, {
+        headers: {
+            Accept: "application/json"
+        }
+    });
+    return await response.json();
 }
 
-/**
- * API used to discover movies.
- *
- * @param page page of the results.
- * @return json with movie data.
- * */
-const discoverMovies = async (page) => {
+/*const discoverMovies = async (page) => {
     const response = await fetch(`https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=${page}&sort_by=popularity.desc`, {
         headers: {
             Authorization: `Bearer ${tmdb_read_token}`,
@@ -146,15 +188,23 @@ const discoverMovies = async (page) => {
     }
 
     return await response.json();
-}
-
+}*/
 /**
- * API used to discover tv shows.
+ * API used to discover movies.
  *
  * @param page page of the results.
- * @return json with tv show data.
+ * @return json with movie data.
  * */
-const discoverTvShows = async (page) => {
+const discoverMovies = async (page) => {
+    const response = await fetch(`${remote_url}/api/discoverMovies?page=${page}`, {
+        headers: {
+            Accept: "application/json"
+        }
+    });
+    return await response.json();
+}
+
+/*const discoverTvShows = async (page) => {
     const response = await fetch(`https://api.themoviedb.org/3/discover/tv?include_adult=false&include_null_first_air_dates=false&language=en-US&page=${page}&sort_by=popularity.desc`, {
         headers: {
             Authorization: `Bearer ${tmdb_read_token}`,
@@ -167,17 +217,23 @@ const discoverTvShows = async (page) => {
     }
 
     return await response.json();
+}*/
+/**
+ * API used to discover tv shows.
+ *
+ * @param page page of the results.
+ * @return json with tv show data.
+ * */
+const discoverTvShows = async (page) => {
+    const response = await fetch(`${remote_url}/api/discoverTvShows?page=${page}`, {
+        headers: {
+            Accept: "application/json"
+        }
+    });
+    return await response.json();
 }
 
-/**
- * API used to get the details of a media. The API defines if the media
- * is a movie or a tv show.
- *
- * @param id id of the media.
- * @param mediaType movie or tv show.
- * @return returns a json with media details.
- * */
-const mediaDetails = async (id, mediaType) => {
+/*const mediaDetails = async (id, mediaType) => {
     const baseUrl = mediaType === 'movie' ? 'https://api.themoviedb.org/3/movie/' : 'https://api.themoviedb.org/3/tv/';
     const response = await fetch(`${baseUrl}${id}?language=en-US`, {
         headers: {
@@ -191,7 +247,23 @@ const mediaDetails = async (id, mediaType) => {
     }
 
     return await response.json();
-};
+};*/
+/**
+ * API used to get the details of a media. The API defines if the media
+ * is a movie or a tv show.
+ *
+ * @param id id of the media.
+ * @param mediaType movie or tv show.
+ * @return returns a json with media details.
+ * */
+const mediaDetails = async (id, mediaType) => {
+    const response = await fetch(`${remote_url}/api/mediaDetails?id=${id}&mediaType=${mediaType}`, {
+        headers: {
+            Accept: "application/json"
+        }
+    });
+    return await response.json();
+}
 
 /**
  * API used to get the episodes of a tv show.
@@ -200,7 +272,7 @@ const mediaDetails = async (id, mediaType) => {
  * @param seasons season of the tv show.
  * @return json with tv show seasons/episodes.
  * */
-const getTvShowsSeasons = async (id, seasons) => {
+/*const getTvShowsSeasons = async (id, seasons) => {
     const allSeasons = [];
     for (let i = 1; i <= seasons; i++) {
         const response = await fetch(`https://api.themoviedb.org/3/tv/${id}/season/${i}?language=en-US`, {
@@ -213,17 +285,29 @@ const getTvShowsSeasons = async (id, seasons) => {
         allSeasons.push(seasonData);
     }
     return allSeasons;
+}*/
+/**
+ * API used to get the episodes of a tv show.
+ *
+ * @param id id of the tv show.
+ * @param seasons season of the tv show.
+ * @return json with tv show seasons/episodes.
+ * */
+const getTvShowsSeasons = async (id, seasons) => {
+    const allSeasons = [];
+    for (let i = 1; i <= seasons; i++) {
+        const response = await fetch(`${remote_url}/api/tvShowsSeasons?id=${id}&season=${i}`, {
+            headers: {
+                Accept: "application/json"
+            }
+        });
+        const seasonData = await response.json();
+        allSeasons.push(seasonData);
+    }
+    return allSeasons;
 }
 
-
-/**
- * API used to get media genres.
- *
- * @param id id of the media.
- * @param media_type movie or tv show.
- * @return a list of details.
- * */
-const mediaGenres = async (id, media_type) => {
+/*const mediaGenres = async (id, media_type) => {
     let response;
     if (media_type === "tv") {
         response = await fetch(`https://api.themoviedb.org/3/tv/${id}?language=en-US`, {
@@ -241,16 +325,24 @@ const mediaGenres = async (id, media_type) => {
         });
     }
     return await response.json();
+}*/
+/**
+ * API used to get media genres.
+ *
+ * @param id id of the media.
+ * @param media_type movie or tv show.
+ * @return a list of details.
+ * */
+const mediaGenres = async (id, media_type) => {
+    const response = await fetch(`${remote_url}/api/mediaGenres?id=${id}&mediaType=${media_type}`, {
+        headers: {
+            Accept: "application/json"
+        }
+    });
+    return await response.json();
 }
 
-/**
- * API used to get movie trailer.
- *
- * @param movieId id of the movie.
- * @param mediaType movie or tv show.
- * @return youtube key of the trailer.
- * */
-const getTrailerKey = async (movieId, mediaType) => {
+/*const getTrailerKey = async (movieId, mediaType) => {
     const baseUrl = mediaType === 'movie' ? 'https://api.themoviedb.org/3/movie/' : 'https://api.themoviedb.org/3/tv/';
     const response = await fetch(`${baseUrl}${movieId}/videos?language=en-US`, {
         headers: {
@@ -259,15 +351,24 @@ const getTrailerKey = async (movieId, mediaType) => {
         }
     });
     return await response.json();
+}*/
+/**
+ * API used to get movie trailer.
+ *
+ * @param movieId id of the movie.
+ * @param mediaType movie or tv show.
+ * @return youtube key of the trailer.
+ * */
+const getTrailerKey = async (movieId, mediaType) => {
+    const response = await fetch(`${remote_url}/api/trailerKey?id=${movieId}&mediaType=${mediaType}`, {
+        headers: {
+            Accept: "application/json"
+        }
+    });
+    return await response.json();
 }
 
-/**
- * API used to search for movies and tv shows.
- *
- * @param query search query.
- * @return json with search results.
- * */
-const search = async (query) => {
+/*const search = async (query) => {
     const response = await fetch(`https://api.themoviedb.org/3/search/multi?include_adult=false&language=en-US&page=1&query=${query}`, {
         headers: {
             Authorization: `Bearer ${tmdb_read_token}`,
@@ -275,7 +376,20 @@ const search = async (query) => {
         }
     });
     return await response.json();
-
+}*/
+/**
+ * API used to search for movies and tv shows.
+ *
+ * @param query search query.
+ * @return json with search results.
+ * */
+const search = async (query) => {
+    const response = await fetch(`${remote_url}/api/search?query=${query}`, {
+        headers: {
+            Accept: "application/json"
+        }
+    });
+    return await response.json();
 }
 
 /**

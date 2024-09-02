@@ -4,14 +4,240 @@ import {createProxyMiddleware, responseInterceptor} from 'http-proxy-middleware'
 
 const app = express();
 
+const tmdb_api_key = "9301ddc7c3bf38fbdf333ae15a936792"
+const tmdb_read_token = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI5MzAxZGRjN2MzYmYzOGZiZGYzMzNhZTE1YTkzNjc5MiIsIm5iZiI6MTcyMzM5NTY2NS40NTcyMDIsInN1YiI6IjY2YjhlZDY0ZmUyNGZlODUwNGY2ZWZjZiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.b8zxhQus7eZTVich0Jv9lMp3vXM2v-LQXPLLKB9cmaM"
+
+
 const corsOptions = {
     origin: "https://stiflix.onrender.com",
     methods: 'GET,POST,PUT,DELETE,OPTIONS',
     allowedHeaders: 'Content-Type,Authorization',
+    credentials: true,
     optionsSuccessStatus: 200
 };
 
 app.use(cors(corsOptions));
+
+/**
+ * Cross proxy used to get popular movies from TMDB API.
+ * */
+app.get('/api/popularMovies', async (req, res) => {
+    const response = await fetch(`https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&api_key=${tmdb_api_key}`, {
+        headers: {
+            Authorization: `Bearer ${tmdb_read_token}`,
+            Accept: "application/json"
+        }
+    });
+
+    if (!response.ok) {
+        return res.status(500).json({ error: 'Failed to fetch data' });
+    }
+    res.json(await response.json());
+});
+
+app.get('/api/popularTvShows', async (req, res) => {
+    const response = await fetch(`https://api.themoviedb.org/3/discover/tv?include_adult=false&include_null_first_air_dates=false&language=en-US&page=1&sort_by=popularity.desc&api_key=${tmdb_api_key}`, {
+        headers: {
+            Authorization: `Bearer ${tmdb_read_token}`,
+            Accept: "application/json"
+        }
+    });
+
+    if (!response.ok) {
+        return res.status(500).json({ error: 'Failed to fetch data' });
+    }
+
+    res.json(await response.json());
+});
+
+app.get('/api/topRatedMovies', async (req, res) => {
+    const response = await fetch(`https://api.themoviedb.org/3/movie/top_rated?language=en-US&page=1&api_key=${tmdb_api_key}`, {
+        headers: {
+            Authorization: `Bearer ${tmdb_read_token}`,
+            Accept: "application/json"
+        }
+    });
+
+    if (!response.ok) {
+        return res.status(500).json({ error: 'Failed to fetch data' });
+    }
+
+    res.json(await response.json());
+});
+
+app.get('/api/topRatedTvShows', async (req, res) => {
+    const response = await fetch(`https://api.themoviedb.org/3/discover/tv?include_adult=false&language=en-US&page=1&sort_by=vote_average.desc&vote_count.gte=200&api_key=${tmdb_api_key}`, {
+        headers: {
+            Authorization: `Bearer ${tmdb_read_token}`,
+            Accept: "application/json"
+        }
+    });
+
+    if (!response.ok) {
+        return res.status(500).json({ error: 'Failed to fetch data' });
+    }
+
+    res.json(await response.json());
+});
+
+app.get('/api/trendingMovies', async (req, res) => {
+    const response = await fetch(`https://api.themoviedb.org/3/trending/all/day?language=en-US&api_key=${tmdb_api_key}`, {
+        headers: {
+            Authorization: `Bearer ${tmdb_read_token}`,
+            Accept: "application/json"
+        }
+    });
+
+    if (!response.ok) {
+        return res.status(500).json({ error: 'Failed to fetch data' });
+    }
+
+    res.json(await response.json());
+});
+
+app.get('/api/tvShowDetails', async (req, res) => {
+    const response = await fetch(`https://api.themoviedb.org/3/tv/${req.query.id}?language=en-US&api_key=${tmdb_api_key}`, {
+        headers: {
+            Authorization: `Bearer ${tmdb_read_token}`,
+            Accept: "application/json"
+        }
+    });
+
+    if (!response.ok) {
+        return res.status(500).json({ error: 'Failed to fetch data' });
+    }
+
+    res.json(await response.json());
+});
+
+app.get('/api/discoverMovies', async (req, res) => {
+    const response = await fetch(`https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=${req.query.page}&sort_by=popularity.desc`, {
+        headers: {
+            Authorization: `Bearer ${tmdb_read_token}`,
+            Accept: "application/json"
+        }
+    });
+
+    if (!response.ok) {
+        return res.status(500).json({ error: 'Failed to fetch data' });
+    }
+
+    res.json(await response.json());
+});
+
+app.get('/api/discoverTvShows', async (req, res) => {
+    const response = await fetch(`https://api.themoviedb.org/3/discover/tv?include_adult=false&include_null_first_air_dates=false&language=en-US&page=${req.query.page}&sort_by=popularity.desc`, {
+        headers: {
+            Authorization: `Bearer ${tmdb_read_token}`,
+            Accept: "application/json"
+        }
+    });
+
+    if (!response.ok) {
+        return res.status(500).json({ error: 'Failed to fetch data' });
+    }
+
+    res.json(await response.json());
+});
+
+app.get('/api/mediaDetails', async (req, res) => {
+    const mediaType = req.query.mediaType;
+    const baseUrl = mediaType === 'movie' ? 'https://api.themoviedb.org/3/movie/' : 'https://api.themoviedb.org/3/tv/';
+    const response = await fetch(`${baseUrl}${req.query.id}?language=en-US&api_key=${tmdb_api_key}`, {
+        headers: {
+            Authorization: `Bearer ${tmdb_read_token}`,
+            Accept: "application/json"
+        }
+    });
+
+    if (!response.ok) {
+        return res.status(500).json({ error: 'Failed to fetch data' });
+    }
+
+    res.json(await response.json());
+});
+
+app.get('/api/tvShowsSeasons', async (req, res) => {
+    const id = req.query.id;
+    const season = req.query.season;
+
+    const response = await fetch(`https://api.themoviedb.org/3/tv/${id}/season/${season}?language=en-US&api_key=${tmdb_api_key}`, {
+        headers: {
+            Authorization: `Bearer ${tmdb_read_token}`,
+            Accept: "application/json"
+        }
+    });
+
+    if (!response.ok) {
+        return res.status(500).json({ error: 'Failed to fetch data' });
+    }
+
+    res.json(await response.json());
+});
+
+app.get('/api/mediaGenres', async (req, res) => {
+   let response;
+   const mediaType = req.query.mediaType;
+   const id = req.query.id;
+
+    if (mediaType === 'movie') {
+        response = await fetch(`https://api.themoviedb.org/3/movie/${id}?language=en-US&api_key=${tmdb_api_key}`, {
+            headers: {
+                Authorization: `Bearer ${tmdb_read_token}`,
+                Accept: "application/json"
+            }
+        });
+    } else {
+        response = await fetch(`https://api.themoviedb.org/3/tv/${id}?language=en-US&api_key=${tmdb_api_key}`, {
+            headers: {
+                Authorization: `Bearer ${tmdb_read_token}`,
+                Accept: "application/json"
+            }
+        });
+    }
+
+    if (!response.ok) {
+        return res.status(500).json({ error: 'Failed to fetch data' });
+    }
+
+    res.json(await response.json());
+});
+
+app.get('/api/trailerKey', async (req, res) => {
+   const mediaType = req.query.mediaType;
+    const id = req.query.id;
+    const baseUrl = mediaType === 'movie' ? 'https://api.themoviedb.org/3/movie/' : 'https://api.themoviedb.org/3/tv/';
+    const response = await fetch(`${baseUrl}${id}/videos?language=en-US&api_key=${tmdb_api_key}`, {
+        headers: {
+            Authorization: `Bearer ${tmdb_read_token}`,
+            Accept: "application/json"
+        }
+    });
+
+    if (!response.ok) {
+        return res.status(500).json({ error: 'Failed to fetch data' });
+    }
+
+    res.json(await response.json());
+});
+
+app.get('/api/search', async (req, res) => {
+    const query = req.query.query;
+    const response = await fetch(`https://api.themoviedb.org/3/search/multi?include_adult=false&language=en-US&page=1&query=${query}&api_key=${tmdb_api_key}`, {
+        headers: {
+            Authorization: `Bearer ${tmdb_read_token}`,
+            Accept: "application/json"
+        }
+    });
+
+    if (!response.ok) {
+        return res.status(500).json({ error: 'Failed to fetch data' });
+    }
+
+    res.json(await response.json());
+});
+
+//----------------------MOVIES AND TV SHOWS LINKS----------------------//
 
 /**
  *  Cross proxy used to get movie id from Piracy server.
