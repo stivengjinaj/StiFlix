@@ -13,10 +13,17 @@ function SplashScreen() {
     };
 
     return (
-        <Container fluid className="w-full h-screen splash-container">
+        <Container
+            fluid
+            className="p-0 w-full h-screen splash-container"
+            style={{
+                overflow: 'hidden',
+                width: '100vw',
+                height: '100vh',
+            }}
+        >
             <Lottie options={defaultOptions} width={width} height={height}/>
         </Container>
-
     );
 }
 
