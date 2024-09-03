@@ -375,7 +375,7 @@ tr {
   background-color: rgba(0, 0, 0, 0.8);
 }
 
-@media (max-width: 1900px) {
+@media (min-width: 1930px) {
   .carousels {
     margin-top: 150px;
   }
