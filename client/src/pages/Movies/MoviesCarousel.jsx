@@ -12,7 +12,7 @@ const MoviesCarousel = (props) => {
     const [columnsToShow, setColumnsToShow] = useState(0);
     const [screenWidth, setScreenWidth] = useState(0);
     const [carouselScope] = useState(props.title === "Popular on Stiflix" ? "popular" : (props.title === "Trending Now" ? "trending" : (props.title === "Top Rated Movies" ? "topMovies" : "topShows")));
-    const isSmartTV = /SmartTV|HbbTV|VIDAA|Web0S|Tizen/.test(navigator.userAgent);
+    const isSmartTV = /SmartTV|HbbTV|VIDAA|Web0S|Tizen|X11; Linux armv7l/.test(navigator.userAgent);
 
     useEffect(() => {
         const viewportWidth = window.innerWidth;

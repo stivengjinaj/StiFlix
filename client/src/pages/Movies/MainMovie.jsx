@@ -22,7 +22,7 @@ function MainMovie(props) {
     const [showMoreInfo, setShowMoreInfo] = useState(false);
     const [moviesInProgress, setMoviesInProgress] = useState([]);
     const navigate = useNavigate();
-    const isSmartTV = /SmartTV|HbbTV|VIDAA|Web0S|Tizen/.test(navigator.userAgent);
+    const isSmartTV = /SmartTV|HbbTV|VIDAA|Web0S|Tizen|X11; Linux armv7l/.test(navigator.userAgent);
 
     useEffect(() => {
         if (props.mainMovie && props.mainMovie.length > 0) {
