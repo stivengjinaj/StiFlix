@@ -72,7 +72,7 @@ function MainMovie(props) {
 
 
     useLayoutEffect(() => {
-        if (currentMovie) {
+        if (currentMovie && window.innerWidth < 4000) {
             const ctx = gsap.context(() => {
                 gsap.fromTo('.main-banner', { x: 100, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: 1 });
                 gsap.fromTo('.main-banner-title', { x: 100, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: 1, delay: 0.2 });

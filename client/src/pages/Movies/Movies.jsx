@@ -48,7 +48,6 @@ function Movies(props) {
     const handleSectionChange = (section) => {
         const getOnlyMovies = async () => {
             const movies = await fetcher.discoverMovies();
-            console.log("Movies: ", movies);
             setOnlyMovies([...movies]);
         }
         const getOnlySeries = async () => {

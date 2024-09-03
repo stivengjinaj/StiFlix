@@ -229,11 +229,11 @@ function MovieDetails(props) {
           ? (
               <>
                   <div className={`splash-screen ${playMovieSplash ? 'visible' : 'invisible'}`} style={{
-                      position: 'absolute',
+                      position: 'fixed',
                       top: 0,
                       left: 0,
                       width: '100%',
-                      height: '100%',
+                      height: '100vh',
                       backgroundColor: 'black',
                       zIndex: playMovieSplash ? 1000 : -1,
                   }}></div>
@@ -241,7 +241,8 @@ function MovieDetails(props) {
                       backgroundImage: `url(https://image.tmdb.org/t/p/original/${screen === "desktop" ? movie.backdrop_path : movie.poster_path})`,
                       backgroundColor: "black",
                   }}>
-                      <Navbar className="bg-gradient-dark" style={{backgroundColor: mediaType === "tv" && "rgb(0,0,0,0.7)"}}>
+                      <Navbar className="bg-gradient-dark"
+                              style={{backgroundColor: mediaType === "tv" && "rgb(0,0,0,0.7)"}}>
                           <Navbar.Brand>
                               <Button variant="transparent" onClick={() => navigate('/movies')}>
                                   <strong><i className="bi bi-arrow-left text-white h1"></i></strong>
@@ -249,33 +250,33 @@ function MovieDetails(props) {
                           </Navbar.Brand>
                       </Navbar>
                       {
-                            mediaType === 'movie'
-                                ?  <Movie
-                                    movie={movie}
-                                    trailer={trailer}
-                                    noTrailer={noTrailer}
-                                    user={props.user}
-                                    isFavourite={isFavourite}
-                                    isWatched={isWatched}
-                                    toWatch={toWatch}
-                                    onFavourite={onFavourite}
-                                    onWatchlist={onWatchlist}
-                                    onWatchLater={onWatchLater}
-                                    onPlay={onPlay}
-                                />
-                                : <TvShow
-                                    movie={movie}
-                                    trailer={trailer}
-                                    noTrailer={noTrailer}
-                                    user={props.user}
-                                    isFavourite={isFavourite}
-                                    isWatched={isWatched}
-                                    toWatch={toWatch}
-                                    onFavourite={onFavourite}
-                                    onWatchlist={onWatchlist}
-                                    onWatchLater={onWatchLater}
-                                    onPlay={onPlay}
-                                />
+                          mediaType === 'movie'
+                              ? <Movie
+                                  movie={movie}
+                                  trailer={trailer}
+                                  noTrailer={noTrailer}
+                                  user={props.user}
+                                  isFavourite={isFavourite}
+                                  isWatched={isWatched}
+                                  toWatch={toWatch}
+                                  onFavourite={onFavourite}
+                                  onWatchlist={onWatchlist}
+                                  onWatchLater={onWatchLater}
+                                  onPlay={onPlay}
+                              />
+                              : <TvShow
+                                  movie={movie}
+                                  trailer={trailer}
+                                  noTrailer={noTrailer}
+                                  user={props.user}
+                                  isFavourite={isFavourite}
+                                  isWatched={isWatched}
+                                  toWatch={toWatch}
+                                  onFavourite={onFavourite}
+                                  onWatchlist={onWatchlist}
+                                  onWatchLater={onWatchLater}
+                                  onPlay={onPlay}
+                              />
                       }
                   </Container>
               </>
@@ -284,7 +285,7 @@ function MovieDetails(props) {
               <Spinner
                   animation="border"
                   role="status"
-                  style={{ color: 'red' }}
+                  style={{color: 'red'}}
               >
               </Spinner>
           </Container>)

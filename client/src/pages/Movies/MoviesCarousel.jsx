@@ -21,30 +21,34 @@ const MoviesCarousel = (props) => {
     }, [props.movies]);
 
     useGSAP(() => {
-        if (props.moving && rowRef.current) {
-            props.scrollable && rowRef.current.classList.add("scrollable");
-            gsap.fromTo(
-                `#movie-carousel-row-${carouselScope}`,
-                { x: 0 },
-                {
-                    ease: "none",
-                    x: screenWidth - rowRef.current.scrollWidth,
-                    delay: 2,
-                    duration: 15,
-                    repeat: -1,
-                    yoyo: true,
-                }
-            );
+        if(screenWidth < 4000) {
+            if (props.moving && rowRef.current) {
+                props.scrollable && rowRef.current.classList.add("scrollable");
+                gsap.fromTo(
+                    `#movie-carousel-row-${carouselScope}`,
+                    { x: 0 },
+                    {
+                        ease: "none",
+                        x: screenWidth - rowRef.current.scrollWidth,
+                        delay: 2,
+                        duration: 15,
+                        repeat: -1,
+                        yoyo: true,
+                    }
+                );
+            }
         }
     }, [screenWidth]);
 
 
     useGSAP(() => {
-        gsap.from(`#movie-carousel-${carouselScope}`, {
-            y: 100,
-            opacity: 0,
-            delay: 1.0,
-        });
+        if(window.innerWidth < 4000) {
+            gsap.from(`#movie-carousel-${carouselScope}`, {
+                y: 100,
+                opacity: 0,
+                delay: 1.0,
+            });
+        }
     });
 
     return (
@@ -56,7 +60,7 @@ const MoviesCarousel = (props) => {
                     </h3>
                 </Row>
 
-                <Container fluid id={props.scrollable ? `scrollable` : `carousel-slider`} className="`w-100 mt-3">
+                <Container fluid id={screenWidth < 4000 ? (props.scrollable ? `scrollable` : `carousel-slider`) : `scrollable`} className="`w-100 mt-3">
                     <table>
                         <tbody>
                         <tr id={`movie-carousel-row-${carouselScope}`} ref={rowRef}>
