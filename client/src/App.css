@@ -375,12 +375,11 @@ tr {
   background-color: rgba(0, 0, 0, 0.8);
 }
 
-@media (min-width: 1930px) {
+@media (width: 2880px) {
   .carousels {
-    margin-top: 150px;
+    margin-top: 70px;
   }
 }
-
 
 @media (max-width: 1580px) {
   .carousels {
