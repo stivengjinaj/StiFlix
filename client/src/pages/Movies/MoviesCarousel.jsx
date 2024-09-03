@@ -12,6 +12,7 @@ const MoviesCarousel = (props) => {
     const [columnsToShow, setColumnsToShow] = useState(0);
     const [screenWidth, setScreenWidth] = useState(0);
     const [carouselScope] = useState(props.title === "Popular on Stiflix" ? "popular" : (props.title === "Trending Now" ? "trending" : (props.title === "Top Rated Movies" ? "topMovies" : "topShows")));
+    const isSmartTV = /SmartTV|HbbTV|VIDAA|Web0S|Tizen/.test(navigator.userAgent);
 
     useEffect(() => {
         const viewportWidth = window.innerWidth;
@@ -21,7 +22,7 @@ const MoviesCarousel = (props) => {
     }, [props.movies]);
 
     useGSAP(() => {
-        if(screenWidth < 4000) {
+        if(!isSmartTV) {
             if (props.moving && rowRef.current) {
                 props.scrollable && rowRef.current.classList.add("scrollable");
                 gsap.fromTo(
@@ -42,7 +43,7 @@ const MoviesCarousel = (props) => {
 
 
     useGSAP(() => {
-        if(window.innerWidth < 4000) {
+        if(!isSmartTV) {
             gsap.from(`#movie-carousel-${carouselScope}`, {
                 y: 100,
                 opacity: 0,
@@ -60,7 +61,7 @@ const MoviesCarousel = (props) => {
                     </h3>
                 </Row>
 
-                <Container fluid id={screenWidth < 4000 ? (props.scrollable ? `scrollable` : `carousel-slider`) : `scrollable`} className="`w-100 mt-3">
+                <Container fluid id={!isSmartTV ? (props.scrollable ? `scrollable` : `carousel-slider`) : `scrollable`} className="`w-100 mt-3">
                     <table>
                         <tbody>
                         <tr id={`movie-carousel-row-${carouselScope}`} ref={rowRef}>

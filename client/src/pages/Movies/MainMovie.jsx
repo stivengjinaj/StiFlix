@@ -22,6 +22,7 @@ function MainMovie(props) {
     const [showMoreInfo, setShowMoreInfo] = useState(false);
     const [moviesInProgress, setMoviesInProgress] = useState([]);
     const navigate = useNavigate();
+    const isSmartTV = /SmartTV|HbbTV|VIDAA|Web0S|Tizen/.test(navigator.userAgent);
 
     useEffect(() => {
         if (props.mainMovie && props.mainMovie.length > 0) {
@@ -72,7 +73,7 @@ function MainMovie(props) {
 
 
     useLayoutEffect(() => {
-        if (currentMovie && window.innerWidth < 4000) {
+        if (currentMovie && !isSmartTV) {
             const ctx = gsap.context(() => {
                 gsap.fromTo('.main-banner', { x: 100, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: 1 });
                 gsap.fromTo('.main-banner-title', { x: 100, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: 1, delay: 0.2 });
