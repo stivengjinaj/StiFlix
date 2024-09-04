@@ -85,8 +85,8 @@ function Register() {
                     </Col>
                 </Row>
                 <Row id="login-form" className="justify-content-center align-items-center">
-                    <Col sm={12} md={6} lg={6} xl={3}
-                         className="flex-column justify-content-center align-items-center px-5 login-col"
+                    <Col xs={12} sm={10} md={6} lg={5} xxl={3}
+                         className="flex-column justify-content-center align-items-center px-5 login-col custom-register"
                          style={{backgroundColor: "rgba(0,0,0,0.6)"}}
                     >
                         <h2 className="text-white my-5 mx-4">Sign up</h2>

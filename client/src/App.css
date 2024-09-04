@@ -450,6 +450,34 @@ tr {
   }
 }
 
+@media (min-width: 1600px) and (max-width: 1400px) {
+  .custom-xl {
+    width: 50% !important;
+    flex: 0 0 50% !important;
+    max-width: 40% !important;
+  }
+
+  .custom-xxl {
+    width: 50% !important;
+    flex: 0 0 50% !important;
+    max-width: 40% !important;
+  }
+}
+
+@media (min-width: 1401px) and (max-width: 1650px) {
+  .custom-xl {
+    width: 50% !important;
+    flex: 0 0 30% !important;
+    max-width: 40% !important;
+  }
+
+  .custom-register {
+    width: 50% !important;
+    flex: 0 0 40% !important;
+    max-width: 40% !important;
+  }
+}
+
 
 @font-face {
   font-family: 'Netflix Sans1';
@@ -471,5 +499,7 @@ tr {
   font-display: optional;
   src: url(https://assets.nflxext.com/ffe/siteui/fonts/netflix-sans/v3/NetflixSans_W_Rg.woff2) format('woff2'),url(https://assets.nflxext.com/ffe/siteui/fonts/netflix-sans/v3/NetflixSans_W_Rg.woff) format('woff')
 }
+
+
 
 
