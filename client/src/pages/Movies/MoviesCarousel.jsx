@@ -52,6 +52,7 @@ const MoviesCarousel = (props) => {
         }
     });
 
+
     return (
         props.movies.length > 0 && (
             <Container fluid className="w-100 mb-3 mt-3" id={"movie-carousel-" + carouselScope}>
@@ -61,13 +62,27 @@ const MoviesCarousel = (props) => {
                     </h3>
                 </Row>
 
-                <Container fluid id={!isSmartTV ? (props.scrollable ? `scrollable` : `carousel-slider`) : `scrollable`} className="`w-100 mt-3">
+                <Container
+                    fluid
+                    id={!isSmartTV ? (props.scrollable ? `scrollable` : `carousel-slider`) : `scrollable`}
+                    className="w-100 mt-3"
+                >
                     <table>
                         <tbody>
                         <tr id={`movie-carousel-row-${carouselScope}`} ref={rowRef}>
                             {props.movies.slice(0, columnsToShow).map((item, index) => (
-                                <td key={index} className="carousel-slider-cover" onClick={() => navigate(`/movies/info/${item.isSeries ? "tv" : "movie"}/${item.id}`)}>
-                                    <img className="mx-3" alt="" src={`https://image.tmdb.org/t/p/w500/${item.poster_path}`} />
+                                <td
+                                    key={index}
+                                    className="carousel-slider-cover"
+                                    onClick={() =>
+                                        navigate(`/movies/info/${item.isSeries ? "tv" : "movie"}/${item.id}`)
+                                    }
+                                >
+                                    <img
+                                        className="mx-3"
+                                        alt=""
+                                        src={`https://image.tmdb.org/t/p/w500/${item.poster_path}`}
+                                    />
                                 </td>
                             ))}
                         </tr>

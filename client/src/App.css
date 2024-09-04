@@ -375,6 +375,7 @@ tr {
   background-color: rgba(0, 0, 0, 0.8);
 }
 
+
 @media (max-width: 1580px) {
   .carousels {
     margin-top: 130px;
@@ -383,7 +384,7 @@ tr {
 
 @media (max-width: 1270px) {
   .carousels {
-    margin-top: 70px;
+    margin-top: 150px;
   }
 }
 
@@ -450,19 +451,7 @@ tr {
   }
 }
 
-@media (min-width: 1600px) and (max-width: 1400px) {
-  .custom-xl {
-    width: 50% !important;
-    flex: 0 0 50% !important;
-    max-width: 40% !important;
-  }
 
-  .custom-xxl {
-    width: 50% !important;
-    flex: 0 0 50% !important;
-    max-width: 40% !important;
-  }
-}
 
 @media (min-width: 1401px) and (max-width: 1650px) {
   .custom-xl {
@@ -475,6 +464,12 @@ tr {
     width: 50% !important;
     flex: 0 0 40% !important;
     max-width: 40% !important;
+  }
+}
+
+@media (min-width: 1401px) and (max-width: 1900px) {
+  .carousels {
+    margin-top: 100px;
   }
 }
 
