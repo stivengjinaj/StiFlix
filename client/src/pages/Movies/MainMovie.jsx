@@ -13,7 +13,7 @@ import {collection, deleteDoc, doc, getDocs} from "firebase/firestore";
 import {db} from "../../../firebaseConfiguration.js";
 import FetchedMovieController from "../../controllers/FetchedMovieController.js";
 import ContinueWatching from "./ContinueWatching.jsx";
-import {parseDateString} from "../../helper/miscs.js";
+import {parseDateString, truncateString} from "../../helper/miscs.js";
 
 function MainMovie(props) {
     const movieFetcher = new FetchedMovieController();
@@ -138,7 +138,7 @@ function MainMovie(props) {
                                 <Row className="justify-content-start align-items-center mt-2 px-5">
                                     <Col xs={12} md={8} lg={6} xl={4}>
                                         <h5 className="text-white main-banner-description">
-                                            {currentMovie.overview}
+                                            {truncateString(currentMovie.overview, 250)}
                                         </h5>
                                     </Col>
                                 </Row>
