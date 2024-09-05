@@ -114,3 +114,20 @@ export function parseDateString(dateString) {
     return new Date(year, month - 1, day);
 }
 
+/**
+ * Function used to truncate a string to a maximum length.
+ *
+ * @param str - The string to truncate.
+ * @param maxLength - The maximum length.
+ * @return The truncated string.
+ */
+export function truncateString(str, maxLength) {
+    if (str.length > maxLength) {
+        return str.slice(0, maxLength) + "...";
+    }
+    return str;
+}
+
+export function formatString(str) {
+    return str.toLowerCase().replace(/\s+/g, '');
+}

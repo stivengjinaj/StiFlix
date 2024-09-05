@@ -229,7 +229,7 @@ form .search-input:focus {
 }
 
 .carousels {
-  margin-top: 280px;
+  margin-top: 200px;
 }
 
 .main-banner::before {
@@ -375,23 +375,47 @@ tr {
   background-color: rgba(0, 0, 0, 0.8);
 }
 
+.scroll-arrow-left,
+.scroll-arrow-right {
+  position: absolute;
+  top: 60%;
+  transform: translateY(-50%);
+  padding: 20px 30px;
+  border-radius: 100%;
+  cursor: pointer;
+  z-index: 1000;
+  pointer-events: all;
+}
+
+.scroll-arrow-left {
+  left: 10px;
+}
+
+.scroll-arrow-right {
+  right: 10px;
+}
+
+.scroll-arrow-left:hover,
+.scroll-arrow-right:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}
 
 @media (max-width: 1580px) {
   .carousels {
-    margin-top: 130px;
+    margin-top: 60px;
   }
 }
 
 @media (max-width: 1270px) {
   .carousels {
-    margin-top: 150px;
+    margin-top: 60px;
   }
 }
 
 @media (max-width: 768px) {
 
   .carousels {
-    margin-top: 120px;
+    margin-top: 50px;
   }
   .main-banner {
     background-size: cover;
@@ -416,7 +440,7 @@ tr {
 
 @media (max-width: 576px) {
   .carousels {
-    margin-top: 130px;
+    margin-top: 60px;
   }
 
   .movie-details {

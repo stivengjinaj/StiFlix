@@ -5,6 +5,7 @@ import {useGSAP} from "@gsap/react";
 import {useEffect, useRef, useState} from "react";
 import {Container, Row} from "react-bootstrap";
 import {gsap} from "gsap";
+import {formatString} from "../../helper/miscs.js";
 
 const MoviesCarousel = (props) => {
     const rowRef = useRef();
@@ -13,6 +14,7 @@ const MoviesCarousel = (props) => {
     const [screenWidth, setScreenWidth] = useState(0);
     const [carouselScope] = useState(props.title === "Popular on Stiflix" ? "popular" : (props.title === "Trending Now" ? "trending" : (props.title === "Top Rated Movies" ? "topMovies" : "topShows")));
     const isSmartTV = /SmartTV|HbbTV|VIDAA|Web0S|Tizen|X11; Linux armv7l/.test(navigator.userAgent);
+    const [showArrows, setShowArrows] = useState(false);
 
     useEffect(() => {
         const viewportWidth = window.innerWidth;
@@ -52,6 +54,15 @@ const MoviesCarousel = (props) => {
         }
     });
 
+    const scrollLeft = () => {
+        const scrollContainer = document.getElementsByClassName(formatString(carouselScope))[0];
+        scrollContainer.scrollBy({ left: -200, behavior: 'smooth' });
+    };
+
+    const scrollRight = () => {
+        const scrollContainer = document.getElementsByClassName(formatString(carouselScope))[0];
+        scrollContainer.scrollBy({ left: 200, behavior: 'smooth' });
+    };
 
     return (
         props.movies.length > 0 && (
@@ -65,7 +76,7 @@ const MoviesCarousel = (props) => {
                 <Container
                     fluid
                     id={!isSmartTV ? (props.scrollable ? `scrollable` : `carousel-slider`) : `scrollable`}
-                    className="w-100 mt-3"
+                    className={`w-100 mt-3 ${formatString(carouselScope)}`}
                 >
                     <table>
                         <tbody>
@@ -89,6 +100,39 @@ const MoviesCarousel = (props) => {
                         </tbody>
                     </table>
                 </Container>
+                {!props.moving && (
+                    <div
+                        onMouseEnter={() => setShowArrows(true)}
+                        onMouseLeave={() => setShowArrows(false)}
+                        style={showArrows ? {
+                            color: 'white',
+                            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                        } : {
+                            color: 'transparent',
+                            backgroundColor: 'transparent',
+                        }}
+                        className="scroll-arrow-left"
+                        onClick={scrollLeft}>
+                        &#10094;
+                    </div>
+                )}
+
+                {!props.moving && (
+                    <div
+                        onMouseEnter={() => setShowArrows(true)}
+                        onMouseLeave={() => setShowArrows(false)}
+                        style={showArrows ? {
+                            color: 'white',
+                            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                        } : {
+                            color: 'transparent',
+                            backgroundColor: 'transparent',
+                        }}
+                        className="scroll-arrow-right"
+                        onClick={scrollRight}>
+                        &#10095;
+                    </div>
+                )}
             </Container>
         )
     );
