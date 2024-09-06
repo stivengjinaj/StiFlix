@@ -5,7 +5,7 @@ import {useEffect, useRef, useState} from "react";
 import FetchLinksController from "../../controllers/FetchLinksController.js";
 import {useParams} from "react-router-dom";
 import FetchedMovieController from "../../controllers/FetchedMovieController.js";
-import {getCurrentDateString, getYearFromDate} from "../../helper/miscs.js";
+import {containsNonLatinChars, getCurrentDateString, getYearFromDate} from "../../helper/miscs.js";
 import Loading from "../Miscs/Loading.jsx";
 import {Button, Container, Dropdown} from "react-bootstrap";
 import {db} from "../../../firebaseConfiguration.js";
@@ -63,17 +63,17 @@ function MoviePlaying(props) {
     useEffect(() => {
         const fetchLinks = async (fetchedMovie) => {
             let response = [];
-
+            const mediaTitle = !containsNonLatinChars(fetchedMovie.title) ? fetchedMovie.name : fetchedMovie.title;
             if (mediaType === 'movie') {
                 response = await linkFetcher.fetchAllLinks(
-                    fetchedMovie.title,
+                    mediaTitle ? encodeURIComponent(encodeURIComponent(mediaTitle)) : fetchedMovie.title,
                     mediaType,
                     getYearFromDate(fetchedMovie.release_date),
                     movieId
                 );
             } else {
                 response = await linkFetcher.fetchTvShowSpecific(
-                    fetchedMovie.title,
+                    mediaTitle ? encodeURIComponent(encodeURIComponent(mediaTitle)) : fetchedMovie.title,
                     mediaType,
                     getYearFromDate(fetchedMovie.release_date),
                     movieId,

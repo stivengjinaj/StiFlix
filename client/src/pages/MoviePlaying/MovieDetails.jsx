@@ -10,6 +10,7 @@ import {db} from "../../../firebaseConfiguration.js";
 import {collection, doc, addDoc, deleteDoc, query, where, getDocs} from "firebase/firestore";
 import {gsap} from "gsap";
 import {useGSAP} from "@gsap/react";
+import {containsNonLatinChars} from "../../helper/miscs.js";
 
 function MovieDetails(props) {
     const fetcher = new FetchedMovieController();
@@ -293,10 +294,13 @@ function MovieDetails(props) {
 }
 
 function Movie(props) {
+
     return (
         <Container className="rounded-4 bg-opacity-75 main-container" style={{backgroundColor: "rgb(0,0,0,0.6)"}}>
             <Container className="mt-5">
-                <h1 className="text-white main-banner-title mt-5">{props.movie.title}</h1>
+                <h1 className="text-white main-banner-title mt-5">{
+                    containsNonLatinChars(props.movie.title) ? props.movie.name : props.movie.title
+                }</h1>
             </Container>
             {props.noTrailer && <Container className="mt-5">
                 {props.trailer ? (
@@ -387,10 +391,13 @@ function TvShow(props) {
         })
     })
 
+
     return (
         <Container fluid className="min-vh-100" style={{ backgroundColor: "rgb(0,0,0,0.7)", overflowX: "hidden"}}>
             <Container fluid className="mt-3 mx-3">
-                <h1 className="text-white tv-title">{props.movie.title}</h1>
+                <h1 className="text-white tv-title">{
+                    !containsNonLatinChars(props.movie.title) ? props.movie.name : props.movie.title
+                }</h1>
             </Container>
             <Container fluid className={`${props.user && "d-flex justify-content-around"} mt-3 mx-3`}>
                 <Dropdown className="tv-season" style={{ position: 'relative', zIndex: 1050 }} align="start" onSelect={(eventKey) => handleSeasonChange(eventKey)}>
