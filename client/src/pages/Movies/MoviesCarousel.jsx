@@ -66,7 +66,7 @@ const MoviesCarousel = (props) => {
 
     return (
         props.movies.length > 0 && (
-            <Container fluid className="w-100 mb-3 mt-3" id={"movie-carousel-" + carouselScope}>
+            <Container fluid className="p-0 w-100 mb-3 mt-3" id={"movie-carousel-" + carouselScope}>
                 <Row className="justify-content-start align-items-center px-3 mt-3">
                     <h3 style={{ fontFamily: 'Netflix Sans1' }} className="text-white mt-3">
                         {props.title}
@@ -84,13 +84,12 @@ const MoviesCarousel = (props) => {
                             {props.movies.slice(0, columnsToShow).map((item, index) => (
                                 <td
                                     key={index}
-                                    className="carousel-slider-cover"
+                                    className={`carousel-slider-cover mx-2`}
                                     onClick={() =>
                                         navigate(`/movies/info/${item.isSeries ? "tv" : "movie"}/${item.id}`)
                                     }
                                 >
                                     <img
-                                        className="mx-3"
                                         alt=""
                                         src={`https://image.tmdb.org/t/p/w500/${item.poster_path}`}
                                     />

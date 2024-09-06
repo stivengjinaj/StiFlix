@@ -475,6 +475,26 @@ tr {
   }
 }
 
+@media (max-width: 400px) {
+  .main-banner {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+    filter: drop-shadow(200px 0px 500px rgba(0, 0, 0, 0.5));
+  }
+}
+
+@media (width: 1024px) and (height: 600px){
+  .main-banner {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh !important;
+    filter: drop-shadow(200px 0px 500px rgba(0, 0, 0, 0.5));
+  }
+}
+
 
 
 @media (min-width: 1401px) and (max-width: 1650px) {

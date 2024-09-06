@@ -64,7 +64,17 @@ function NavBarMobile(props) {
                   <img src={logo} alt="logo" width={25} height={44}/>
               </div>
 
-              <Form className="d-flex align-items-center me-3">
+              <Form
+                  onSubmit={(e) => {
+                      e.preventDefault()
+                  }}
+                  onChange={(e) => {
+                      if (searchVisible) {
+                          props.handleSearch(e.target.value);
+                      }
+                  }}
+                  className="d-flex align-items-center me-3"
+              >
                   {searchVisible && (
                       <Form.Control
                           type="search"
@@ -72,7 +82,10 @@ function NavBarMobile(props) {
                           aria-label="Search"
                       />
                   )}
-                  <i onClick={() => setSearchVisible(!searchVisible)} className="bi bi-search text-white h2"></i>
+                  <i onClick={() => {
+                      props.startSearching()
+                      setSearchVisible(!searchVisible)
+                  }} className="bi bi-search text-white h2"></i>
                   {
                       user && (
                           <Dropdown align={{lg: 'start'}} className="mx-3">

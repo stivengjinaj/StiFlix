@@ -19,6 +19,7 @@ function SeachResults(props) {
             <Row>
                 {
                     props.movies.map(movie => (
+                        movie.poster_path &&
                         <Col xs={4} sm={4} md={3} lg={2} key={movie.id} className="mb-4">
                             <Card className="h-100 border-0">
                                 <Card.Img

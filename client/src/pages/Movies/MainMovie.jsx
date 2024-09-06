@@ -165,7 +165,7 @@ function MainMovie(props) {
                                         </div>
                                     </Col>
                                 </Row>
-                                <Container fluid className="px-0 carousels">
+                                <Container fluid className="mx-0 px-0 carousels">
                                     {
                                         !props.isSearching
                                             ? (
