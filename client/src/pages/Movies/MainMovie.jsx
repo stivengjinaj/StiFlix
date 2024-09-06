@@ -49,7 +49,7 @@ function MainMovie(props) {
                         const movieDate = parseDateString(movie.date);
                         const timeDiff = currentDate - movieDate;
                         const daysDiff = timeDiff / (1000 * 60 * 60 * 24);
-                        if(daysDiff > 5) {
+                        if(daysDiff > 2) {
                             deleteDoc(doc(continueWatchingCollection, movie.id));
                         } else {
                             return {
