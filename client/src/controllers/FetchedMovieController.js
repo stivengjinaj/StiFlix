@@ -205,6 +205,7 @@ class FetchedMovieController {
             id: media.id,
             original_name: media.original_name,
             original_title: media.original_title,
+            name: media.name,
             overview: media.overview,
             backdrop_path: media.backdrop_path,
             poster_path: media.poster_path,

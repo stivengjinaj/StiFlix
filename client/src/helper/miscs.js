@@ -128,6 +128,41 @@ export function truncateString(str, maxLength) {
     return str;
 }
 
+/**
+ * Function used to format a string into a lowercase spaceless string.
+ *
+ * @param str - The string to format.
+ * @return The formatted string.
+ * */
 export function formatString(str) {
     return str.toLowerCase().replace(/\s+/g, '');
+}
+
+/**
+ * Function used to check if a string contains non-latin characters.
+ *
+ * @param str - The string to check.
+ * @return True if the string contains non-latin characters, false otherwise.
+ * */
+export function containsNonLatinChars(str) {
+    let regex = /^[a-zA-Z]+$/;
+    return regex.test(str);
+}
+
+/**
+ * Function used to replace Latin Extended-A characters with their base Latin equivalents.
+ *
+ * @param str - The string to replace characters in.
+ * @return The string with Latin Extended-A characters replaced.
+ * */
+export function replaceLatinExtendedChars(str) {
+    // Map of Latin Extended-A characters to their base Latin equivalents
+    const charMap = {
+        'ā': 'a', 'č': 'c', 'ē': 'e', 'ģ': 'g', 'ī': 'i', 'ķ': 'k', 'ļ': 'l',
+        'ņ': 'n', 'ō': 'o', 'ŗ': 'r', 'š': 's', 'ū': 'u', 'ž': 'z',
+        'Ā': 'A', 'Č': 'C', 'Ē': 'E', 'Ģ': 'G', 'Ī': 'I', 'Ķ': 'K', 'Ļ': 'L',
+        'Ņ': 'N', 'Ō': 'O', 'Ŗ': 'R', 'Š': 'S', 'Ū': 'U', 'Ž': 'Z'
+    };
+
+    return str.replace(/[\u0100-\u017F]/g, match => charMap[match] || match);
 }

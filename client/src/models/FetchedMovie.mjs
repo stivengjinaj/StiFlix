@@ -2,6 +2,7 @@ class FetchedMovie {
     constructor(jsonMovie, isSeries, number_of_seasons, number_of_episodes, seasons=null) {
         this.id = jsonMovie.id;
         this.title = isSeries ? jsonMovie.original_name : jsonMovie.original_title;
+        this.name = jsonMovie.name;
         this.overview = jsonMovie.overview;
         this.backdrop_path = jsonMovie.backdrop_path;
         this.poster_path = jsonMovie.poster_path;
