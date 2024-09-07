@@ -18,6 +18,7 @@ import {parseDateString, truncateString} from "../../helper/miscs.js";
 function MainMovie(props) {
     const movieFetcher = new FetchedMovieController();
     const [currentMovie, setCurrentMovie] = useState(null);
+    const [movieTitleLogo, setMovieTitleLogo] = useState(null);
     const [playMovieSplash, setPlayMovieSplash] = useState(false);
     const [showMoreInfo, setShowMoreInfo] = useState(false);
     const [moviesInProgress, setMoviesInProgress] = useState([]);
@@ -25,8 +26,15 @@ function MainMovie(props) {
     const isSmartTV = /SmartTV|HbbTV|VIDAA|Web0S|Tizen|X11; Linux armv7l/.test(navigator.userAgent);
 
     useEffect(() => {
+        const getMovieLogos = async (movieId, mediaType) => {
+            const logos = await movieFetcher.getMovieLogos(movieId, mediaType);
+            if(logos.length > 0) {
+                setMovieTitleLogo(logos[0]);
+            }
+        }
         if (props.mainMovie && props.mainMovie.length > 0) {
             setCurrentMovie(props.mainMovie[0]);
+            getMovieLogos(props.mainMovie[0].id, props.mainMovie[0].isSeries ? 'tv' : 'movie');
         }
     }, [props.mainMovie]);
 
@@ -38,38 +46,46 @@ function MainMovie(props) {
                     const continueWatchingCollection = collection(userDocRef, 'continueWatching');
 
                     const querySnapshot = await getDocs(continueWatchingCollection);
+                    const movies = querySnapshot.docs.map(doc => ({
+                        id: doc.id,
+                        ...doc.data()
+                    }));
 
-                    const movies = querySnapshot.docs.map(doc => doc.data());
-
-                    const movieDetailsPromises = movies.map(movie => movieFetcher.getMediaDetails(movie.movieId, movie.mediaType));
-                    const movieDetails = await Promise.all(movieDetailsPromises);
                     const currentDate = new Date();
-                    const moviesInProgress = movies.map((movie) => {
-                        const foundMovieDetails = movieDetails.find(details => details.id === movie.movieId);
+                    const moviesInProgress = [];
+
+                    const movieDetailsPromises = movies.map(async (movie) => {
+                        const movieDetails = await movieFetcher.getMediaDetails(movie.movieId, movie.mediaType);
                         const movieDate = parseDateString(movie.date);
-                        const timeDiff = currentDate - movieDate;
-                        const daysDiff = timeDiff / (1000 * 60 * 60 * 24);
-                        if(daysDiff > 2) {
-                            deleteDoc(doc(continueWatchingCollection, movie.id));
+
+                        const timeDifference = currentDate - movieDate;
+                        const daysDifference = timeDifference / (1000 * 3600 * 24);
+
+                        if (daysDifference > 2) {
+                            const movieDocRef = doc(continueWatchingCollection, movie.id);
+                            await deleteDoc(movieDocRef);
                         } else {
-                            return {
-                                movie: foundMovieDetails,
+                            const movieData = {
+                                movie: movieDetails,
                                 season: movie.season,
                                 episode: movie.episode,
                                 date: movie.date,
                             }
+                            moviesInProgress.push(movieData);
                         }
                     });
 
+                    await Promise.all(movieDetailsPromises);
                     setMoviesInProgress(moviesInProgress);
                 } catch (error) {
-                    console.error('Error fetching movie IDs:', error);
+                    console.error('Error fetching or deleting movies:', error);
                 }
             };
 
             fetchMoviesInProgress();
         }
     }, []);
+
 
 
     useLayoutEffect(() => {
@@ -125,7 +141,18 @@ function MainMovie(props) {
                             <Container fluid className="px-0 pt-5 mt-5 mx-0 min-vh-100">
                                 <Row className="justify-content-start align-items-center mt-2 px-5">
                                     <Col xs={12} md={8} lg={6} xl={5} className="mt-3 text-center text-md-start">
-                                        <h1 className="text-white main-banner-title mt-5">{currentMovie.title}</h1>
+                                        {
+                                            movieTitleLogo
+                                                ? (
+                                                    <img
+                                                        src={`https://image.tmdb.org/t/p/w500/${movieTitleLogo.file_path}`}
+                                                        alt="movie logo"
+                                                        className="main-banner-logo mt-5 img-fluid"/>
+                                                )
+                                                : (
+                                                    <h1 className="text-white main-banner-title mt-5">{currentMovie.title}</h1>
+                                                )
+                                        }
                                     </Col>
                                 </Row>
                                 <Row className="justify-content-start align-items-center mt-2 px-5">
