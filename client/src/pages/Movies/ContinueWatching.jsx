@@ -5,6 +5,7 @@ import {Container, Row} from "react-bootstrap";
 
 function ContinueWatching (props) {
     const navigate = useNavigate();
+
     return (
         <Container fluid className="p-0 mt-3">
             <Row className="justify-content-start align-items-center px-3 mt-3">
