@@ -100,7 +100,7 @@ const MoviesCarousel = (props) => {
                     </table>
                 </Container>
                 {
-                    !isSmartTV
+                    isSmartTV
                         ? (
                             <>
                                 <div
