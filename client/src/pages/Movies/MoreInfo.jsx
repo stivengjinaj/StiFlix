@@ -7,7 +7,7 @@ import Loading from "../Miscs/Loading.jsx";
 
 function MoreInfo(props) {
     const fetcher = new FetchedMovieController();
-    const [trailer, setTrailer] = useState('');
+    const [trailer, setTrailer] = useState(null);
     const [genres, setGenres] = useState([]);
     useEffect(() => {
         const fetchMediaData = async () => {
@@ -48,7 +48,14 @@ function MoreInfo(props) {
                         title="Movie Trailer"
                         style={{ marginBottom: '20px' }}
                     ></iframe>
-                ): (<Loading />)}
+                ): (
+                    <img
+                        src={`https://image.tmdb.org/t/p/original/${props.movie.backdrop_path}`}
+                        alt={props.movie.title}
+                        width="100%"
+                        height="400"
+                    />
+                )}
                 {genres.length > 0 && (
                     genres.map((genre, index) => (
                         <span key={index} className="badge bg-danger me-2 opacity-75">{genre.name}</span>
