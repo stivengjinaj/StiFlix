@@ -99,39 +99,68 @@ const MoviesCarousel = (props) => {
                         </tbody>
                     </table>
                 </Container>
-                {!props.moving && (
-                    <div
-                        onMouseEnter={() => setShowArrows(true)}
-                        onMouseLeave={() => setShowArrows(false)}
-                        style={showArrows ? {
-                            color: 'white',
-                            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                        } : {
-                            color: 'transparent',
-                            backgroundColor: 'transparent',
-                        }}
-                        className="scroll-arrow-left"
-                        onClick={scrollLeft}>
-                        &#10094;
-                    </div>
-                )}
+                {
+                    !isSmartTV
+                        ? (
+                            <>
+                                <div
+                                    style={{
+                                        color: 'white',
+                                        backgroundColor: 'black',
+                                    }}
+                                    className="scroll-arrow-left"
+                                    onClick={scrollLeft}>
+                                    &#10094;
+                                </div>
+                                <div
+                                    style={{
+                                        color: 'white',
+                                        backgroundColor: 'black',
+                                    }}
+                                    className="scroll-arrow-right"
+                                    onClick={scrollRight}>
+                                    &#10095;
+                                </div>
+                            </>
+                        )
 
-                {!props.moving && (
-                    <div
-                        onMouseEnter={() => setShowArrows(true)}
-                        onMouseLeave={() => setShowArrows(false)}
-                        style={showArrows ? {
-                            color: 'white',
-                            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                        } : {
-                            color: 'transparent',
-                            backgroundColor: 'transparent',
-                        }}
-                        className="scroll-arrow-right"
-                        onClick={scrollRight}>
-                        &#10095;
-                    </div>
-                )}
+                        : (
+                            !props.moving && (
+                                <>
+                                    <div
+                                        onMouseEnter={() => setShowArrows(true)}
+                                        onMouseLeave={() => setShowArrows(false)}
+                                        style={showArrows ? {
+                                            color: 'white',
+                                            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                                        } : {
+                                            color: 'transparent',
+                                            backgroundColor: 'transparent',
+                                        }}
+                                        className="scroll-arrow-left"
+                                        onClick={scrollLeft}>
+                                        &#10094;
+                                    </div>
+                                    <div
+                                        onMouseEnter={() => setShowArrows(true)}
+                                        onMouseLeave={() => setShowArrows(false)}
+                                        style={showArrows ? {
+                                            color: 'white',
+                                            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                                        } : {
+                                            color: 'transparent',
+                                            backgroundColor: 'transparent',
+                                        }}
+                                        className="scroll-arrow-right"
+                                        onClick={scrollRight}>
+                                        &#10095;
+                                    </div>
+                                </>
+                            )
+                        )
+
+                }
+
             </Container>
         )
     );

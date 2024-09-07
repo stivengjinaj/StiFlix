@@ -238,9 +238,8 @@ function MovieDetails(props) {
                       backgroundColor: 'black',
                       zIndex: playMovieSplash ? 1000 : -1,
                   }}></div>
-                  <Container fluid className="movie-details w-100 p-0 min-vh-100" style={{
+                  <Container fluid className="movie-details w-100 p-0" style={{
                       backgroundImage: `url(https://image.tmdb.org/t/p/original/${screen === "desktop" ? movie.backdrop_path : movie.poster_path})`,
-                      backgroundColor: "black",
                   }}>
                       <Navbar className="bg-gradient-dark"
                               style={{backgroundColor: mediaType === "tv" && "rgb(0,0,0,0.7)"}}>
@@ -296,7 +295,7 @@ function MovieDetails(props) {
 function Movie(props) {
 
     return (
-        <Container className="rounded-4 bg-opacity-75 main-container" style={{backgroundColor: "rgb(0,0,0,0.6)"}}>
+        <Container className="bg-opacity-75 main-container" style={{backgroundColor: "rgb(0,0,0,0.6)"}}>
             <Container className="mt-5">
                 <h1 className="text-white main-banner-title mt-5">{
                     containsNonLatinChars(props.movie.title) ? props.movie.name : props.movie.title
@@ -325,7 +324,7 @@ function Movie(props) {
                     {props.movie.overview}
                 </h5>
             </Container>
-            <Row className="main-banner-actions my-5 d-flex justify-content-center gap-4">
+            <Row className="main-banner-controls bg-transparent my-5 d-flex justify-content-center gap-4">
                 <Col xs="auto">
                     <Button onClick={props.onPlay} variant="light" className="d-flex align-items-center px-3">
                         <i className="bi bi-play-fill fs-2"></i>

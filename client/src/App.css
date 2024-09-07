@@ -444,8 +444,10 @@ tr {
   }
 
   .movie-details {
-    height: 100vh;
-    background-size: cover;
+    overflow-y: auto;
+    width: 100%;
+    min-height: 100vh;
+    background-size: cover !important;
     background-position: center;
     background-repeat: repeat;
   }
