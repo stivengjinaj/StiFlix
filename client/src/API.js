@@ -1,5 +1,4 @@
-//const remote_url = "https://stiflix.vercel.app";
-const remote_url = "http://localhost:3000";
+const remote_url = "https://stiflix.vercel.app";
 
 /*const getPopularMovies = async () => {
    const response = await fetch(`https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc`, {
