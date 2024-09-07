@@ -28,11 +28,11 @@ function MoviePlaying(props) {
                 const userDocRef = doc(db, 'users', props.user.uid);
                 const continueWatchingCollection = collection(userDocRef, 'continueWatching');
 
-                const querySnapshot = await getDocs(query(continueWatchingCollection, where('movieId', '==', parseInt(movieId))));
+                const querySnapshot = await getDocs(query(continueWatchingCollection, where('movieId', '==', String(movieId))));
 
                 if (querySnapshot.empty) {
                     await setDoc(doc(continueWatchingCollection), {
-                        movieId: parseInt(movieId),
+                        movieId: String(movieId),
                         mediaType: mediaType,
                         season: mediaType === 'tv' ? season : 1,
                         episode: mediaType === 'tv' ? episode : 1,
