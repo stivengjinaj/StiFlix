@@ -41,6 +41,9 @@ app.get('/api/popularMovies', async (req, res) => {
     res.json(await response.json());
 });
 
+/**
+ * Cross proxy used to get popular tv shows from TMDB API.
+ */
 app.get('/api/popularTvShows', async (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
@@ -63,6 +66,9 @@ app.get('/api/popularTvShows', async (req, res) => {
     res.json(await response.json());
 });
 
+/**
+ * Cross proxy used to get top rated movies from TMDB API.
+ */
 app.get('/api/topRatedMovies', async (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
@@ -85,6 +91,9 @@ app.get('/api/topRatedMovies', async (req, res) => {
     res.json(await response.json());
 });
 
+/**
+ * Cross proxy used to get top rated tv shows from TMDB API.
+ */
 app.get('/api/topRatedTvShows', async (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
@@ -107,6 +116,9 @@ app.get('/api/topRatedTvShows', async (req, res) => {
     res.json(await response.json());
 });
 
+/**
+ * Cross proxy used to get trending movies from TMDB API.
+ */
 app.get('/api/trendingMovies', async (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
@@ -129,6 +141,9 @@ app.get('/api/trendingMovies', async (req, res) => {
     res.json(await response.json());
 });
 
+/**
+ * Cross proxy used to get tv show details from TMDB API.
+ */
 app.get('/api/tvShowDetails', async (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
@@ -151,6 +166,9 @@ app.get('/api/tvShowDetails', async (req, res) => {
     res.json(await response.json());
 });
 
+/**
+ * Cross proxy used to get movies from TMDB API.
+ */
 app.get('/api/discoverMovies', async (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
@@ -173,6 +191,9 @@ app.get('/api/discoverMovies', async (req, res) => {
     res.json(await response.json());
 });
 
+/**
+ * Cross proxy used to get tv shows from TMDB API.
+ */
 app.get('/api/discoverTvShows', async (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
@@ -195,6 +216,9 @@ app.get('/api/discoverTvShows', async (req, res) => {
     res.json(await response.json());
 });
 
+/**
+ * Cross proxy used to get movie details from TMDB API.
+ */
 app.get('/api/mediaDetails', async (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
@@ -220,6 +244,9 @@ app.get('/api/mediaDetails', async (req, res) => {
     res.json(await response.json());
 });
 
+/**
+ * Cross proxy used to get tv show seasons from TMDB API.
+ */
 app.get('/api/tvShowsSeasons', async (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
@@ -245,6 +272,9 @@ app.get('/api/tvShowsSeasons', async (req, res) => {
     res.json(await response.json());
 });
 
+/**
+ * Cross proxy used to get movie genres from TMDB API.
+ */
 app.get('/api/mediaGenres', async (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
@@ -280,6 +310,9 @@ app.get('/api/mediaGenres', async (req, res) => {
     res.json(await response.json());
 });
 
+/**
+ * Cross proxy used to get movie trailers from TMDB API.
+ */
 app.get('/api/trailerKey', async (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
@@ -305,6 +338,9 @@ app.get('/api/trailerKey', async (req, res) => {
     res.json(await response.json());
 });
 
+/**
+ * Cross proxy used to search movies from TMDB API.
+ */
 app.get('/api/search', async (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
@@ -327,6 +363,34 @@ app.get('/api/search', async (req, res) => {
 
     res.json(await response.json());
 });
+
+/**
+ * Cross proxy used to get movie logos from TMDB API.
+ *
+ */
+app.get(`/api/movieLogos`, async (req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type,Authorization');
+    res.setHeader(
+        'Access-Control-Allow-Headers',
+        'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
+    )
+    const { movieId, mediaType } = req.query;
+    const response = await fetch(`https://api.themoviedb.org/3/${mediaType}/${movieId}?language=en-US&append_to_response=images&include_image_language=en`, {
+        headers: {
+            Authorization: `Bearer ${tmdb_read_token}`,
+            Accept: "application/json"
+        }
+    });
+
+    if (!response.ok) {
+        return res.status(500).json({ error: 'Failed to fetch data' });
+    }
+
+    res.json(await response.json());
+});
+
 
 //----------------------MOVIES AND TV SHOWS LINKS----------------------//
 

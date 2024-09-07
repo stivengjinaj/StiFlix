@@ -315,6 +315,18 @@ class FetchedMovieController {
     }
 
     /**
+     * Function used to get the logos of a movie title.
+     *
+     * @param movieId Movie id.
+     * @param mediaType Movie or tv show.
+     * @return Array of logos.
+     */
+    async getMovieLogos(movieId, mediaType) {
+        const logos = await API.getLogos(movieId, mediaType);
+        return logos.images.logos;
+    }
+
+    /**
      * Function used to check if the details of a movie exist.
      *
      * @param movie movie to check

@@ -1,5 +1,5 @@
-const remote_url = "https://stiflix.vercel.app";
-
+//const remote_url = "https://stiflix.vercel.app";
+const remote_url = "http://localhost:3000";
 
 /*const getPopularMovies = async () => {
    const response = await fetch(`https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc`, {
@@ -389,6 +389,22 @@ const search = async (query) => {
 }
 
 /**
+ * API used to get logos of a movie title.
+ *
+ * @param movieId id of the movie.
+ * @param mediaType movie or tv show.
+ * @return json with logos.
+ * */
+const getLogos = async (movieId, mediaType) => {
+    const response = await fetch(`${remote_url}/api/movieLogos?movieId=${movieId}&mediaType=${mediaType}`, {
+        headers: {
+            Accept: "application/json"
+        }
+    });
+    return await response.json();
+}
+
+/**
  * API used to get movie ID from Piracy server. NOT WORKING
  *
  * @param query search query for the movie to search.
@@ -451,4 +467,22 @@ const getMovieIdBraflix = async (server, query, year, type, episode, season, mov
 };
 
 
-export {getPopularMovies, getPopularTvShows, getTopRatedMovies, getTopRatedTvShows, getTrendingMovies, getTvShowDetails, discoverMovies, discoverTvShows, getMovieId, getMovieSources, getMovieIdBraflix, search, getTrailerKey, mediaGenres, mediaDetails, getTvShowsSeasons};
+export {
+    getPopularMovies,
+    getPopularTvShows,
+    getTopRatedMovies,
+    getTopRatedTvShows,
+    getTrendingMovies,
+    getTvShowDetails,
+    discoverMovies,
+    discoverTvShows,
+    getMovieId,
+    getMovieSources,
+    getMovieIdBraflix,
+    search,
+    getTrailerKey,
+    mediaGenres,
+    mediaDetails,
+    getTvShowsSeasons,
+    getLogos
+};
