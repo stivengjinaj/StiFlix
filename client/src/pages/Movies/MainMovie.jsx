@@ -32,9 +32,10 @@ function MainMovie(props) {
                 setMovieTitleLogo(logos[0]);
             }
         }
-        if (props.mainMovie && props.mainMovie.length > 0) {
-            setCurrentMovie(props.mainMovie[0]);
-            getMovieLogos(props.mainMovie[0].id, props.mainMovie[0].isSeries ? 'tv' : 'movie');
+        if (props.allTrending && props.allTrending.length > 0) {
+            const main = props.allTrending[0];
+            setCurrentMovie(main);
+            getMovieLogos(main.id, main.isSeries ? 'tv' : 'movie');
         }
     }, [props.mainMovie]);
 
@@ -147,10 +148,16 @@ function MainMovie(props) {
                                                     <img
                                                         src={`https://image.tmdb.org/t/p/w500/${movieTitleLogo.file_path}`}
                                                         alt="movie logo"
-                                                        className="main-banner-logo mt-5 img-fluid"/>
+                                                        className="main-banner-logo mt-5 img-fluid"
+                                                        style={{
+                                                            maxHeight: '200px',
+                                                            height: 'auto'
+                                                        }}
+                                                    />
+
                                                 )
                                                 : (
-                                                    <h1 className="text-white main-banner-title mt-5">{currentMovie.title}</h1>
+                                                    <h1 className="text-white main-banner-title mt-5">{currentMovie.name ? currentMovie.name : currentMovie.title}</h1>
                                                 )
                                         }
                                     </Col>

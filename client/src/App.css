@@ -378,8 +378,7 @@ tr {
 .scroll-arrow-left,
 .scroll-arrow-right {
   position: absolute;
-  top: 60%;
-  transform: translateY(-50%);
+  top: 50%;
   padding: 20px 30px;
   border-radius: 100%;
   cursor: pointer;

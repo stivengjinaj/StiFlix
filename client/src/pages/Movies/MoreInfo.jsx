@@ -3,7 +3,6 @@ import FetchedMovieController from "../../controllers/FetchedMovieController.js"
 {/*eslint-disable react/prop-types*/}
 import { Modal } from "react-bootstrap";
 import { useEffect, useState } from "react";
-import Loading from "../Miscs/Loading.jsx";
 
 function MoreInfo(props) {
     const fetcher = new FetchedMovieController();
@@ -13,7 +12,7 @@ function MoreInfo(props) {
         const fetchMediaData = async () => {
             try {
                 const [trailer, genres] = await Promise.all([
-                    fetcher.getTrailer(props.movie.id),
+                    fetcher.getTrailer(props.movie.id, props.movie.isSeries ? 'tv' : 'movie'),
                     fetcher.getMediaGenres(props.movie.id, props.movie.isSeries ? 'tv' : 'movie')
                 ]);
 

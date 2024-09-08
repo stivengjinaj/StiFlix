@@ -100,7 +100,6 @@ function HomePage(props) {
             />
             <MainMovie
                 user={props.user}
-                mainMovie={props.allTrending}
                 isSearching={isSearching}
                 section={props.section}
                 allPopular={props.allPopular}

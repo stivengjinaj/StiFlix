@@ -400,6 +400,7 @@ const getLogos = async (movieId, mediaType) => {
             Accept: "application/json"
         }
     });
+
     return await response.json();
 }
 
