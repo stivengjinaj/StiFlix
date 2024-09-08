@@ -368,7 +368,7 @@ app.get('/api/search', async (req, res) => {
  * Cross proxy used to get movie logos from TMDB API.
  *
  */
-app.get(`/api/movieLogos`, async (req, res) => {
+app.get('/api/movieLogos', async (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type,Authorization');
