@@ -295,9 +295,9 @@ function MovieDetails(props) {
 function Movie(props) {
 
     return (
-        <Container className="bg-opacity-75 main-container" style={{backgroundColor: "rgb(0,0,0,0.6)"}}>
-            <Container className="mt-5">
-                <h1 className="text-white main-banner-title mt-5">{
+        <Container className="d-flex flex-column bg-opacity-75 main-container align-items-center" style={{backgroundColor: "rgb(0,0,0,0.6)"}}>
+            <Container className="mt-3">
+                <h1 className="text-white main-banner-title mt-3">{
                     containsNonLatinChars(props.movie.title) ? props.movie.name : props.movie.title
                 }</h1>
             </Container>
@@ -307,7 +307,6 @@ function Movie(props) {
                         src={props.trailer}
                         className="main-banner-video"
                         width="100%"
-                        height="400"
                         allowFullScreen
                         title="Movie Trailer"
                         style={{marginBottom: '20px'}}

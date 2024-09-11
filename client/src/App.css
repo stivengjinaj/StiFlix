@@ -399,9 +399,17 @@ tr {
   background-color: rgba(0, 0, 0, 0.8);
 }
 
+.main-banner-video {
+  height: 350px;
+}
+
 @media (max-width: 1580px) {
   .carousels {
     margin-top: 60px;
+  }
+
+  .main-banner-video {
+    height: 330px;
   }
 }
 
@@ -409,9 +417,17 @@ tr {
   .carousels {
     margin-top: 60px;
   }
+
+  .main-banner-video {
+    height: 250px;
+  }
 }
 
 @media (max-width: 768px) {
+
+  .main-banner-video {
+    height: 300px;
+  }
 
   .carousels {
     margin-top: 50px;
@@ -457,6 +473,10 @@ tr {
     background-position: center;
     background-repeat: no-repeat;
     filter: drop-shadow(200px 0px 500px rgba(0, 0, 0, 0.5));
+  }
+
+  .main-banner-video {
+    height: 250px;
   }
 
   .main-banner-controls {
