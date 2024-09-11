@@ -1,3 +1,5 @@
+import {shuffle} from "gsap/gsap-core";
+
 {/* eslint-disable react/prop-types */}
 import {useEffect, useState} from "react";
 import SplashScreen from "./SplashScreen.jsx";
@@ -26,7 +28,7 @@ function Movies(props) {
                     fetcher.getTopRatedMovies(),
                     fetcher.discoverTvShows()
                 ]);
-                setAllTrending([...trending]);
+                setAllTrending([...shuffle(trending)]);
                 setAllPopular([...popular]);
                 setTopRatedMovies([...movies]);
                 setOnlySeries([...series]);
