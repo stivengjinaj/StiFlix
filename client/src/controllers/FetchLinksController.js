@@ -18,7 +18,8 @@ class FetchLinksController {
         try {
             // This is movied ID from Piracy server. NOT WORKING.
             //const movieIdResponse = await API.getMovieId(query, type, year);
-
+            const vidproLink = `https://vidlink.pro/movie/${movieId}?primaryColor=ffffff&secondaryColor=c9c9c9&poster=true&autoplay=true`;
+            links.push({ server: "Omega", link: vidproLink, error: null });
             const promises = [
                 API.getMovieIdBraflix("upcloud", query, year, type, 1, 1, movieId)
                     .then(response => links.push({ server: "Alpha", link: `https://rabbitstream.net/v2/embed-4/${response}?_debug=true`, error: null }))
@@ -48,7 +49,6 @@ class FetchLinksController {
             } */
             await Promise.all(promises);
         } catch (error) {
-            console.log("Error here")
             handleError("All", error);
         }
         return links;
@@ -121,6 +121,8 @@ class FetchLinksController {
         const handleResponse = (server, link) => links.push({ server, link, error: null });
         const handleError = (server, error) => links.push({ server, link: null, error });
 
+        const vidproLink = `https://vidlink.pro/movie/${movieId}/${season}/${episode}?primaryColor=ffffff&secondaryColor=c9c9c9&poster=true&autoplay=true`;
+        links.push({ server: "Omega", link: vidproLink, error: null });
         const promises = [
             API.getMovieIdBraflix("upcloud", query, year, type, episode, season, movieId)
                 .then(response => handleResponse("Alpha", `https://rabbitstream.net/v2/embed-4/${response}?_debug=true`))
