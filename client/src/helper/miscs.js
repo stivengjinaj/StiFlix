@@ -166,3 +166,18 @@ export function replaceLatinExtendedChars(str) {
 
     return str.replace(/[\u0100-\u017F]/g, match => charMap[match] || match);
 }
+
+/**
+ * Fisher-Yates (Knuth) Shuffle algorithm to shuffle an array.
+ *
+ * @param array - The array to shuffle.
+ * @return The shuffled array.
+ * */
+export function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const randomIndex = Math.floor(Math.random() * (i + 1));
+
+        [array[i], array[randomIndex]] = [array[randomIndex], array[i]];
+    }
+    return array;
+}
