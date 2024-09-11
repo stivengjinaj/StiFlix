@@ -33,11 +33,10 @@ function MainMovie(props) {
             }
         }
         if (props.allTrending && props.allTrending.length > 0) {
-            const main = props.allTrending[0];
-            setCurrentMovie(main);
-            getMovieLogos(main.id, main.isSeries ? 'tv' : 'movie');
+            setCurrentMovie(props.allTrending[0]);
+            getMovieLogos(props.allTrending[0].id, props.allTrending[0].isSeries ? 'tv' : 'movie');
         }
-    }, [props.mainMovie]);
+    }, [props.allTrending]);
 
     useEffect(() => {
         if (props.user?.uid) {
@@ -150,7 +149,7 @@ function MainMovie(props) {
                                                         alt="movie logo"
                                                         className="main-banner-logo mt-5 img-fluid"
                                                         style={{
-                                                            maxHeight: '200px',
+                                                            maxHeight: '100px',
                                                             height: 'auto'
                                                         }}
                                                     />
