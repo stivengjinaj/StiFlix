@@ -29,7 +29,7 @@ function MoreInfo(props) {
     return (
         <Modal {...props} size="lg" centered>
             <Modal.Header closeButton style={{backgroundColor: "black"}}>
-                <Modal.Title className="text-white"><h3>{props.movie.title}</h3></Modal.Title>
+                <Modal.Title className="text-white"><h3>{props.movie.name ? props.movie.name : props.movie.title}</h3></Modal.Title>
             </Modal.Header>
             <Modal.Body style={{
                 backgroundColor: 'black',
