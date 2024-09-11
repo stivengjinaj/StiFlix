@@ -113,8 +113,9 @@ function MoviePlaying(props) {
     return (
         noLinks
             ? (
-                <Container fluid className="d-flex justify-content-center align-items-center bg-gradient-dark-radius" style={{ height: '100vh' }}>
+                <Container fluid className="d-flex flex-column justify-content-center align-items-center bg-gradient-dark-radius" style={{ height: '100vh' }}>
                     <h1 className="text-white text-center">Movie not found. We are sorry :(</h1>
+                    <h3 className="text-white text-center">Stiflix does not have control over the movies. It is just a friendly app that points you to where the movies are.</h3>
                 </Container>
             )
             : (
@@ -124,7 +125,7 @@ function MoviePlaying(props) {
                         <Container fluid className="d-flex dropdown-wrapper justify-content-between">
                             <Dropdown
                                 className="mx-3"
-                                style={{ position: 'relative', zIndex: 1060 }}
+                                style={{ position: 'relative', zIndex: 1060}}
                                 align="start"
                                 onSelect={(eventKey) => handleServerChange(eventKey)}
                             >

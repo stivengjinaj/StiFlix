@@ -397,7 +397,7 @@ function TvShow(props) {
                     !containsNonLatinChars(props.movie.title) ? props.movie.name : props.movie.title
                 }</h1>
             </Container>
-            <Container fluid className={`${props.user && "d-flex justify-content-around"} mt-3 mx-3`}>
+            <Container fluid className={`${props.user && "d-flex flex-wrap justify-content-xl-around justify-content-center"} mt-3 mx-3`}>
                 <Dropdown className="tv-season" style={{ position: 'relative', zIndex: 1050 }} align="start" onSelect={(eventKey) => handleSeasonChange(eventKey)}>
                     <Dropdown.Toggle variant="dark" className="py-3 px-5 custom-toggle d-flex align-items-center">
                         <h3 className="mb-0">Season {currentSeason.season_number}</h3>
@@ -413,19 +413,19 @@ function TvShow(props) {
                 </Dropdown>
                 {
                     props.user && (
-                        <Container className="d-flex justify-content-end tv-season">
+                        <Container className="d-flex justify-content-center mt-2 tv-season">
                             <Button onClick={props.onWatchLater} variant={props.toWatch ? "danger" : "light"}
                                     className="d-flex align-items-center px-3">
                                 <i className={`bi bi-clock-fill fs-2 ${props.toWatch ? "text-light" : "text-danger"}`}></i>
                                 <h4 className={`${props.toWatch ? "text-light" : "text-dark"} mb-0 d-none d-md-inline mx-1`}>Watch Later</h4>
                             </Button>
                             <Button onClick={props.onWatchlist} variant={props.isWatched ? "danger" : "light"}
-                                    className="d-flex align-items-center px-3 mx-3">
+                                    className="d-flex align-items-center px-3 mx-5">
                                 <i className={`bi bi-eye-fill fs-2 ${props.isWatched ? "text-light" : "text-danger"}`}></i>
                                 <h4 className={`${props.isWatched ? "text-light" : "text-dark"} mb-0 d-none d-md-inline mx-1`}>Watchlist</h4>
                             </Button>
                             <Button onClick={props.onFavourite} variant={props.isFavourite ? "danger" : "light"}
-                                    className="d-flex align-items-center px-3 ml-3">
+                                    className="d-flex align-items-center px-3 ml-5">
                                 <i className={`bi fs-2 ${props.isFavourite ? "text-light bi-star-fill" : "text-danger bi-star"}`}></i>
                                 <h4 className={`${props.isFavourite ? "text-light" : "text-dark"} mb-0 d-none d-md-inline mx-1`}>Favourites</h4>
                             </Button>
