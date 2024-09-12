@@ -436,7 +436,7 @@ app.get('/api/getMovieSources', async (req, res) => {
     const { server, query, year, type, episode, season, movieId } = req.query;
     //const encodedQuery = encodeURIComponent(query).replace(/%20/g, '+');
     try {
-        const response = await fetch(`https://api.braflix.ru/${server}/sources-with-title?title=${query}&year=${year}&mediaType=${type}&episodeId=${episode}&seasonId=${season}&tmdbId=${movieId}`, {
+        const response = await fetch(`https://api.braflix.st/${server}/sources-with-title?title=${query}&year=${year}&mediaType=${type}&episodeId=${episode}&seasonId=${season}&tmdbId=${movieId}`, {
             headers: {
                 Accept: "application/json",
                 UserAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 13_4_1) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.5.2 Safari/605.1.15"
@@ -477,7 +477,6 @@ app.use('/api/getMovieIdBraflix', createProxyMiddleware({
     on: {
         proxyRes: responseInterceptor(async (responseBuffer, proxyRes, req, res) => {
             try {
-                console.log("requesting");
                 if (!responseBuffer || typeof responseBuffer !== 'object' || responseBuffer.length === 0) {
                     throw new Error('Invalid or empty response from target server');
                 }
