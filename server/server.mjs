@@ -465,8 +465,9 @@ app.get('/api/getMovieSources', async (req, res) => {
  *  Cross proxy used to get movie id from Braflix server. (with proxy middleware)
  * */
 app.use('/api/getMovieIdBraflix', createProxyMiddleware({
-    target: 'https://api.braflix.ru',
+    target: 'https://api.braflix.st',
     changeOrigin: true,
+    followRedirects: false,
     pathRewrite: (path, req) => {
         const { server, query, year, type, episode, season, movieId } = req.query;
 
@@ -476,15 +477,16 @@ app.use('/api/getMovieIdBraflix', createProxyMiddleware({
     on: {
         proxyRes: responseInterceptor(async (responseBuffer, proxyRes, req, res) => {
             try {
+                console.log("requesting");
                 if (!responseBuffer || typeof responseBuffer !== 'object' || responseBuffer.length === 0) {
                     throw new Error('Invalid or empty response from target server');
                 }
                 const response = responseBuffer.toString('utf8');
-                // Inject CORS headers
+
                 res.setHeader('Access-Control-Allow-Origin', '*');
                 res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
                 res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-
+                res.setHeader('User-Agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36');
                 return JSON.stringify({ id: response });
             } catch (error) {
                 res.statusCode = 500;
@@ -494,7 +496,7 @@ app.use('/api/getMovieIdBraflix', createProxyMiddleware({
     },
     headers: {
         Accept: "application/json",
-        'User-Agent': "Mozilla/5.0 (Macintosh; Intel Mac OS X 13_4_1) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.5.2 Safari/605.1.15",
+        'User-Agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36",
     }
 }));
 
