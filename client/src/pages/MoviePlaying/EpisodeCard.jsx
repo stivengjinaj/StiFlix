@@ -10,7 +10,7 @@ function EpisodeCard(props) {
                 onClick={() => props.onPlay(props.season, props.episode.episode_number)}
             >
                 <img
-                    src={`https://image.tmdb.org/t/p/w500/${props.episode.still_path}`}
+                    src={`https://image.tmdb.org/t/p/w500/${props.episode.still_path ? props.episode.still_path : props.movie.backdrop_path}`}
                     alt={props.episode.name}
                     width={450}
                     height={250}
