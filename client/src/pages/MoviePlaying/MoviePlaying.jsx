@@ -110,6 +110,10 @@ function MoviePlaying(props) {
         setCurrentServer(selectedServer);
     };
 
+    useEffect(() => {
+        console.log(links);
+    }, [links]);
+
     return (
         noLinks
             ? (
