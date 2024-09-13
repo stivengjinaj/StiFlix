@@ -295,7 +295,7 @@ function MovieDetails(props) {
 function Movie(props) {
 
     return (
-        <Container className="d-flex flex-column bg-opacity-75 main-container align-items-center" style={{backgroundColor: "rgb(0,0,0,0.6)"}}>
+        <Container className="d-flex flex-column bg-opacity-75 main-container align-items-center mb-5" style={{backgroundColor: "rgb(0,0,0,0.6)"}}>
             <Container className="mt-3">
                 <h1 className="text-white main-banner-title mt-3">{
                     containsNonLatinChars(props.movie.title) ? props.movie.name : props.movie.title
@@ -363,7 +363,9 @@ function Movie(props) {
 }
 
 function TvShow(props) {
+    const isSmartTV = /SmartTV|HbbTV|VIDAA|Web0S|Tizen|X11; Linux armv7l/.test(navigator.userAgent);
     const [currentSeason, setCurrentSeason] = useState(props.movie.seasons[0]);
+    const [showArrows, setShowArrows] = useState(false);
 
     const handleSeasonChange = (seasonNumber) => {
         setCurrentSeason(props.movie.seasons[seasonNumber - 1]);
@@ -388,6 +390,16 @@ function TvShow(props) {
             delay: 0.3
         })
     })
+
+    const scrollLeft = () => {
+        const scrollContainer = document.getElementsByClassName("episodes")[0];
+        scrollContainer.scrollBy({ left: -200, behavior: 'smooth' });
+    };
+
+    const scrollRight = () => {
+        const scrollContainer = document.getElementsByClassName("episodes")[0];
+        scrollContainer.scrollBy({ left: 200, behavior: 'smooth' });
+    };
 
 
     return (
@@ -433,14 +445,70 @@ function TvShow(props) {
                     )
                 }
             </Container>
-            <Container fluid className="mt-3 no-scrollbar">
+            <Container fluid className="mt-3 no-scrollbar episodes">
                 <div className="d-flex">
                     {currentSeason.episodes.map((episode, index) => (
                         <EpisodeCard key={index} onPlay={props.onPlay} season={currentSeason.season_number} episode={episode} />
                     ))}
                 </div>
             </Container>
-
+            {
+                isSmartTV
+                    ? (
+                        <>
+                            <div
+                                style={{
+                                    color: 'white',
+                                    backgroundColor: 'black',
+                                }}
+                                className="tv-scroll-left"
+                                onClick={scrollLeft}>
+                                &#10094;
+                            </div>
+                            <div
+                                style={{
+                                    color: 'white',
+                                    backgroundColor: 'black',
+                                }}
+                                className="tv-scroll-right"
+                                onClick={scrollRight}>
+                                &#10095;
+                            </div>
+                        </>
+                    )
+                    : (
+                        <>
+                            <div
+                                onMouseEnter={() => setShowArrows(true)}
+                                onMouseLeave={() => setShowArrows(false)}
+                                style={showArrows ? {
+                                    color: 'white',
+                                    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                                } : {
+                                    color: 'transparent',
+                                    backgroundColor: 'transparent',
+                                }}
+                                className="tv-scroll-left"
+                                onClick={scrollLeft}>
+                                &#10094;
+                            </div>
+                            <div
+                                onMouseEnter={() => setShowArrows(true)}
+                                onMouseLeave={() => setShowArrows(false)}
+                                style={showArrows ? {
+                                    color: 'white',
+                                    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                                } : {
+                                    color: 'transparent',
+                                    backgroundColor: 'transparent',
+                                }}
+                                className="tv-scroll-right"
+                                onClick={scrollRight}>
+                                &#10095;
+                            </div>
+                        </>
+                    )
+            }
         </Container>
     );
 }

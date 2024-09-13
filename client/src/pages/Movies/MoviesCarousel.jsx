@@ -66,7 +66,7 @@ const MoviesCarousel = (props) => {
 
     return (
         props.movies.length > 0 && (
-            <Container fluid className="p-0 w-100 mb-3 mt-3" id={"movie-carousel-" + carouselScope}>
+            <Container fluid className="p-0 w-100 mb-3 mt-3" id={"movie-carousel-" + carouselScope} style={{position: "relative"}}>
                 <Row className="justify-content-start align-items-center px-3 mt-3">
                     <h3 style={{ fontFamily: 'Netflix Sans1' }} className="text-white mt-3">
                         {props.title}
@@ -75,8 +75,7 @@ const MoviesCarousel = (props) => {
 
                 <Container
                     fluid
-                    id={!isSmartTV ? (props.scrollable ? `scrollable` : `carousel-slider`) : `scrollable`}
-                    className={`w-100 mt-3 ${formatString(carouselScope)}`}
+                    className={`w-100 mt-3 ${formatString(carouselScope)} no-scrollbar ${!isSmartTV ? (props.scrollable ? "scrollable-carousel" : "non-scrollable-carousel") : "scrollable-carousel"}`}
                 >
                     <table>
                         <tbody>

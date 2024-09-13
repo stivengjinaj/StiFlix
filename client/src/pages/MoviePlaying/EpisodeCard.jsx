@@ -19,8 +19,10 @@ function EpisodeCard(props) {
             <h2 className="text-white mt-4">
                 {props.episode.episode_number}. {props.episode.name}
             </h2>
-            <h5 className="text-white mt-3 border-1 border-top border-secondary">{props.episode.runtime}m</h5>
+            <h5 className="text-white mt-3 border-1 border-top border-secondary">{props.episode.runtime && `${props.episode.runtime}m`}</h5>
             <h5 className="text-white mt-3">{props.episode.overview}</h5>
+
+
         </Container>
     );
 }

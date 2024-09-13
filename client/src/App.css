@@ -212,7 +212,6 @@ form .search-input:focus {
   background-position: center;
   background-repeat: no-repeat;
   min-height: 100vh;
-  height: 85vh;
   filter: drop-shadow(200px 0px 500px rgba(0, 0, 0, 0.5));
   display: flex;
   flex-direction: column;
@@ -269,19 +268,17 @@ form .search-input:focus {
   display: none !important;
 }
 
-#carousel-slider {
-  overflow-x: hidden;
-  overflow-y: hidden;
-  white-space: nowrap;
-}
-
-#scrollable {
+.scrollable-carousel {
   overflow-x: auto;
-  overflow-y: hidden;
-  white-space: nowrap;
+  -ms-overflow-style: none;
 }
 
-#scrollable::-webkit-scrollbar {
+.non-scrollable-carousel {
+  overflow-x: hidden !important;
+  -ms-overflow-style: none;
+}
+
+.scrollable::-webkit-scrollbar {
   display: none;
 }
 
@@ -391,6 +388,25 @@ tr {
 }
 
 .scroll-arrow-right {
+  right: 10px;
+}
+
+.tv-scroll-left,
+.tv-scroll-right {
+  position: absolute;
+  top: 30%;
+  padding: 20px 30px;
+  border-radius: 100%;
+  cursor: pointer;
+  z-index: 1000;
+  pointer-events: all;
+}
+
+.tv-scroll-left {
+  left: 10px;
+}
+
+.tv-scroll-right {
   right: 10px;
 }
 
