@@ -499,6 +499,43 @@ app.use('/api/getMovieIdBraflix', createProxyMiddleware({
     }
 }));
 
+app.use('/api/getOmegaLink', createProxyMiddleware({
+    target: 'https://vidlink.pro',
+    changeOrigin: true,
+    followRedirects: false,
+    pathRewrite: (path, req) => {
+        const { movieId, mediaType } = req.query;
+        return `/${mediaType}/${movieId}?primaryColor=ffffff&secondaryColor=c9c9c9&poster=true&autoplay=true`;
+    },
+    selfHandleResponse: true,
+    on: {
+        proxyRes: responseInterceptor(async (responseBuffer, proxyRes, req, res) => {
+            try {
+                const link = `https://vidlink.pro/${req.query.mediaType}/${req.query.movieId}?primaryColor=ffffff&secondaryColor=c9c9c9&poster=true&autoplay=true`;
+                res.setHeader('Access-Control-Allow-Origin', '*');
+                res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+                res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+                res.setHeader('User-Agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36');
+
+                if (proxyRes.statusCode === 200) {
+                    return JSON.stringify({ link:  link});
+                } else {
+                    res.statusCode = proxyRes.statusCode;
+                    return JSON.stringify({ error: 'Failed to fetch movie data' });
+                }
+            } catch (error) {
+                res.statusCode = 500;
+                return JSON.stringify({ error: 'Failed to process response from target server' });
+            }
+        }),
+    },
+    headers: {
+        Accept: "application/json",
+        'User-Agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36",
+    }
+}));
+
+
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
