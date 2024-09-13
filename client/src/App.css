@@ -394,7 +394,8 @@ tr {
 .tv-scroll-left,
 .tv-scroll-right {
   position: absolute;
-  top: 30%;
+  top: 40%;
+  transform: translateY(-50%);
   padding: 20px 30px;
   border-radius: 100%;
   cursor: pointer;
