@@ -466,6 +466,35 @@ const getMovieIdBraflix = async (server, query, year, type, episode, season, mov
     return data.id;
 };
 
+/**
+ * API used to get movie link from OMEGA server.
+ *
+ * @param movieId id of the movie.
+ * @param season season index.
+ * @param episode episode index.
+ * @return link to the movie.
+ * */
+const getOmegaLink = async (movieId, season=null, episode=null) => {
+    if(season && episode) {
+        const response = await fetch(`${remote_url}/api/getOmegaLink?movieId=${movieId}&mediaType=tv&season=${season}&episode=${episode}`);
+        if (!response.ok) {
+            throw new Error(`Movie not found`);
+        }
+
+        const data = await response.json();
+
+        return data.link;
+    } else {
+        const response = await fetch(`${remote_url}/api/getOmegaLink?movieId=${movieId}&mediaType=movie`);
+        if (!response.ok) {
+            throw new Error(`Movie not found`);
+        }
+
+        const data = await response.json();
+
+        return data.link;
+    }
+}
 
 export {
     getPopularMovies,
@@ -479,6 +508,7 @@ export {
     getMovieId,
     getMovieSources,
     getMovieIdBraflix,
+    getOmegaLink,
     search,
     getTrailerKey,
     mediaGenres,
