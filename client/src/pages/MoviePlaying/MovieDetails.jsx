@@ -448,7 +448,13 @@ function TvShow(props) {
             <Container fluid className="mt-3 no-scrollbar episodes">
                 <div className="d-flex">
                     {currentSeason.episodes.map((episode, index) => (
-                        <EpisodeCard key={index} onPlay={props.onPlay} season={currentSeason.season_number} episode={episode} />
+                        <EpisodeCard
+                            key={index}
+                            onPlay={props.onPlay}
+                            season={currentSeason.season_number}
+                            episode={episode}
+                            movie={props.movie}
+                        />
                     ))}
                 </div>
             </Container>
