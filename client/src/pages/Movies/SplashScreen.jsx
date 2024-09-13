@@ -1,4 +1,4 @@
-import splashScreen from '../../assets/splash_screen_desktop.json';
+import splashScreenDark from '../../assets/splash_screen_dark.json';
 import Lottie from 'react-lottie'
 import {getWindowDimensions} from "../../helper/miscs.js";
 import {Container} from "react-bootstrap";
@@ -9,7 +9,7 @@ function SplashScreen() {
     const defaultOptions = {
         loop: true,
         autoplay: true,
-        animationData: splashScreen,
+        animationData: splashScreenDark,
     };
 
     return (
