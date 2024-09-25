@@ -82,9 +82,9 @@ function MoviePlaying(props) {
                 );
             }
 
-            const validLinks = response.filter(link => link.error === null);
-
+            let validLinks = response.filter(link => link.error === null);
             if (validLinks.length > 0) {
+                validLinks = validLinks.sort((a, b) => a.server.localeCompare(b.server));
                 setLinks(validLinks);
                 setCurrentServer(validLinks[0]);
             } else {
