@@ -515,7 +515,12 @@ app.use('/api/getOmegaLink', createProxyMiddleware({
     on: {
         proxyRes: responseInterceptor(async (responseBuffer, proxyRes, req, res) => {
             try {
-                const link = `https://vidlink.pro/${req.query.mediaType}/${req.query.movieId}?primaryColor=ffffff&secondaryColor=c9c9c9&poster=true&autoplay=true`;
+                let link;
+                if(req.query.season && req.query.episode) {
+                    link = `https://vidlink.pro/${req.query.mediaType}/${req.query.movieId}/${req.query.season}/${req.query.episode}?primaryColor=ffffff&secondaryColor=c9c9c9&poster=true&autoplay=true`;
+                } else {
+                    link = `https://vidlink.pro/${req.query.mediaType}/${req.query.movieId}?primaryColor=ffffff&secondaryColor=c9c9c9&poster=true&autoplay=true`;
+                }
                 res.setHeader('Access-Control-Allow-Origin', '*');
                 res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
                 res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
