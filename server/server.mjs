@@ -504,8 +504,12 @@ app.use('/api/getOmegaLink', createProxyMiddleware({
     changeOrigin: true,
     followRedirects: false,
     pathRewrite: (path, req) => {
-        const { movieId, mediaType } = req.query;
-        return `/${mediaType}/${movieId}?primaryColor=ffffff&secondaryColor=c9c9c9&poster=true&autoplay=true`;
+        const { movieId, mediaType, season, episode } = req.query;
+        if(season && episode) {
+            return `/${mediaType}/${movieId}/${season}/${episode}?primaryColor=ffffff&secondaryColor=c9c9c9&poster=true&autoplay=true`;
+        } else {
+            return `/${mediaType}/${movieId}?primaryColor=ffffff&secondaryColor=c9c9c9&poster=true&autoplay=true`;
+        }
     },
     selfHandleResponse: true,
     on: {

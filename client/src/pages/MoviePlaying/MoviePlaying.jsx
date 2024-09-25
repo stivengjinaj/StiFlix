@@ -136,7 +136,7 @@ function MoviePlaying(props) {
                                 <Dropdown.Menu className="mt-1 bg-dark">
                                     {links.filter(link => link.server !== currentServer.server).map((link, index) => (
                                         <Dropdown.Item key={index} eventKey={link.server} className="text-white dropdown-item">
-                                            {link.server}
+                                            {link.server === "Omega" ? "Omega (Ads)" : link.server}
                                         </Dropdown.Item>
                                     ))}
                                 </Dropdown.Menu>
