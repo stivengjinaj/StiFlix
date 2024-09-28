@@ -46,7 +46,7 @@ function Login() {
                 }else {
                     updateUserVerified(userCredential.user.uid);
                     setCurrentUserState("");
-                    navigate("/");
+                    navigate("/movies");
                 }
             })
             .catch(() => {
@@ -59,7 +59,7 @@ function Login() {
             const userDocRef = doc(db, "users", userId);
             await updateDoc(userDocRef, { verified: true });
         } catch (error) {
-            navigate("/");
+            navigate("/movies");
         }
     };
 
