@@ -9,7 +9,7 @@ import {useNavigate} from "react-router-dom";
 function ChangeSeasonEpisode (props) {
     const navigate = useNavigate();
     const [screen, setScreen] = useState(null);
-    const [currentSeason, setCurrentSeason] = useState(props.movie.seasons[0]);
+    const [currentSeason, setCurrentSeason] = useState(props.movie.seasons[props.season - 1]);
 
     window.addEventListener('resize', () => {
         if (window.innerWidth < 768) {
