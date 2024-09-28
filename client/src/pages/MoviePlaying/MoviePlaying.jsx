@@ -3,7 +3,7 @@ import {collection, doc, getDocs, query, setDoc, updateDoc, where} from "firebas
 {/*eslint-disable react/prop-types*/}
 import {useEffect, useRef, useState} from "react";
 import FetchLinksController from "../../controllers/FetchLinksController.js";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import FetchedMovieController from "../../controllers/FetchedMovieController.js";
 import {containsNonLatinChars, getCurrentDateString, getYearFromDate} from "../../helper/miscs.js";
 import Loading from "../Miscs/Loading.jsx";
@@ -12,8 +12,10 @@ import {db} from "../../../firebaseConfiguration.js";
 import ChangeSeasonEpisode from "./ChangeSeasonEpisode.jsx";
 
 function MoviePlaying(props) {
+    const navigate = useNavigate();
     const iframeRef = useRef(null);
     const { mediaType, movieId, season, episode } = useParams();
+    const [currentEpisode, setCurrentEpisode] = useState(episode);
     const linkFetcher = new FetchLinksController();
     const movieFetcher = new FetchedMovieController();
     const [movie, setMovie] = useState(null);
@@ -21,6 +23,7 @@ function MoviePlaying(props) {
     const [currentServer, setCurrentServer] = useState(null);
     const [noLinks, setNoLinks] = useState(false);
     const [changeSeasonEpisode, setChangeSeasonEpisode] = useState(false);
+    const [lastEpisodeSeason, setLastEpisodeSeason] = useState(false);
 
     const handleProgressSave = async () => {
         if (props.user && movieId) {
@@ -96,6 +99,9 @@ function MoviePlaying(props) {
             try {
                 const fetchedMovie = await movieFetcher.getMediaDetails(movieId, mediaType);
                 setMovie(fetchedMovie);
+                if (mediaType === 'tv') {
+                    setLastEpisodeSeason(parseInt(season) === fetchedMovie.seasons.length && parseInt(episode) === fetchedMovie.seasons[parseInt(season) - 1].episodes.length);
+                }
                 await fetchLinks(fetchedMovie);
             } catch (error) {
                 setNoLinks(true);
@@ -103,12 +109,42 @@ function MoviePlaying(props) {
         };
 
         movieDetails();
-    }, []);
+
+    }, [currentEpisode]);
 
     const handleServerChange = (server) => {
         const selectedServer = links.find(link => link.server === server);
         setCurrentServer(selectedServer);
     };
+
+    const handleNextEpisode = () => {
+        const lastEpisode = movie.seasons[season - 1].episodes.length;
+        if (parseInt(episode) < lastEpisode) {
+            setCurrentEpisode(String(parseInt(episode) + 1));
+            setLinks([]);
+            navigate(`/tv/${movie.id}/${season}/${parseInt(episode) + 1}`);
+        } else {
+            if (parseInt(season) < movie.seasons.length) {
+                setCurrentEpisode("1");
+                setLinks([]);
+                navigate(`/tv/${movie.id}/${parseInt(season) + 1}/1`);
+            }
+        }
+    };
+
+    const handlePreviousEpisode = () => {
+        if (parseInt(episode) > 1) {
+            setCurrentEpisode(String(parseInt(episode) - 1));
+            setLinks([]);
+            navigate(`/tv/${movie.id}/${season}/${parseInt(episode) - 1}`);
+        } else {
+            if (parseInt(season) > 1) {
+                setCurrentEpisode(String(movie.seasons[parseInt(season) - 2].episodes.length));
+                setLinks([]);
+                navigate(`/tv/${movie.id}/${parseInt(season) - 1}/${movie.seasons[parseInt(season) - 2].episodes.length}`);
+            }
+        }
+    }
 
     return (
         noLinks
@@ -143,9 +179,15 @@ function MoviePlaying(props) {
                             </Dropdown>
                             {
                                 movie.isSeries &&
-                                <Button onClick={() => setChangeSeasonEpisode(true)} variant="dark" className="p-3 mx-3">
-                                    <h5>Season/Episode</h5>
-                                </Button>
+                                (
+                                    <div>
+                                        {(parseInt(episode) >= 1 && parseInt(season) !== 1) && <Button onClick={handlePreviousEpisode} variant="outline-light" className="rounded rounded-5 px-4"><i className="bi bi-arrow-left"></i></Button>}
+                                        {!lastEpisodeSeason && <Button onClick={handleNextEpisode} variant="outline-light" className="rounded rounded-5 px-4 mx-3"><i className="bi bi-arrow-right"></i></Button>}
+                                        <Button onClick={() => setChangeSeasonEpisode(true)} variant="dark" className="p-3 mx-3">
+                                            <h5>{`Season ${season}`}</h5>
+                                        </Button>
+                                    </div>
+                                )
                             }
                         </Container>
                         {currentServer && (
@@ -160,6 +202,7 @@ function MoviePlaying(props) {
                                 {movie.isSeries &&
                                     <ChangeSeasonEpisode
                                     movie={movie}
+                                    season={season}
                                     show={changeSeasonEpisode}
                                     hide={() => setChangeSeasonEpisode(false)}
                                     onHide={() => setChangeSeasonEpisode(false)}
