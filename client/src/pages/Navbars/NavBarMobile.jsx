@@ -10,7 +10,7 @@ import {doc, getDoc} from "firebase/firestore";
 
 function NavBarMobile(props) {
     const navigate = useNavigate()
-    const [searchVisible, setSearchVisible] = useState(false);
+    const [searchVisible, setSearchVisible] = useState(props.searchQuery.length > 0);
     const [user, setUser] = useState(auth.currentUser);
     const [avatar, setAvatar] = useState(null)
 
@@ -78,8 +78,9 @@ function NavBarMobile(props) {
                   {searchVisible && (
                       <Form.Control
                           type="search"
-                          className="search-input"
+                          className="search-input mx-2"
                           aria-label="Search"
+                          defaultValue={props.searchQuery.length > 0 ? props.searchQuery : ""}
                       />
                   )}
                   <i onClick={() => {

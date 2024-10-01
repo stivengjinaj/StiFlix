@@ -65,6 +65,9 @@ function Movies(props) {
             ? (<SplashScreen />)
             : (<HomePage
                 user={props.user}
+                searchQuery={props.searchQuery}
+                searchResults={props.searchResults}
+                handleSearchResults={props.handleSearchResults}
                 allTrending={allTrending}
                 allPopular={allPopular}
                 topRatedMovies={topRatedMovies}
@@ -79,17 +82,14 @@ function Movies(props) {
 
 function HomePage(props) {
     const fetcher = new FetchedMovieController();
-    const [searchedMovies, setSearchedMovies] = useState([]);
-    const [isSearching, setIsSearching ] = useState(false);
 
     const handleSearch = (query) => {
         fetcher.search(stringQuery(query)).then((movies) => {
-            setSearchedMovies([...movies]);
+            props.handleSearchResults(movies, query);
         });
     }
     const startSearching = () => {
-        setSearchedMovies([]);
-        setIsSearching(!isSearching);
+        props.handleSearchResults([], "");
     };
 
     return (
@@ -98,17 +98,20 @@ function HomePage(props) {
                 section={props.section}
                 handleSectionChange={props.handleSectionChange}
                 handleSearch={handleSearch}
+                searchQuery={props.searchQuery}
                 startSearching={startSearching}
             />
             <MainMovie
                 user={props.user}
-                isSearching={isSearching}
+                isSearching={props.searchQuery !== ""}
+                searchQuery={props.searchQuery}
+                searchedResults={props.searchResults}
+                handleSearchResults={props.handleSearchResults}
                 section={props.section}
                 allPopular={props.allPopular}
                 allTrending={props.allTrending}
                 topRatedMovies={props.topRatedMovies}
                 topRatedSeries={props.topRatedSeries}
-                searchedMovies={searchedMovies}
                 onlyMovies={props.onlyMovies}
                 onlySeries={props.onlySeries}
             />

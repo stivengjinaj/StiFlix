@@ -12,7 +12,7 @@ gsap.config().nullTargetWarn = false;
 
 function NavBarDesktop(props) {
     const navigate = useNavigate();
-    const [searchVisible, setSearchVisible] = useState(false);
+    const [searchVisible, setSearchVisible] = useState(props.searchQuery.length > 0);
     const [user, setUser] = useState(auth.currentUser);
     const [avatar, setAvatar] = useState(null)
 
@@ -96,6 +96,7 @@ function NavBarDesktop(props) {
                             name="searchInput"
                             className="me-2 search-input"
                             aria-label="Search"
+                            defaultValue={props.searchQuery.length > 0 ? props.searchQuery : ""}
                         />
                     )}
                     <i onClick={() => {
