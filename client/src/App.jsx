@@ -19,6 +19,8 @@ function App() {
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [searchQuery, setSearchQuery] = useState("");
+    const [searchResults, setSearchResults] = useState([]);
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged((usr) => {
@@ -36,6 +38,11 @@ function App() {
         });
     };
 
+    const handleSearchResults = (searchResults, query) => {
+        setSearchQuery(query);
+        setSearchResults([...searchResults]);
+    }
+
     if (loading) {
         return <Loading />;
     }
@@ -43,7 +50,14 @@ function App() {
     return (
         <Routes>
             <Route index element={<InitialPage user={user} handleSignOut={handleSignOut}/>} />
-            <Route path={'/movies'} element={<Movies user={user} />} />
+            <Route path={'/movies'} element={
+                <Movies
+                    user={user}
+                    searchQuery={searchQuery}
+                    searchResults={searchResults}
+                    handleSearchResults={handleSearchResults}
+                />
+            } />
             <Route path={'/movies/info/:mediaType/:movieId'} element={<MovieDetails user={user}/>} />
             <Route path={'/:mediaType/:movieId/:season/:episode'} element={<MoviePlaying user={user}/>} />
             <Route path={'/login'} element={

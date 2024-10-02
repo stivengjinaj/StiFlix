@@ -28,6 +28,7 @@ function NavBar(props) {
                     section={props.section}
                     handleSectionChange={props.handleSectionChange}
                     handleSearch={props.handleSearch}
+                    searchQuery={props.searchQuery}
                     startSearching={props.startSearching}
                 />
             )
@@ -36,6 +37,7 @@ function NavBar(props) {
                     section={props.section}
                     handleSectionChange={props.handleSectionChange}
                     handleSearch={props.handleSearch}
+                    searchQuery={props.searchQuery}
                     startSearching={props.startSearching}
                 />
             )

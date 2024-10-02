@@ -184,14 +184,17 @@ function MainMovie(props) {
                                                 <h4 className="text-dark mb-0 ml-2">Play</h4>
                                             </Button>
                                             <div className="d-none d-md-block">
-                                                <Button onClick={() => setShowMoreInfo(true)} variant="secondary" className="d-flex align-items-center px-5 mx-3">
+                                                <Button onClick={() => setShowMoreInfo(true)} variant="secondary"
+                                                        className="d-flex align-items-center px-5 mx-3">
                                                     <i className="bi bi-info-circle fs-1"></i>
                                                     <h4 className="text-white mb-0 mx-3 font-weight-bold">More Info</h4>
                                                 </Button>
-                                                <MoreInfo show={showMoreInfo} onHide={() => setShowMoreInfo(false)} movie={currentMovie}/>
+                                                <MoreInfo show={showMoreInfo} onHide={() => setShowMoreInfo(false)}
+                                                          movie={currentMovie}/>
                                             </div>
                                             <div className="d-flex d-md-none justify-content-center mx-3">
-                                                <Button onClick={() => setShowMoreInfo(true)} variant="secondary" className="d-flex align-items-center px-3">
+                                                <Button onClick={() => setShowMoreInfo(true)} variant="secondary"
+                                                        className="d-flex align-items-center px-3">
                                                     <i className="bi bi-info-circle fs-1"></i>
                                                 </Button>
                                             </div>
@@ -207,25 +210,36 @@ function MainMovie(props) {
                                                         case 'home':
                                                             return (
                                                                 <>
-                                                                    <MoviesCarousel title={"Popular on Stiflix"} movies={props.allPopular} moving={true} scrollable={false}/>
-                                                                    {props.user && moviesInProgress.length > 0 && <ContinueWatching movies={moviesInProgress}/>}
-                                                                    <MoviesCarousel title={"Trending Now"} movies={props.allTrending} moving={false} scrollable={true}/>
-                                                                    <MoviesCarousel title={"Top Rated Movies"} movies={props.topRatedMovies} moving={false} scrollable={true}/>
-                                                                    <MoviesCarousel title={"Top Rated TV Shows"} movies={props.topRatedSeries} moving={false} scrollable={true}/>
-                                                                    <StiflixFooter />
+                                                                    <MoviesCarousel title={"Popular on Stiflix"}
+                                                                                    movies={props.allPopular} moving={true}
+                                                                                    scrollable={false}/>
+                                                                    {props.user && moviesInProgress.length > 0 &&
+                                                                        <ContinueWatching movies={moviesInProgress}/>}
+                                                                    <MoviesCarousel title={"Trending Now"}
+                                                                                    movies={props.allTrending} moving={false}
+                                                                                    scrollable={true}/>
+                                                                    <MoviesCarousel title={"Top Rated Movies"}
+                                                                                    movies={props.topRatedMovies} moving={false}
+                                                                                    scrollable={true}/>
+                                                                    <MoviesCarousel title={"Top Rated TV Shows"}
+                                                                                    movies={props.topRatedSeries} moving={false}
+                                                                                    scrollable={true}/>
+                                                                    <StiflixFooter/>
                                                                 </>
                                                             );
                                                         case 'movies':
-                                                            return props.onlyMovies ? <GridMovies movies={props.onlyMovies} /> : <Loading />;
+                                                            return props.onlyMovies ? <GridMovies movies={props.onlyMovies}/> :
+                                                                <Loading/>;
                                                         case 'tvShows':
-                                                            return props.onlySeries ? <GridMovies movies={props.onlySeries} /> : <Loading />;
+                                                            return props.onlySeries ? <GridMovies movies={props.onlySeries}/> :
+                                                                <Loading/>;
                                                         default:
                                                             return <div>Section not found</div>;
                                                     }
                                                 })()
                                             )
                                             : (
-                                                props.allTrending.length > 0 && <SeachResults movies={props.searchedMovies}/>
+                                                props.allTrending.length > 0 && <SeachResults movies={props.searchedResults}/>
                                             )
                                     }
                                 </Container>
