@@ -557,6 +557,10 @@ app.use((req, res, next) => {
     next();
 });
 
+app.get('/', async (req, res) => {
+    res.status(200).json({ message: 'Server is online' });
+});
+
 app.listen(3000, () => {
     console.log('Proxy server is online on port 3000');
 });
