@@ -34,7 +34,6 @@ app.get('/api/popularMovies', async (req, res) => {
             Accept: "application/json"
         }
     });
-
     if (!response.ok) {
         return res.status(500).json({ error: 'Failed to fetch data' });
     }
@@ -465,7 +464,7 @@ app.get('/api/getMovieSources', async (req, res) => {
  *  Cross proxy used to get movie id from Braflix server. (with proxy middleware)
  * */
 app.use('/api/getMovieIdBraflix', createProxyMiddleware({
-    target: 'https://api.braflix.st',
+    target: 'https://api.braflix.is',
     changeOrigin: true,
     followRedirects: false,
     pathRewrite: (path, req) => {

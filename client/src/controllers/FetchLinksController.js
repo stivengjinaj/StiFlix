@@ -19,15 +19,15 @@ class FetchLinksController {
         //const movieIdResponse = await API.getMovieId(query, type, year);
         const promises = [
             API.getMovieIdBraflix("upcloud", query, year, type, 1, 1, movieId)
-                .then(response => links.push({ server: "Alpha", link: `https://rabbitstream.net/v2/embed-4/${response}?_debug=true`, error: null }))
+                .then(response => links.push({ server: "Alpha", link: response, error: null }))
                 .catch(error => handleError("upcloud", error)),
 
             API.getMovieIdBraflix("vidcloud", query, year, type, 1, 1, movieId)
-                .then(response => links.push({ server: "Beta", link: `https://rabbitstream.net/v2/embed-4/${response}?_debug=true`, error: null }))
+                .then(response => links.push({ server: "Beta", link: response, error: null }))
                 .catch(error => handleError("vidcloud", error)),
 
             API.getMovieIdBraflix("megacloud", query, year, type, 1, 1, movieId)
-                .then(response => links.push({ server: "Gamma", link: `https://megacloud.tv/embed-1/e-1/${response}?_debug=true`, error: null }))
+                .then(response => links.push({ server: "Gamma", link: response, error: null }))
                 .catch(error => handleError("megacloud", error)),
 
             API.getOmegaLink(movieId)
