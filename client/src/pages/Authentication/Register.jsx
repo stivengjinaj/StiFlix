@@ -10,6 +10,7 @@ import {auth, db} from "../../../firebaseConfiguration.js";
 import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import {randomAvatar} from "../../helper/miscs.js";
+import {signOut} from "firebase/auth";
 
 function Register() {
 
@@ -48,27 +49,28 @@ function Register() {
 
             try {
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-
-                sendEmailVerification(userCredential.user).then(() => {
-                    setCurrentState("Registration completed. Please check your email.");
-                }).catch((error) => {
-                    console.log(error);
-                })
+                await sendEmailVerification(userCredential.user);
 
                 await setDoc(doc(db, "users", userCredential.user.uid), {
                     fullName: newUser.fullName,
                     email: newUser.email,
                     verified: false,
                     avatar: randomAvatar(["avatar1", "avatar2", "avatar3", "avatar4"])
-                }).then(() => {
-                    setFullName("");
-                    setEmail("");
-                    setPassword("");
-                    setConfirmPassword("");
                 });
+
+                await signOut(auth);
+
+                setCurrentState("Registration completed. Please check your email.");
+                setFullName("");
+                setEmail("");
+                setPassword("");
+                setConfirmPassword("");
+
             } catch (error) {
                 if (error.code === 'auth/weak-password') {
                     setCurrentState("The password must contain at least 6 characters.");
+                } else if (error.code === 'auth/email-already-in-use') {
+                    setCurrentState("The email address is already in use by another account.");
                 } else {
                     setWrongCredentials(true);
                 }
@@ -155,7 +157,7 @@ function Register() {
                                     <label htmlFor="confirmPassword" className="custom-label">Confirm Password</label>
                                 </Form.Floating>
                                 {wrongCredentials && <span className="text-danger">Please check your credentials.</span>}
-                                {currentState.includes("The password must") ? (<span className="text-danger">{currentState}</span>) : (<span className="text-success">{currentState}</span>)}
+                                {currentState.includes("The password must") || currentState.includes("The email address") ? (<span className="text-danger">{currentState}</span>) : (<span className="text-success">{currentState}</span>)}
                             </Form.Group>
                             <Form.Group className="mb-3 mx-4">
                                 <Button
