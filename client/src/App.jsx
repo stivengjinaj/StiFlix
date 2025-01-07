@@ -27,7 +27,7 @@ function App() {
             setUser(usr);
             setLoading(false);
         });
-        return () => unsubscribe(); // Cleanup subscription on unmount
+        return () => unsubscribe();
     }, []);
 
     const handleSignOut = async (e) => {
@@ -77,6 +77,9 @@ function App() {
             } />
             <Route path={'/watchlist'} element={
                 user ? <PersonalMovies user={user} type={'watchlist'} /> : <Navigate to={'/login'} />
+            } />
+            <Route path={'/7eca8fc2a523de8067a0ef89bc192f1b.txt'} element={
+                <NotFound />
             } />
             <Route path={'*'} element={<NotFound />} />
         </Routes>
