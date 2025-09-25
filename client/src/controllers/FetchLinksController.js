@@ -1,182 +1,31 @@
-import * as API from "../API.js";
 
 class FetchLinksController {
 
     /**
      * Function used to get the links where to watch a movie.
      *
-     * @param query Search query of the movie.
-     * @param type Media type: movie or tv show.
-     * @param year release year.
-     * @param movieId movie id.
+     * @param mediaType movie or tv show.
+     * @param id id of the media.
+     * @param season season of the tv show (default 1).
+     * @param episode episode of the tv show (default 1).
      * @return array of links.
      * */
-    async fetchAllLinks(query, type, year, movieId) {
+    fetchAllLinks(mediaType, id, season=1, episode=1) {
         const links = [];
-        const handleError = (server, error) => links.push({ server, link: null, error });
-
-        // This is movied ID from Piracy server. NOT WORKING.
-        //const movieIdResponse = await API.getMovieId(query, type, year);
-        const promises = [
-            API.getMovieIdBraflix("upcloud", query, year, type, 1, 1, movieId)
-                .then(response => links.push({ server: "Alpha", link: response, error: null }))
-                .catch(error => handleError("upcloud", error)),
-
-            API.getMovieIdBraflix("vidcloud", query, year, type, 1, 1, movieId)
-                .then(response => links.push({ server: "Beta", link: response, error: null }))
-                .catch(error => handleError("vidcloud", error)),
-
-            API.getMovieIdBraflix("megacloud", query, year, type, 1, 1, movieId)
-                .then(response => links.push({ server: "Gamma", link: response, error: null }))
-                .catch(error => handleError("megacloud", error)),
-
-            API.getOmegaLink(movieId)
-                .then(response => links.push({ server: "Omega", link: response, error: null }))
-                .catch(error => handleError("Omega", error))
-        ];
-        // If piracy server is working, we can fetch links from it. NOT WORKING.
-        /*if (movieIdResponse[0]?.id) {
-            const piracyId = movieIdResponse[0].id;
-
-            promises.push(
-                API.getMovieSources(piracyId, "f2cloud")
-                    .then(response => links.push({ server: "Delta", link: response, error: null }))
-                    .catch(error => links.push({ server: "f2cloud", link: null, error })),
-
-                API.getMovieSources(piracyId, "megacloud")
-                    .then(response => links.push({ server: "Epsilon", link: response, error: null }))
-                    .catch(error => links.push({ server: "megacloud", link: null, error }))
-            );
-        } */
-        await Promise.all(promises);
-
-        return links;
-    }
-
-
-
-    /**
-     * Function that fetches links from a specific server.
-     *
-     * @param query Search query of the movie.
-     * @param type Media type: movie or tv show.
-     * @param year release year.
-     * @param movieId movie id.
-     * @param server server to fetch links from.
-     * @return array of links.
-     * */
-    async fetchFromServer(query, type, year, movieId, server) {
-        const links = [];
-        const handleResponse = (server, link) => links.push({ server, link, error: null });
-        const handleError = (server, error) => links.push({ server, link: null, error });
-
-        try {
-            switch (server) {
-                case "Alpha":
-                    await API.getMovieIdBraflix("upcloud", query, year, type, 1, 1, movieId)
-                        .then(response => handleResponse("Alpha", `https://rabbitstream.net/v2/embed-4/${response}?_debug=true`))
-                        .catch(error => handleError("Alpha", error));
-                    break;
-                case "Beta":
-                    await API.getMovieIdBraflix("vidcloud", query, year, type, 1, 1, movieId)
-                        .then(response => handleResponse("Beta", `https://rabbitstream.net/v2/embed-4/${response}?_debug=true`))
-                        .catch(error => handleError("Beta", error));
-                    break;
-                case "Gamma":
-                    await API.getMovieIdBraflix("megacloud", query, year, type, 1, 1, movieId)
-                        .then(response => handleResponse("Gamma", `https://megacloud.tv/embed-1/e-1/${response}?_debug=true`))
-                        .catch(error => handleError("Gamma", error));
-                    break;
-                case "Delta":
-                    await API.getMovieSources(movieId, "f2cloud")
-                        .then(response => handleResponse("Delta", response))
-                        .catch(error => handleError("Delta", error));
-                    break;
-                case "Epsilon":
-                    await API.getMovieSources(movieId, "megacloud")
-                        .then(response => handleResponse("Epsilon", response))
-                        .catch(error => handleError("Epsilon", error));
-                    break;
-            }
-        } catch (e) {
-            handleError(server, e);
+        if (mediaType === "movie") {
+            links.push({link: `https://vidlink.pro/movie/${id}?primaryColor=63b8bc&secondaryColor=a2a2a2&iconColor=eefdec&icons=default&player=jw&title=true&poster=true&autoplay=true&nextbutton=true`, server: "Alpha"})
+            links.push({link: `https://player.smashy.stream/movie/${id}`, server: "Beta"})
+            links.push({link: `https://embed.su/embed/movie/${id}`, server: "Gamma"})
+        }else if (mediaType === "tv") {
+            links.push({link: `https://vidlink.pro/tv/${id}/${season}/${episode}?primaryColor=63b8bc&secondaryColor=a2a2a2&iconColor=eefdec&icons=default&player=jw&title=true&poster=true&autoplay=true&nextbutton=true`, server: "Alpha"})
+            links.push({link: `https://player.smashy.stream/tv/${id}?s=${season}&e=${episode}`, server: "Beta"})
+            links.push({link: `https://embed.su/embed/tv/${id}/${season}/${episode}`, server: "Gamma"})
         }
-    }
-
-
-    /**
-     * Function used to get links specific to season and episode of a tv show.
-     *
-     * @param query Search query of the movie.
-     * @param type Media type: movie or tv show.
-     * @param year release year.
-     * @param movieId movie id.
-     * @param season season index.
-     * @param episode episode index.
-     * @return array of links.
-     * */
-    async fetchTvShowSpecific(query, type, year, movieId, season, episode) {
-        const links = [];
-        const handleResponse = (server, link) => links.push({ server, link, error: null });
-        const handleError = (server, error) => links.push({ server, link: null, error });
-
-        const promises = [
-            API.getMovieIdBraflix("upcloud", query, year, type, episode, season, movieId)
-                .then(response => handleResponse("Alpha", `https://rabbitstream.net/v2/embed-4/${response}?_debug=true`))
-                .catch(error => handleError("Alpha", error)),
-
-            API.getMovieIdBraflix("vidcloud", query, year, type, episode, season, movieId)
-                .then(response => handleResponse("Beta", `https://rabbitstream.net/v2/embed-4/${response}?_debug=true`))
-                .catch(error => handleError("Beta", error)),
-
-            API.getMovieIdBraflix("megacloud", query, year, type, episode, season, movieId)
-                .then(response => handleResponse("Gamma", `https://megacloud.tv/embed-1/e-1/${response}?_debug=true`))
-                .catch(error => handleError("Gamma", error)),
-
-            API.getOmegaLink(movieId, season, episode)
-                .then(response => handleResponse("Omega", response))
-                .catch(error => handleError("Omega", error))
-        ];
-
-        await Promise.all(promises);
 
         return links;
     }
 
-
-    /**
-     * Function used to get links that it is not possible to get from the piracy server.
-     *
-     * @param query Search query of the movie.
-     * @param type Media type: movie or tv show.
-     * @param year release year.
-     * @param movieId movie id.
-     * @return array of links.
-     * */
-    async fetchSpecialLinks(query, type, year, movieId) {
-        const links = [];
-        const handleResponse = (server, link) => links.push({ server, link, error: null });
-        const handleError = (server, error) => links.push({ server, link: null, error });
-
-        const promises = [
-            API.getMovieIdBraflix("upcloud", query, year, type, 1, 1, movieId)
-                .then(response => handleResponse("Alpha", `https://rabbitstream.net/v2/embed-4/${response}?_debug=true`))
-                .catch(error => handleError("Alpha", error)),
-
-            API.getMovieIdBraflix("vidcloud", query, year, type, 1, 1, movieId)
-                .then(response => handleResponse("Beta", `https://rabbitstream.net/v2/embed-4/${response}?_debug=true`))
-                .catch(error => handleError("Beta", error)),
-
-            API.getMovieIdBraflix("megacloud", query, year, type, 1, 1, movieId)
-                .then(response => handleResponse("Gamma", `https://megacloud.tv/embed-1/e-1/${response}?_debug=true`))
-                .catch(error => handleError("Gamma", error))
-        ];
-
-        await Promise.all(promises);
-
-        return links;
-    }
-
+    // Made a class in case I need to add more functionality later.
 }
 
 export default FetchLinksController;

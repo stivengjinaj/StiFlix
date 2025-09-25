@@ -116,33 +116,6 @@ class FetchedMovieController {
     }
 
     /**
-     * Function used to get top-rated tv shows.
-     *
-     * @returns Array of top-rated tv shows.
-     * */
-    async getTopRatedTvShows() {
-        const fetchedMovies = [];
-        const tvShows = await API.getTopRatedTvShows();
-        tvShows.results.forEach(tvShow => {
-                console.log(tvShows.results);
-                API.getTvShowDetails(tvShow.id)
-                    .then(tvShowDetails => {
-                        const detailsExist = this.checkTvShowData(tvShow);
-                        console.log(detailsExist);
-                        detailsExist && fetchedMovies.push(
-                            new FetchedMovie(
-                                tvShow,
-                                true,
-                                tvShowDetails.number_of_seasons,
-                                tvShowDetails.number_of_episodes
-                            )
-                        );
-                    });
-        });
-        return fetchedMovies;
-    }
-
-    /**
      * Function used to get 3 pages of movies only
      *
      * @returns Array of movies.
