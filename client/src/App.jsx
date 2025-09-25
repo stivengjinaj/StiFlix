@@ -21,6 +21,13 @@ function App() {
     const [loading, setLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState("");
     const [searchResults, setSearchResults] = useState([]);
+    const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+
+    useEffect(() => {
+        const handleResize = () => setScreenWidth(window.innerWidth);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, [])
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged((usr) => {
@@ -59,7 +66,7 @@ function App() {
                 />
             } />
             <Route path={'/movies/info/:mediaType/:movieId'} element={<MovieDetails user={user}/>} />
-            <Route path={'/:mediaType/:movieId/:season/:episode'} element={<MoviePlaying user={user}/>} />
+            <Route path={'/:mediaType/:movieId/:season/:episode'} element={<MoviePlaying user={user} screenWidth={screenWidth} />} />
             <Route path={'/login'} element={
                 !user ? <Login /> : <Navigate to={'/'} />
             } />

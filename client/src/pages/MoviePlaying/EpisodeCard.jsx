@@ -14,6 +14,7 @@ function EpisodeCard(props) {
                     alt={props.episode.name}
                     width={450}
                     height={250}
+                    style={{objectFit: "fill"}}
                 />
             </Container>
             <h2 className="text-white mt-4">

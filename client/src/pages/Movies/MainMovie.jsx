@@ -124,11 +124,11 @@ function MainMovie(props) {
     return (
         <>
             <div className={`splash-screen ${playMovieSplash ? 'visible' : 'invisible'}`} style={{
-                position: 'absolute',
+                position: 'fixed',
                 top: 0,
                 left: 0,
                 width: '100%',
-                height: '100%',
+                height: '100vh',
                 backgroundColor: 'black',
                 zIndex: playMovieSplash ? 1000 : -1,
             }}></div>

@@ -5,9 +5,9 @@ import {useEffect, useRef, useState} from "react";
 import FetchLinksController from "../../controllers/FetchLinksController.js";
 import {useNavigate, useParams} from "react-router-dom";
 import FetchedMovieController from "../../controllers/FetchedMovieController.js";
-import {containsNonLatinChars, getCurrentDateString, getYearFromDate} from "../../helper/miscs.js";
+import {getCurrentDateString} from "../../helper/miscs.js";
 import Loading from "../Miscs/Loading.jsx";
-import {Button, Container, Dropdown} from "react-bootstrap";
+import {Col, Container, Dropdown, Row} from "react-bootstrap";
 import {db} from "../../../firebaseConfiguration.js";
 import ChangeSeasonEpisode from "./ChangeSeasonEpisode.jsx";
 
@@ -63,36 +63,13 @@ function MoviePlaying(props) {
         }
     }, [currentServer]);
 
+
+
     useEffect(() => {
         const fetchLinks = async (fetchedMovie) => {
-            let response = [];
-            const mediaTitle = !containsNonLatinChars(fetchedMovie.title) ? fetchedMovie.name : fetchedMovie.title;
-            if (mediaType === 'movie') {
-                response = await linkFetcher.fetchAllLinks(
-                    mediaTitle ? encodeURIComponent(encodeURIComponent(mediaTitle)) : fetchedMovie.title,
-                    mediaType,
-                    getYearFromDate(fetchedMovie.release_date),
-                    movieId
-                );
-            } else {
-                response = await linkFetcher.fetchTvShowSpecific(
-                    mediaTitle ? encodeURIComponent(encodeURIComponent(mediaTitle)) : fetchedMovie.title,
-                    mediaType,
-                    getYearFromDate(fetchedMovie.release_date),
-                    movieId,
-                    season,
-                    episode
-                );
-            }
-
-            let validLinks = response.filter(link => link.error === null);
-            if (validLinks.length > 0) {
-                validLinks = validLinks.sort((a, b) => a.server.localeCompare(b.server));
-                setLinks(validLinks);
-                setCurrentServer(validLinks[0]);
-            } else {
-                setNoLinks(true);
-            }
+            let links = linkFetcher.fetchAllLinks(fetchedMovie.isSeries ? 'tv' : 'movie', fetchedMovie.id, parseInt(season), parseInt(currentEpisode));
+            setLinks(links);
+            setCurrentServer(links[0]);
         };
 
         const movieDetails = async () => {
@@ -144,72 +121,162 @@ function MoviePlaying(props) {
                 navigate(`/tv/${movie.id}/${parseInt(season) - 1}/${movie.seasons[parseInt(season) - 2].episodes.length}`);
             }
         }
-    }
+    };
 
     return (
         noLinks
             ? (
-                <Container fluid className="d-flex flex-column justify-content-center align-items-center bg-gradient-dark-radius" style={{ height: '100vh' }}>
-                    <h1 className="text-white text-center">Movie not found. We are sorry :(</h1>
-                    <h3 className="text-white text-center">Stiflix does not have control over the movies. It is just a friendly app that points you to where the movies are.</h3>
+                <Container fluid className="d-flex flex-column justify-content-center align-items-center" style={{ height: '100vh', background: 'linear-gradient(135deg, #141414 0%, #000000 100%)' }}>
+                    <h1 className="text-white text-center mb-4">Movie not found. We are sorry :(</h1>
+                    <h3 className="text-white-50 text-center">Stiflix does not have control over the movies. It is just a friendly app that points you to where the movies are.</h3>
                 </Container>
             )
             : (
                 links.length === 0
                     ? <Loading />
-                    : <Container fluid className="p-0 video-container">
-                        <Container fluid className="d-flex dropdown-wrapper justify-content-between">
-                            <Dropdown
-                                className="mx-3"
-                                style={{ position: 'relative', zIndex: 1060}}
-                                align="start"
-                                onSelect={(eventKey) => handleServerChange(eventKey)}
-                            >
-                                <Dropdown.Toggle variant="dark" id="dropdown-basic" className="select-server p-3">
-                                    <h4 className="mb-0">{currentServer ? currentServer.server : 'Select Server'}</h4>
-                                </Dropdown.Toggle>
+                    : <Container fluid className="p-0 d-flex flex-column" style={{ backgroundColor: '#212121', minHeight: '100vh' }}>
+                        <div className="w-100 py-3 px-4 d-flex flex-row align-items-center justify-content-between">
+                            <div className="d-flex align-items-center">
+                                <Dropdown
+                                    style={{ position: 'relative', zIndex: 100}}
+                                    align="start"
+                                    onSelect={(eventKey) => handleServerChange(eventKey)}
+                                >
+                                    <Dropdown.Toggle
+                                        className="d-flex align-items-center px-3 py-2 border-0 text-white fw-semibold"
+                                        style={{
+                                            background: 'rgba(229, 9, 20, 0.1)',
+                                            backdropFilter: 'blur(10px)',
+                                            border: '1px solid rgba(229, 9, 20, 0.3)',
+                                            borderRadius: '4px',
+                                            fontSize: '0.9rem',
+                                            transition: 'all 0.3s ease'
+                                        }}
+                                    >
+                                        <div
+                                            className="me-2 d-flex align-items-center justify-content-center"
+                                            style={{
+                                                width: '8px',
+                                                height: '8px',
+                                                backgroundColor: '#e50914',
+                                                borderRadius: '50%'
+                                            }}
+                                        ></div>
+                                        {currentServer ? currentServer.server : 'Select Server'}
+                                    </Dropdown.Toggle>
 
-                                <Dropdown.Menu className="mt-1 bg-dark">
-                                    {links.filter(link => link.server !== currentServer.server).map((link, index) => (
-                                        <Dropdown.Item key={index} eventKey={link.server} className="text-white dropdown-item">
-                                            {link.server === "Omega" ? "Omega (Ads)" : link.server}
-                                        </Dropdown.Item>
-                                    ))}
-                                </Dropdown.Menu>
-                            </Dropdown>
-                            {
-                                movie.isSeries &&
-                                (
-                                    <div>
-                                        {(parseInt(episode) >= 1 && parseInt(season) !== 1) && <Button onClick={handlePreviousEpisode} variant="outline-light" className="rounded rounded-5 px-4"><i className="bi bi-arrow-left"></i></Button>}
-                                        {!lastEpisodeSeason && <Button onClick={handleNextEpisode} variant="outline-light" className="rounded rounded-5 px-4 mx-3"><i className="bi bi-arrow-right"></i></Button>}
-                                        <Button onClick={() => setChangeSeasonEpisode(true)} variant="dark" className="p-3 mx-3">
-                                            <h5>{`Season ${season}`}</h5>
-                                        </Button>
-                                    </div>
-                                )
-                            }
-                        </Container>
-                        {currentServer && (
-                            <>
-                            <iframe
-                                ref={iframeRef}
-                                className="video"
-                                src={currentServer.link}
-                                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen"
-                                style={{ width: '100%', height: '100%', border: 'none' }}
-                            ></iframe>
-                                {movie.isSeries &&
-                                    <ChangeSeasonEpisode
-                                    movie={movie}
-                                    season={season}
-                                    show={changeSeasonEpisode}
-                                    hide={() => setChangeSeasonEpisode(false)}
-                                    onHide={() => setChangeSeasonEpisode(false)}
-                                    />
-                                }
-                            </>
-                        )}
+                                    <Dropdown.Menu
+                                        className="mt-2 border-0 shadow-lg"
+                                        style={{
+                                            background: 'rgba(42, 42, 42, 0.95)',
+                                            backdropFilter: 'blur(20px)',
+                                            borderRadius: '8px'
+                                        }}
+                                    >
+                                        {links.filter(link => link.server !== currentServer.server).map((link, index) => (
+                                            <Dropdown.Item
+                                                key={index}
+                                                eventKey={link.server}
+                                                className="text-white bg-transparent border-0 py-3 px-4 server-dropdown-item"
+                                            >
+                                                {link.server}
+                                            </Dropdown.Item>
+                                        ))}
+                                    </Dropdown.Menu>
+                                </Dropdown>
+                            </div>
+
+                            <div className="text-center flex-grow-1">
+                                <h1 className="text-white mb-0 fw-bold" style={{ fontSize: '1.8rem', letterSpacing: '-0.5px' }}>
+                                    {movie.title}
+                                </h1>
+                            </div>
+
+                            {movie.isSeries && (
+                                <div className="d-flex align-items-center">
+                                    {!(parseInt(season) === 1 && parseInt(episode) === 1) &&
+                                        <button
+                                            onClick={handlePreviousEpisode}
+                                            className="btn border-0 text-white d-flex align-items-center justify-content-center ms-2"
+                                            style={{
+                                                width: '40px',
+                                                height: '40px',
+                                                background: 'rgba(255, 255, 255, 0.1)',
+                                                borderRadius: '50%',
+                                            }}
+                                        >
+                                            <i className="bi bi-skip-backward-fill"></i>
+                                        </button>
+                                    }
+                                    {!lastEpisodeSeason &&
+                                        <button
+                                            onClick={handleNextEpisode}
+                                            className="btn border-0 text-white d-flex align-items-center justify-content-center me-2"
+                                            style={{
+                                                width: '40px',
+                                                height: '40px',
+                                                background: 'rgba(255, 255, 255, 0.1)',
+                                                borderRadius: '50%',
+                                                transition: 'all 0.3s ease'
+                                            }}
+                                        >
+                                            <i className="bi bi-skip-forward-fill"></i>
+                                        </button>
+                                    }
+                                    <button
+                                        onClick={() => setChangeSeasonEpisode(true)}
+                                        className="btn border-0 text-white fw-semibold px-4 py-2 d-flex align-items-center"
+                                        style={{
+                                            background: 'linear-gradient(90deg, #e50914 0%, #b8070f 100%)',
+                                            borderRadius: '4px',
+                                            fontSize: '0.95rem',
+                                            transition: 'all 0.3s ease',
+                                            boxShadow: '0 2px 8px rgba(229, 9, 20, 0.3)'
+                                        }}
+                                    >
+                                        <i className="bi bi-collection-play"></i>
+                                        {props.screenWidth > 900 && <span className="ms-2">Season {season}</span>}
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+
+                        <div className="flex-grow-1 d-flex flex-column justify-content-center py-5">
+                            <Container>
+                                <Row className="justify-content-center">
+                                    <Col lg={10} xl={9}>
+                                        {currentServer && (
+                                            <div
+                                                className="position-relative shadow-lg overflow-hidden"
+                                                style={{
+                                                    borderRadius: '8px',
+                                                    boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.8)'
+                                                }}
+                                            >
+                                                <div className="ratio ratio-16x9">
+                                                    <iframe
+                                                        ref={iframeRef}
+                                                        src={currentServer.link}
+                                                        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+                                                        style={{ borderRadius: '8px' }}
+                                                    ></iframe>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </Col>
+                                </Row>
+                            </Container>
+                        </div>
+
+                        {movie.isSeries &&
+                            <ChangeSeasonEpisode
+                                movie={movie}
+                                season={season}
+                                show={changeSeasonEpisode}
+                                hide={() => setChangeSeasonEpisode(false)}
+                                onHide={() => setChangeSeasonEpisode(false)}
+                            />
+                        }
                     </Container>
             )
     );
