@@ -1,3 +1,6 @@
+const SPLASH_KEY = "splashSeen";
+const EXPIRY_MS = 1000 * 60 * 60 * 24;
+
 /**
  * Function used to get the dimensions of the window.
  *
@@ -180,4 +183,24 @@ export function shuffleArray(array) {
         [array[i], array[randomIndex]] = [array[randomIndex], array[i]];
     }
     return array;
+}
+
+/**
+ * Functions used to manage splash screen visibility with localStorage and expiry.
+ *
+ * @returns {boolean} - True if the splash screen has been seen and is still valid, false otherwise.
+ * */
+export function hasSeenSplash() {
+    const item = localStorage.getItem(SPLASH_KEY);
+    if (!item) return false;
+
+    const { timestamp } = JSON.parse(item);
+    return Date.now() - timestamp < EXPIRY_MS;
+}
+
+/**
+ * Function used to set the splash screen as seen with the current timestamp.
+ */
+export function setSplashSeen() {
+    localStorage.setItem(SPLASH_KEY, JSON.stringify({ timestamp: Date.now() }));
 }

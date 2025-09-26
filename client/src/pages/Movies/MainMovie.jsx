@@ -91,10 +91,10 @@ function MainMovie(props) {
         if (currentMovie && !props.isSmartTV) {
             const ctx = gsap.context(() => {
                 gsap.fromTo('.main-banner', { x: 50, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: 1 });
-                gsap.fromTo('.main-banner-title', { x: 50, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: 1, delay: 0.2 });
-                gsap.fromTo('.main-banner-category', { x: 50, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: 1, delay: 0.4 });
-                gsap.fromTo('.main-banner-description', { x: 50, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: 1, delay: 0.6 });
-                gsap.fromTo('button', { x: 50, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: 1.5, delay: 0.8 });
+                gsap.fromTo('.main-banner-title', { x: 50, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: 1 });
+                gsap.fromTo('.main-banner-category', { x: 50, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: 1 });
+                gsap.fromTo('.main-banner-description', { x: 50, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: 1 });
+                gsap.fromTo('button', { x: 50, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: 1.5 });
             });
 
             return () => ctx.revert();

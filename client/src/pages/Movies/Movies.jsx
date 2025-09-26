@@ -7,17 +7,24 @@ import {Container} from "react-bootstrap";
 import NavBar from "../Navbars/NavBar.jsx";
 import MainMovie from "./MainMovie.jsx";
 import FetchedMovieController from "../../controllers/FetchedMovieController.js";
-import {sortByVoteAverage, stringQuery} from "../../helper/miscs.js";
+import {hasSeenSplash, setSplashSeen, sortByVoteAverage, stringQuery} from "../../helper/miscs.js";
 
 function Movies(props) {
     const fetcher = new FetchedMovieController();
-    const [showSplash, setShowSplash] = useState(true);
+    const [showSplash, setShowSplash] = useState(false);
     const [section, setSection] = useState('home');
     const [allPopular, setAllPopular] = useState([]);
     const [allTrending, setAllTrending] = useState([]);
     const [topRatedMovies, setTopRatedMovies] = useState([]);
     const [onlyMovies, setOnlyMovies] = useState([]);
     const [onlySeries, setOnlySeries] = useState([]);
+
+    useEffect(() => {
+        if (!hasSeenSplash()) {
+            setShowSplash(true);
+            setSplashSeen();
+        }
+    }, []);
 
     useEffect(() => {
         const fetchAllData = async () => {
