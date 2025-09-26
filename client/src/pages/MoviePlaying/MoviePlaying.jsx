@@ -134,7 +134,13 @@ function MoviePlaying(props) {
             : (
                 links.length === 0
                     ? <Loading />
-                    : <Container fluid className="p-0 d-flex flex-column" style={{ backgroundColor: '#212121', minHeight: '100vh' }}>
+                    : <Container
+                        fluid
+                        className="p-0 d-flex flex-column movie-playing-container"
+                        style={{
+                            backgroundImage: props.screenWidth > 768 ? `url(https://image.tmdb.org/t/p/original/${movie.backdrop_path})` : `url(https://image.tmdb.org/t/p/w500/${movie.poster_path})`,
+                    }}
+                    >
                         <div className="w-100 py-3 px-4 d-flex flex-row align-items-center justify-content-between">
                             <div className="d-flex align-items-center">
                                 <Dropdown
@@ -186,12 +192,6 @@ function MoviePlaying(props) {
                                 </Dropdown>
                             </div>
 
-                            <div className="text-center flex-grow-1">
-                                <h1 className="text-white mb-0 fw-bold" style={{ fontSize: '1.8rem', letterSpacing: '-0.5px' }}>
-                                    {movie.title}
-                                </h1>
-                            </div>
-
                             {movie.isSeries && (
                                 <div className="d-flex align-items-center">
                                     {!(parseInt(season) === 1 && parseInt(episode) === 1) &&
@@ -240,8 +240,15 @@ function MoviePlaying(props) {
                                 </div>
                             )}
                         </div>
+                        <Container fluid>
+                            <Row className="justify-content-center align-items-center my-5">
+                                <h1 className="text-white text-center mb-0 fw-bold" style={{ fontSize: '2rem', letterSpacing: '-0.5px' }}>
+                                    {movie.title}
+                                </h1>
+                            </Row>
+                        </Container>
 
-                        <div className="flex-grow-1 d-flex flex-column justify-content-center py-5">
+                        <div className="d-flex flex-column justify-content-center">
                             <Container>
                                 <Row className="justify-content-center">
                                     <Col lg={10} xl={9}>

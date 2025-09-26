@@ -345,6 +345,16 @@ tr {
   color: #b8b8b8 !important;
 }
 
+.movie-playing-container {
+  position: fixed;
+  background-color: #212121;
+  height: 100vh;
+  overflow-x: hidden;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
 .modalBody::after {
   box-shadow: 10px 0 5px -2px #000000;
 }
