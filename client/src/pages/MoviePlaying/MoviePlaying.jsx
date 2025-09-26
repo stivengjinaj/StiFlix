@@ -141,7 +141,7 @@ function MoviePlaying(props) {
                             backgroundImage: props.screenWidth > 768 ? `url(https://image.tmdb.org/t/p/original/${movie.backdrop_path})` : `url(https://image.tmdb.org/t/p/w500/${movie.poster_path})`,
                     }}
                     >
-                        <div className="w-100 py-3 px-4 d-flex flex-row align-items-center justify-content-between">
+                        <div className="w-100 py-4 px-4 d-flex flex-row align-items-center justify-content-between movie-topbar">
                             <div className="d-flex align-items-center">
                                 <Dropdown
                                     style={{ position: 'relative', zIndex: 100}}
