@@ -1,7 +1,7 @@
 import {shuffle} from "gsap/gsap-core";
 
 {/* eslint-disable react/prop-types */}
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import SplashScreen from "./SplashScreen.jsx";
 import {Container} from "react-bootstrap";
 import NavBar from "../Navbars/NavBar.jsx";
@@ -90,12 +90,18 @@ function Movies(props) {
 
 function HomePage(props) {
     const fetcher = new FetchedMovieController();
+    const debounceRef = useRef(null);
 
     const handleSearch = (query) => {
-        fetcher.search(stringQuery(query)).then((movies) => {
-            props.handleSearchResults(movies, query);
-        });
-    }
+        if (debounceRef.current) clearTimeout(debounceRef.current);
+
+        debounceRef.current = setTimeout(() => {
+            fetcher.search(stringQuery(query)).then((movies) => {
+                props.handleSearchResults(movies, query);
+            });
+        }, 1000);
+    };
+
     const startSearching = () => {
         props.handleSearchResults([], "");
     };
