@@ -12,28 +12,29 @@ function FeatureRow(props) {
     const featureVideo = useRef(null);
 
     useGSAP(() => {
-        gsap.fromTo(featureVideo.current, {
-            autoAlpha: 1
-        }, {
-            autoAlpha: 1,
-            duration: 1,
-            scrollTrigger: {
-                trigger: featureVideo.current,
-                start: "top 90%",
-                onEnter: () => {
-                    featureVideo.current.play();
-                },
-                onLeave: () => {
-                    featureVideo.current.pause();
-                },
-                onEnterBack: () => {
-                    featureVideo.current.play();
-                },
-                onLeaveBack: () => {
-                    featureVideo.current.pause();
-                },
-            }
-        });
+        if(!props.isSmartTV) {
+            gsap.fromTo(featureVideo.current, {
+                autoAlpha: 1
+            }, {
+                autoAlpha: 1,
+                duration: 1,
+                scrollTrigger: {
+                    trigger: featureVideo.current,
+                    onEnter: () => {
+                        featureVideo.current.play();
+                    },
+                    onLeave: () => {
+                        featureVideo.current.pause();
+                    },
+                    onEnterBack: () => {
+                        featureVideo.current.play();
+                    },
+                    onLeaveBack: () => {
+                        featureVideo.current.pause();
+                    },
+                }
+            });
+        }
     }, []);
 
     return (

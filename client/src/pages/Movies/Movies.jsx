@@ -76,6 +76,7 @@ function Movies(props) {
                 onlySeries={onlySeries}
                 section={section}
                 handleSectionChange={handleSectionChange}
+                isSmartTV={props.isSmartTV}
             />)
     );
 }
@@ -100,6 +101,7 @@ function HomePage(props) {
                 handleSearch={handleSearch}
                 searchQuery={props.searchQuery}
                 startSearching={startSearching}
+                isSmartTV={props.isSmartTV}
             />
             <MainMovie
                 user={props.user}
@@ -114,6 +116,7 @@ function HomePage(props) {
                 topRatedSeries={props.topRatedSeries}
                 onlyMovies={props.onlyMovies}
                 onlySeries={props.onlySeries}
+                isSmartTV={props.isSmartTV}
             />
         </Container>
     );

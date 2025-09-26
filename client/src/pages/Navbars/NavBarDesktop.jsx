@@ -36,27 +36,31 @@ function NavBarDesktop(props) {
     }
     
     useGSAP(() => {
-        gsap.fromTo('.search-input', {
-            duration: 1,
-            x: 100,
-            opacity: 0,
-            ease: 'ease-in'
-        }, {
-            x: 0,
-            opacity: 1,
-            ease: 'ease-out'
-        })
+        if(!props.isSmartTV) {
+            gsap.fromTo('.search-input', {
+                duration: 1,
+                x: 50,
+                opacity: 0,
+                ease: 'ease-in'
+            }, {
+                x: 0,
+                opacity: 1,
+                ease: 'ease-out'
+            })
+        }
     }, [searchVisible]);
 
     useGSAP(() => {
-        gsap.from(['.nav-item-selected', '.nav-item'], {
-            duration: 1,
-            delay: 0.1,
-            x: 100,
-            opacity: 0,
-            ease: 'ease-in',
-            stagger: 0.1
-        })
+        if (!props.isSmartTV) {
+            gsap.from(['.nav-item-selected', '.nav-item'], {
+                duration: 1,
+                delay: 0.1,
+                x: 50,
+                opacity: 0,
+                ease: 'ease-in',
+                stagger: 0.1
+            })
+        }
     }, [])
 
 

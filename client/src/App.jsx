@@ -14,6 +14,7 @@ import {useEffect, useState} from "react";
 import {auth} from "../firebaseConfiguration.js";
 import Loading from "./pages/Miscs/Loading.jsx";
 import NotFound from "./pages/NotFound.jsx";
+import {detectSmartTV} from "./helper/smartTvDetector.js";
 
 function App() {
     const navigate = useNavigate();
@@ -22,6 +23,7 @@ function App() {
     const [searchQuery, setSearchQuery] = useState("");
     const [searchResults, setSearchResults] = useState([]);
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+    const isSmartTV = detectSmartTV();
 
     useEffect(() => {
         const handleResize = () => setScreenWidth(window.innerWidth);
@@ -56,22 +58,23 @@ function App() {
 
     return (
         <Routes>
-            <Route index element={<InitialPage user={user} handleSignOut={handleSignOut}/>} />
+            <Route index element={<InitialPage user={user} handleSignOut={handleSignOut} isSmartTv={isSmartTV}/>} />
             <Route path={'/movies'} element={
                 <Movies
                     user={user}
                     searchQuery={searchQuery}
                     searchResults={searchResults}
                     handleSearchResults={handleSearchResults}
+                    isSmartTV={isSmartTV}
                 />
             } />
-            <Route path={'/movies/info/:mediaType/:movieId'} element={<MovieDetails user={user}/>} />
+            <Route path={'/movies/info/:mediaType/:movieId'} element={<MovieDetails user={user} isSmartTV={isSmartTV}/>} />
             <Route path={'/:mediaType/:movieId/:season/:episode'} element={<MoviePlaying user={user} screenWidth={screenWidth} />} />
             <Route path={'/login'} element={
-                !user ? <Login /> : <Navigate to={'/'} />
+                !user ? <Login isSmartTv={isSmartTV}/> : <Navigate to={'/'} />
             } />
             <Route path={'/register'} element={
-                !user ? <Register /> : <Navigate to={'/'} />
+                !user ? <Register isSmartTv={isSmartTV}/> : <Navigate to={'/'} />
             } />
             <Route path={'/account'} element={
                 user ? <MyAccount user={user} handleSignOut={handleSignOut}/> : <Navigate to={'/login'} />
@@ -85,6 +88,7 @@ function App() {
             <Route path={'/watchlist'} element={
                 user ? <PersonalMovies user={user} type={'watchlist'} /> : <Navigate to={'/login'} />
             } />
+            <Route path={'/loading'} element={<Loading />} />
             <Route path={'*'} element={<NotFound />} />
         </Routes>
     );

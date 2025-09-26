@@ -23,7 +23,6 @@ function MainMovie(props) {
     const [showMoreInfo, setShowMoreInfo] = useState(false);
     const [moviesInProgress, setMoviesInProgress] = useState([]);
     const navigate = useNavigate();
-    const isSmartTV = /SmartTV|HbbTV|VIDAA|Web0S|Tizen|X11; Linux armv7l/.test(navigator.userAgent);
 
     useEffect(() => {
         const getMovieLogos = async (movieId, mediaType) => {
@@ -89,13 +88,13 @@ function MainMovie(props) {
 
 
     useLayoutEffect(() => {
-        if (currentMovie && !isSmartTV) {
+        if (currentMovie && !props.isSmartTV) {
             const ctx = gsap.context(() => {
-                gsap.fromTo('.main-banner', { x: 100, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: 1 });
-                gsap.fromTo('.main-banner-title', { x: 100, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: 1, delay: 0.2 });
-                gsap.fromTo('.main-banner-category', { x: 100, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: 1, delay: 0.4 });
-                gsap.fromTo('.main-banner-description', { x: 100, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: 1, delay: 0.6 });
-                gsap.fromTo('button', { x: 100, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: 1.5, delay: 0.8 });
+                gsap.fromTo('.main-banner', { x: 50, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: 1 });
+                gsap.fromTo('.main-banner-title', { x: 50, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: 1, delay: 0.2 });
+                gsap.fromTo('.main-banner-category', { x: 50, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: 1, delay: 0.4 });
+                gsap.fromTo('.main-banner-description', { x: 50, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: 1, delay: 0.6 });
+                gsap.fromTo('button', { x: 50, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: 1.5, delay: 0.8 });
             });
 
             return () => ctx.revert();
@@ -103,7 +102,7 @@ function MainMovie(props) {
     }, [currentMovie]);
 
     useEffect(() => {
-        if (playMovieSplash) {
+        if (playMovieSplash && !props.isSmartTV) {
             gsap.fromTo('.splash-screen', {
                 autoAlpha: 0,
             }, {

@@ -21,7 +21,7 @@ body {
 
 .login-bg {
   background-image: url('assets/images/background.jpg');
-  min-height: 90vh;
+  min-height: 100vh;
   background-repeat: no-repeat;
   background-size: cover;
 }

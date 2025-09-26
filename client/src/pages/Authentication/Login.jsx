@@ -17,7 +17,7 @@ import logo from "../../assets/images/logo.png";
 import gsap from "gsap";
 import {useGSAP} from "@gsap/react";
 
-function Login() {
+function Login(props) {
     const navigate = useNavigate();
 
     const [email, setEmail] = useState("");
@@ -29,19 +29,21 @@ function Login() {
     const [forgotPassword, setForgotPassword] = useState(false);
 
     useGSAP(() => {
-        gsap.from('img', {
-            opacity: 0,
-            x: 100,
-            duration: 1,
-            animation: "ease-in"
-        })
+        if(!props.isSmartTV) {
+            gsap.from('img', {
+                opacity: 0,
+                x: 100,
+                duration: 1,
+                animation: "ease-in"
+            })
 
-        gsap.from('#login-form', {
-            opacity: 0,
-            y: 100,
-            duration: 1,
-            animation: "ease-in"
-        })
+            gsap.from('#login-form', {
+                opacity: 0,
+                y: 100,
+                duration: 1,
+                animation: "ease-in"
+            })
+        }
     }, []);
 
     const handleLogin = async (e) => {

@@ -30,6 +30,7 @@ function NavBar(props) {
                     handleSearch={props.handleSearch}
                     searchQuery={props.searchQuery}
                     startSearching={props.startSearching}
+                    isSmartTV={props.isSmartTV}
                 />
             )
             : (
@@ -39,6 +40,7 @@ function NavBar(props) {
                     handleSearch={props.handleSearch}
                     searchQuery={props.searchQuery}
                     startSearching={props.startSearching}
+                    isSmartTV={props.isSmartTV}
                 />
             )
     );

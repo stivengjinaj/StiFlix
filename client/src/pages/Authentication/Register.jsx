@@ -12,7 +12,7 @@ import { doc, setDoc } from "firebase/firestore";
 import {randomAvatar} from "../../helper/miscs.js";
 import {signOut} from "firebase/auth";
 
-function Register() {
+function Register(props) {
 
     const [fullName, setFullName] = useState("");
     const [email, setEmail] = useState("");
@@ -22,19 +22,21 @@ function Register() {
     const [currentState, setCurrentState] = useState("");
 
     useGSAP(() => {
-        gsap.from('img', {
-            opacity: 0,
-            x: 100,
-            duration: 1,
-            animation: "ease-in"
-        })
+        if(!props.isSmartTV) {
+            gsap.from('img', {
+                opacity: 0,
+                x: 100,
+                duration: 1,
+                animation: "ease-in"
+            })
 
-        gsap.from('#login-form', {
-            opacity: 0,
-            y: 100,
-            duration: 1,
-            animation: "ease-in"
-        })
+            gsap.from('#login-form', {
+                opacity: 0,
+                y: 100,
+                duration: 1,
+                animation: "ease-in"
+            })
+        }
     }, []);
 
     const handleRegister = async (e) => {

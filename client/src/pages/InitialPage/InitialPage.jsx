@@ -1,5 +1,5 @@
 {/*eslint-disable react/prop-types*/}
-import {auth, db} from "../../../firebaseConfiguration.js";
+import {db} from "../../../firebaseConfiguration.js";
 import {Button, Col, Container, Dropdown, Row} from "react-bootstrap";
 import logo from "../../assets/images/logo.png";
 import tvvideo from "../../assets/videos/tv.mp4";
@@ -28,25 +28,25 @@ function InitialPage(props) {
 
 
     useGSAP(() => {
-        gsap.from("#feature1", {
-            opacity: 0,
-            y: 100,
-            duration: 1,
-            animation: "ease-in"
-        })
+        if(!props.isSmartTV) {
+            gsap.from("#feature1", {
+                opacity: 0,
+                y: 100,
+                duration: 1,
+                animation: "ease-in"
+            })
 
-        gsap.fromTo("#feature2", {
-            y: 100,
-            autoAlpha: 0
-        },{
-            scrollTrigger: "#feature2",
-            autoAlpha: 1,
-            duration: 1,
-            start: "top 70%",
-            y: 0,
+            gsap.fromTo("#feature2", {
+                y: 100,
+                autoAlpha: 0
+            },{
+                scrollTrigger: "#feature2",
+                autoAlpha: 1,
+                duration: 1,
+                y: 0,
 
-        })
-
+            })
+        }
     }, [])
 
     return (
@@ -110,6 +110,7 @@ function InitialPage(props) {
                         hFourSecond="Apple TV, Blu-ray players and more."
                         video={tvvideo}
                         textDirection="left"
+                        isSmartTV={props.isSmartTV}
                     />
                 </div>
                 <div style={{backgroundColor: '#2b2a2a', height: '7px', width: '100%', margin: '2rem 0'}}></div>

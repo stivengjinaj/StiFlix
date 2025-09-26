@@ -78,7 +78,7 @@ function MovieDetails(props) {
     }, [props.user]);
 
     useEffect(() => {
-        if (playMovieSplash) {
+        if (playMovieSplash && !props.isSmartTV) {
             gsap.fromTo('.splash-screen', {
                 opacity: 0,
             }, {
@@ -191,38 +191,40 @@ function MovieDetails(props) {
     };
 
     useGSAP(() => {
-        gsap.from('.main-container', {
-            opacity: 0,
-            duration: 1
-        })
+        if(!props.isSmartTV) {
+            gsap.from('.main-container', {
+                opacity: 0,
+                duration: 1
+            })
 
-        gsap.from('.main-banner-title', {
-            opacity: 0,
-            y: 100,
-            duration: 1
-        })
+            gsap.from('.main-banner-title', {
+                opacity: 0,
+                y: 100,
+                duration: 1
+            })
 
-        gsap.from('.main-banner-video', {
-            opacity: 0,
-            duration: 1
-        })
+            gsap.from('.main-banner-video', {
+                opacity: 0,
+                duration: 1
+            })
 
-        gsap.from('.categories', {
-            opacity: 0,
-            duration: 1
-        })
+            gsap.from('.categories', {
+                opacity: 0,
+                duration: 1
+            })
 
-        gsap.from('.main-banner-description', {
-            opacity: 0,
-            y: 100,
-            duration: 1
-        })
+            gsap.from('.main-banner-description', {
+                opacity: 0,
+                y: 100,
+                duration: 1
+            })
 
-        gsap.from('.main-banner-actions', {
-            opacity: 0,
-            y: 100,
-            duration: 1
-        })
+            gsap.from('.main-banner-actions', {
+                opacity: 0,
+                y: 100,
+                duration: 1
+            })
+        }
     }, [trailer]);
 
     return (
