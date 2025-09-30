@@ -1,5 +1,5 @@
-const remote_url = "https://stiflix.vercel.app";
-//const remote_url = "http://localhost:3000";
+export const remote_url = "https://stiflix.vercel.app";
+//export const remote_url = "http://localhost:3000";
 
 /**
  * API used to get popular movies(only).
