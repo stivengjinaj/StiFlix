@@ -1,3 +1,4 @@
+import {remote_url} from "../API.js";
 
 class FetchLinksController {
 
@@ -16,10 +17,12 @@ class FetchLinksController {
             links.push({link: `https://vidlink.pro/movie/${id}?primaryColor=63b8bc&secondaryColor=a2a2a2&iconColor=eefdec&icons=default&player=jw&title=true&poster=true&autoplay=true&nextbutton=true`, server: "Alpha"})
             links.push({link: `https://player.smashy.stream/movie/${id}`, server: "Beta"})
             links.push({link: `https://embed.su/embed/movie/${id}`, server: "Gamma"})
+            links.push({links: `${remote_url}/?url=https://vidlink.pro/movie/${id}`, server: "Delta"})
         }else if (mediaType === "tv") {
             links.push({link: `https://vidlink.pro/tv/${id}/${season}/${episode}?primaryColor=63b8bc&secondaryColor=a2a2a2&iconColor=eefdec&icons=default&player=jw&title=true&poster=true&autoplay=true&nextbutton=true`, server: "Alpha"})
             links.push({link: `https://player.smashy.stream/tv/${id}?s=${season}&e=${episode}`, server: "Beta"})
             links.push({link: `https://embed.su/embed/tv/${id}/${season}/${episode}`, server: "Gamma"})
+            links.push({links: `${remote_url}/?url=https://vidlink.pro/tv/${id}/${season}/${episode}`, server: "Delta"})
         }
 
         return links;

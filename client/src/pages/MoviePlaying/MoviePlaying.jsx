@@ -92,6 +92,9 @@ function MoviePlaying(props) {
     const handleServerChange = (server) => {
         const selectedServer = links.find(link => link.server === server);
         setCurrentServer(selectedServer);
+        if (selectedServer.server === "Delta") {
+            window.open(selectedServer.links);
+        }
     };
 
     const handleNextEpisode = () => {
