@@ -13,14 +13,13 @@ const getUser = async (token) => {
 }
 
 const updateUserVerification = async (token) => {
-    const response = await fetch(`${remote_url}/users/`, {
+    return await fetch(`${remote_url}/users/`, {
         method: "PATCH",
         headers: {
             Authorization: `Bearer ${token}`,
             Accept: "application/json"
         }
     });
-    return await response.json();
 }
 
 const createUser = async (user, token) => {

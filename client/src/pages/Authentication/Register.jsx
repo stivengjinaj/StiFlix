@@ -67,7 +67,7 @@ function Register(props) {
 
             const userSuccess = await createUser(userData, idToken);
 
-            if (!userSuccess) {
+            if (userSuccess.status !== 201) {
                 await userCredential.user.delete();
                 props.isRegisteringRef.current = false;
                 setLoading(false);
