@@ -1,5 +1,6 @@
+import {useEffect} from "react";
+
 {/*eslint-disable react/prop-types*/}
-import {db} from "../../../firebaseConfiguration.js";
 import {Button, Col, Container, Dropdown, Row} from "react-bootstrap";
 import logo from "../../assets/images/logo.png";
 import tvvideo from "../../assets/videos/tv.mp4";
@@ -9,23 +10,11 @@ import { useGSAP } from "@gsap/react";
 import FeatureRow from "./FeatureRow.jsx";
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import {useNavigate} from "react-router-dom";
-import {useEffect, useState} from "react";
-import {doc, getDoc} from "firebase/firestore";
 
 gsap.registerPlugin(ScrollTrigger);
 
 function InitialPage(props) {
     const navigate = useNavigate();
-    const [avatar, setAvatar] = useState(null);
-
-    useEffect(() => {
-        if (props.user) {
-            getDoc(doc(db, "users", props.user.uid)).then((doc) => {
-                setAvatar(doc.data().avatar);
-            });
-        }
-    }, [props.user]);
-
 
     useGSAP(() => {
         if(!props.isSmartTV) {
@@ -62,7 +51,7 @@ function InitialPage(props) {
                                 ? (
                                     <Dropdown align={{lg: 'start'}}>
                                         <Dropdown.Toggle className="p-0 btn-avatar">
-                                            {avatar && <img src={`/avatars/${avatar}.png`} alt="avatar"
+                                            {props.user && <img src={`/avatars/${props.user.avatar}.png`} alt="avatar"
                                                   width={50} height={50} className="rounded-3"/>}
                                         </Dropdown.Toggle>
 

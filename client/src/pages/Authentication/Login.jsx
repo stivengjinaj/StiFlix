@@ -25,7 +25,6 @@ function Login(props) {
     const [wrongCredentials, setWrongCredentials] = useState(false);
     const [currentUserState, setCurrentUserState ] = useState("")
     const [rememberMe, setRememberMe] = useState(false);
-    const [user, setUser] = useState(auth.currentUser);
     const [forgotPassword, setForgotPassword] = useState(false);
     const [loading, setLoading] = useState(false);
 
@@ -65,6 +64,7 @@ function Login(props) {
             const user = userCredential.user;
 
             if (!user.emailVerified) {
+                setLoading(false);
                 await auth.signOut();
                 setWrongCredentials(false);
                 setCurrentUserState("Please verify your email before logging in.");
@@ -76,20 +76,19 @@ function Login(props) {
             const userData = await getUser(idToken);
 
             if (userData) {
-                setLoading(false);
                 if (!userData.verified) {
                     const updateVerification = await updateUserVerification(idToken);
                     if (updateVerification.success) {
-                        userData.verified = true;
-                        setCurrentUserState("")
-                        setUser(userData);
+                        setLoading(false);
+                        setCurrentUserState("");
                         navigate("/movies");
                     }else {
+                        setLoading(false);
                         setCurrentUserState("Error verifying user. Please try again later.");
                     }
                 }else {
-                    setCurrentUserState("")
-                    setUser(userData);
+                    setLoading(false);
+                    setCurrentUserState("");
                     navigate("/movies");
                 }
             }
@@ -102,8 +101,8 @@ function Login(props) {
 
     const handleResendEmail = async () => {
         try {
-            if (user) {
-                await sendEmailVerification(user);
+            if (props.user) {
+                await sendEmailVerification(props.user);
                 setCurrentUserState("Verification email resent. Please check your inbox.");
             } else {
                 setCurrentUserState("Error: Unable to resend verification email.");
@@ -213,7 +212,7 @@ function Login(props) {
                         </Col>
                     </Row>
                 </Container>
-                : <ForgotPassword user={user} authentication={auth} handleForgotPassword={handleForgotPassword}/>
+                : <ForgotPassword user={props.user} authentication={auth} handleForgotPassword={handleForgotPassword}/>
             }
         </Container>
     );

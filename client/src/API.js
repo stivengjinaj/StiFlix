@@ -23,6 +23,19 @@ const updateUserVerification = async (token) => {
     return await response.json();
 }
 
+const createUser = async (user, token) => {
+    const response = await fetch(`${remote_url}/users/`, {
+        method: "POST",
+        headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+            Accept: "application/json"
+        },
+        body: JSON.stringify(user)
+    });
+    return await response.json();
+}
+
 /**
  * API used to get popular movies(only).
  *
@@ -335,6 +348,7 @@ const getOmegaLink = async (movieId, season=null, episode=null) => {
 export {
     getUser,
     updateUserVerification,
+    createUser,
     getPopularMovies,
     getPopularTvShows,
     getTopRatedMovies,

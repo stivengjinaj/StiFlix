@@ -2,15 +2,15 @@ import User from "../../models/User.js";
 
 {/*eslint-disable react/prop-types*/}
 import {useState} from "react";
-import {Button, Col, Container, Form, Row} from "react-bootstrap";
+import {Button, Col, Container, Form, Row, Spinner} from "react-bootstrap";
 import logo from "../../assets/images/logo.png";
 import gsap from "gsap";
 import {useGSAP} from "@gsap/react";
-import {auth, db} from "../../../firebaseConfiguration.js";
+import {auth} from "../../../firebaseConfiguration.js";
 import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
 import {randomAvatar} from "../../helper/miscs.js";
 import {signOut} from "firebase/auth";
+import {createUser} from "../../API.js";
 
 function Register(props) {
 
@@ -20,6 +20,7 @@ function Register(props) {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [wrongCredentials, setWrongCredentials] = useState(false);
     const [currentState, setCurrentState] = useState("");
+    const [loading, setLoading] = useState(false);
 
     useGSAP(() => {
         if(!props.isSmartTV) {
@@ -41,7 +42,7 @@ function Register(props) {
 
     const handleRegister = async (e) => {
         e.preventDefault();
-
+        setLoading(true);
         if (password !== confirmPassword) {
             setWrongCredentials(true);
         } else {
@@ -53,12 +54,20 @@ function Register(props) {
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                 await sendEmailVerification(userCredential.user);
 
-                await setDoc(doc(db, "users", userCredential.user.uid), {
+                const idToken = await userCredential.user.getIdToken(true);
+                const userData = {
                     fullName: newUser.fullName,
                     email: newUser.email,
-                    verified: false,
                     avatar: randomAvatar(["avatar1", "avatar2", "avatar3", "avatar4"])
-                });
+                }
+
+                const userSuccess = await createUser(userData, idToken);
+
+                if (!userSuccess) {
+                    setCurrentState("An error occurred while creating the user. Please try again.");
+                    await userCredential.user.delete();
+                    return;
+                }
 
                 await signOut(auth);
 
@@ -168,7 +177,11 @@ function Register(props) {
                                     className="w-100"
                                     onClick={handleRegister}
                                 >
-                                    Register
+                                    {
+                                        loading
+                                            ? <Spinner animation="border" variant="light" size="sm" />
+                                            : "Register"
+                                    }
                                 </Button>
                             </Form.Group>
                         </Form>

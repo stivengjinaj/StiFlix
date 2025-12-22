@@ -15,6 +15,7 @@ import {auth} from "../firebaseConfiguration.js";
 import Loading from "./pages/Miscs/Loading.jsx";
 import NotFound from "./pages/NotFound.jsx";
 import {detectSmartTV} from "./helper/smartTvDetector.js";
+import {getUser} from "./API.js";
 
 function App() {
     const navigate = useNavigate();
@@ -32,8 +33,19 @@ function App() {
     }, [])
 
     useEffect(() => {
-        const unsubscribe = auth.onAuthStateChanged((usr) => {
-            setUser(usr);
+        const unsubscribe = auth.onAuthStateChanged(async (usr) => {
+            if (usr) {
+                try {
+                    const idToken = await usr.getIdToken(true);
+                    const userData = await getUser(idToken);
+                    setUser(userData);
+                } catch (error) {
+                    console.error("Error fetching user data:", error);
+                    setUser(null);
+                }
+            } else {
+                setUser(null);
+            }
             setLoading(false);
         });
         return () => unsubscribe();
