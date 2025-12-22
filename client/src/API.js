@@ -24,7 +24,7 @@ const updateUserVerification = async (token) => {
 }
 
 const createUser = async (user, token) => {
-    const response = await fetch(`${remote_url}/users/`, {
+    return await fetch(`${remote_url}/users/`, {
         method: "POST",
         headers: {
             Authorization: `Bearer ${token}`,
@@ -33,7 +33,6 @@ const createUser = async (user, token) => {
         },
         body: JSON.stringify(user)
     });
-    return await response.json();
 }
 
 /**

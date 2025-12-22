@@ -13,7 +13,6 @@ import {signOut} from "firebase/auth";
 import {createUser} from "../../API.js";
 
 function Register(props) {
-
     const [fullName, setFullName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -43,48 +42,60 @@ function Register(props) {
     const handleRegister = async (e) => {
         e.preventDefault();
         setLoading(true);
+
         if (password !== confirmPassword) {
+            setLoading(false);
             setWrongCredentials(true);
-        } else {
-            setWrongCredentials(false);
+            return;
+        }
 
-            const newUser = new User(fullName, email, false);
+        setWrongCredentials(false);
+        props.isRegisteringRef.current = true;
 
-            try {
-                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                await sendEmailVerification(userCredential.user);
+        const newUser = new User(fullName, email, false);
 
-                const idToken = await userCredential.user.getIdToken(true);
-                const userData = {
-                    fullName: newUser.fullName,
-                    email: newUser.email,
-                    avatar: randomAvatar(["avatar1", "avatar2", "avatar3", "avatar4"])
-                }
+        try {
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            await sendEmailVerification(userCredential.user);
 
-                const userSuccess = await createUser(userData, idToken);
+            const idToken = await userCredential.user.getIdToken(true);
+            const userData = {
+                fullName: newUser.fullName,
+                email: newUser.email,
+                avatar: randomAvatar(["avatar1", "avatar2", "avatar3", "avatar4"])
+            };
 
-                if (!userSuccess) {
-                    setCurrentState("An error occurred while creating the user. Please try again.");
-                    await userCredential.user.delete();
-                    return;
-                }
+            const userSuccess = await createUser(userData, idToken);
 
-                await signOut(auth);
+            if (!userSuccess) {
+                await userCredential.user.delete();
+                props.isRegisteringRef.current = false;
+                setLoading(false);
+                setCurrentState("Profile creation failed. Please try again.");
+                return;
+            }
 
-                setCurrentState("Registration completed. Please check your email.");
-                setFullName("");
-                setEmail("");
-                setPassword("");
-                setConfirmPassword("");
+            await signOut(auth);
 
-            } catch (error) {
-                if (error.code === 'auth/weak-password') {
-                    setCurrentState("The password must contain at least 6 characters.");
-                } else if (error.code === 'auth/email-already-in-use') {
-                    setCurrentState("The email address is already in use by another account.");
-                } else {
-                    setWrongCredentials(true);
-                }
+            await new Promise(resolve => setTimeout(resolve, 200));
+
+            props.isRegisteringRef.current = false;
+            setLoading(false);
+            setCurrentState("Registration successful! Please check your email.");
+
+            window.location.href = "/login?registered=1";
+
+        } catch (error) {
+            props.isRegisteringRef.current = false;
+            setLoading(false);
+
+            if (error.code === 'auth/weak-password') {
+                setCurrentState("Password must be at least 6 characters.");
+            } else if (error.code === 'auth/email-already-in-use') {
+                setCurrentState("The email address is already in use.");
+            } else {
+                console.error("Registration error:", error);
+                setCurrentState("Registration failed. Please try again.");
             }
         }
     };

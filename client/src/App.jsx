@@ -10,7 +10,7 @@ import MovieDetails from "./pages/MoviePlaying/MovieDetails.jsx";
 import MoviePlaying from "./pages/MoviePlaying/MoviePlaying.jsx";
 import MyAccount from "./pages/Account/MyAccount.jsx";
 import PersonalMovies from "./pages/Personal/PersonalMovies.jsx";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {auth} from "../firebaseConfiguration.js";
 import Loading from "./pages/Miscs/Loading.jsx";
 import NotFound from "./pages/NotFound.jsx";
@@ -25,6 +25,7 @@ function App() {
     const [searchResults, setSearchResults] = useState([]);
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
     const isSmartTV = detectSmartTV();
+    const isRegistering = useRef(false);
 
     useEffect(() => {
         const handleResize = () => setScreenWidth(window.innerWidth);
@@ -32,9 +33,15 @@ function App() {
         return () => window.removeEventListener('resize', handleResize);
     }, [])
 
+
+
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(async (usr) => {
-            if (usr) {
+            if (isRegistering.current) {
+                return;
+            }
+
+            if (usr && usr.emailVerified) {
                 try {
                     const idToken = await usr.getIdToken(true);
                     const userData = await getUser(idToken);
@@ -86,7 +93,7 @@ function App() {
                 !user ? <Login isSmartTv={isSmartTV}/> : <Navigate to={'/'} />
             } />
             <Route path={'/register'} element={
-                !user ? <Register isSmartTv={isSmartTV}/> : <Navigate to={'/'} />
+                !user ? <Register isSmartTv={isSmartTV} isRegisteringRef={isRegistering}/> : <Navigate to={'/'} />
             } />
             <Route path={'/account'} element={
                 user ? <MyAccount user={user} handleSignOut={handleSignOut}/> : <Navigate to={'/login'} />

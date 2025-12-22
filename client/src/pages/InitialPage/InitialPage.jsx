@@ -1,5 +1,3 @@
-import {useEffect} from "react";
-
 {/*eslint-disable react/prop-types*/}
 import {Button, Col, Container, Dropdown, Row} from "react-bootstrap";
 import logo from "../../assets/images/logo.png";

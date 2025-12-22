@@ -1,8 +1,8 @@
 import ForgotPassword from "./ForgotPassword.jsx";
 
 {/*eslint-disable react/prop-types*/}
-import {useNavigate} from "react-router-dom";
-import {useState} from "react";
+import {useNavigate, useLocation} from "react-router-dom";
+import {useState, useEffect} from "react";
 import {
     signInWithEmailAndPassword,
     setPersistence,
@@ -19,6 +19,7 @@ import {getUser, updateUserVerification} from "../../API.js";
 
 function Login(props) {
     const navigate = useNavigate();
+    const location = useLocation();
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -27,6 +28,15 @@ function Login(props) {
     const [rememberMe, setRememberMe] = useState(false);
     const [forgotPassword, setForgotPassword] = useState(false);
     const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('registered') === '1') {
+            setCurrentUserState('Registration successful! Please verify your email and then log in.');
+        } else if (location.state?.message) {
+            setCurrentUserState(location.state.message);
+        }
+    }, [location.state?.message]);
 
     useGSAP(() => {
         if(!props.isSmartTV) {
@@ -49,30 +59,25 @@ function Login(props) {
     const handleLogin = async (e) => {
         e.preventDefault();
         setLoading(true);
+        setWrongCredentials(false);
+
         try {
             await setPersistence(
                 auth,
                 rememberMe ? browserLocalPersistence : browserSessionPersistence
             );
 
-            const userCredential = await signInWithEmailAndPassword(
-                auth,
-                email,
-                password
-            );
-
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
 
             if (!user.emailVerified) {
-                setLoading(false);
                 await auth.signOut();
-                setWrongCredentials(false);
+                setLoading(false);
                 setCurrentUserState("Please verify your email before logging in.");
                 return;
             }
 
             const idToken = await user.getIdToken(true);
-
             const userData = await getUser(idToken);
 
             if (userData) {
@@ -82,27 +87,41 @@ function Login(props) {
                         setLoading(false);
                         setCurrentUserState("");
                         navigate("/movies");
-                    }else {
+                    } else {
                         setLoading(false);
                         setCurrentUserState("Error verifying user. Please try again later.");
+                        await auth.signOut();
                     }
-                }else {
+                } else {
                     setLoading(false);
                     setCurrentUserState("");
                     navigate("/movies");
                 }
+            } else {
+                setLoading(false);
+                setCurrentUserState("User profile not found. Please contact support.");
+                await auth.signOut();
             }
-        } catch (e) {
+        } catch (error) {
             setLoading(false);
-            setWrongCredentials(true);
+            console.error("Login error:", error);
+            if (error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found') {
+                setWrongCredentials(true);
+                setCurrentUserState("Invalid email or password.");
+            } else {
+                setWrongCredentials(true);
+                setCurrentUserState("Login failed. Please try again.");
+            }
         }
-    }
+    };
+
 
 
     const handleResendEmail = async () => {
         try {
-            if (props.user) {
-                await sendEmailVerification(props.user);
+            const currentUser = auth.currentUser;
+            if (currentUser && !currentUser.emailVerified) {
+                await sendEmailVerification(currentUser);
                 setCurrentUserState("Verification email resent. Please check your inbox.");
             } else {
                 setCurrentUserState("Error: Unable to resend verification email.");
@@ -166,7 +185,7 @@ function Login(props) {
                                     </Form.Floating>
                                     {wrongCredentials && <span className="text-danger">Please check your credentials</span>}
                                     {currentUserState !== "" && (
-                                        <span className="text-danger">{currentUserState}{" "}
+                                        <span className={currentUserState.includes("successful") ? "text-success" : "text-danger"}>{currentUserState}{" "}
                                             {currentUserState.includes("Please verify") && (
                                                 <a href="#" onClick={handleResendEmail}>
                                                     Resend email
