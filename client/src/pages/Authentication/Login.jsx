@@ -183,15 +183,21 @@ function Login(props) {
                                         />
                                         <label htmlFor="password" className="custom-label">Password</label>
                                     </Form.Floating>
-                                    {wrongCredentials && <span className="text-danger">Please check your credentials</span>}
-                                    {currentUserState !== "" && (
-                                        <span className={currentUserState.includes("successful") ? "text-success" : "text-danger"}>{currentUserState}{" "}
+                                    {wrongCredentials && (
+                                        <span className="text-danger">Invalid email or password.</span>
+                                    )}
+                                    {!wrongCredentials && currentUserState !== "" && (
+                                        <span className={currentUserState.includes("successful") ? "text-success" : "text-danger"}>
+                                            {currentUserState}
                                             {currentUserState.includes("Please verify") && (
-                                                <a href="#" onClick={handleResendEmail}>
-                                                    Resend email
-                                                </a>
+                                                <>
+                                                    {" "}
+                                                    <a href="#" onClick={handleResendEmail}>
+                                                        Resend email
+                                                    </a>
+                                                </>
                                             )}
-                                    </span>
+                                        </span>
                                     )}
                                 </Form.Group>
                                 <Form.Group className="mb-3 mx-4">
@@ -238,3 +244,4 @@ function Login(props) {
 }
 
 export default Login;
+

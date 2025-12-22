@@ -1,6 +1,11 @@
 //export const remote_url = "https://stiflix.vercel.app";
 export const remote_url = "http://localhost:8080/api/v2";
 
+/** * API used to get user information.
+ *
+ * @param token - The authentication token.
+ * @returns JSON object of user information.
+ * */
 const getUser = async (token) => {
     const response = await fetch(`${remote_url}/users/me`, {
         method: "GET",
@@ -12,6 +17,11 @@ const getUser = async (token) => {
     return await response.json();
 }
 
+/** * API used to update user verification status.
+ *
+ * @param token
+ * @returns {Promise<Response>}
+ */
 const updateUserVerification = async (token) => {
     return await fetch(`${remote_url}/users/`, {
         method: "PATCH",
@@ -22,6 +32,12 @@ const updateUserVerification = async (token) => {
     });
 }
 
+/** * API used to create a new user.
+ *
+ * @param user
+ * @param token
+ * @returns {Promise<Response>}
+ */
 const createUser = async (user, token) => {
     return await fetch(`${remote_url}/users/`, {
         method: "POST",
@@ -251,98 +267,6 @@ const getLogos = async (movieId, mediaType) => {
     return await response.json();
 }
 
-/**
- * API used to get movie ID from Piracy server. NOT WORKING
- *
- * @param query search query for the movie to search.
- * @param type movie type.
- * @param year release year.
- * @return json with movie data or an error message.
- */
-const getMovieId = async (query, type, year) => {
-    const response = await fetch(`${remote_url}/api/movieId?query=${query}&type=${type}&year=${year}`, {
-        headers: {
-            Accept: "application/json"
-        }
-    });
-
-    if (!response.ok) {
-        throw new Error(`Failed to fetch movie`);
-    }
-
-    return await response.json();
-};
-
-/**
- * API used to get a link from a specific server.
- *
- * @param movieId id of the movie.
- * @param server server where to look.
- * @return json with data.
- * */
-const getMovieSources = async (movieId, server) => {
-    const response = await fetch(`${remote_url}/api/getMovieSources?movieId=${movieId}&server=${server}`);
-
-    if (!response.ok) {
-        throw new Error(`Failed to fetch movie sources`);
-    }
-
-    return await response.json();
-};
-/**
- * API used to get the id of the movie that Braflix uses to search the movies. A.K.A
- * TMDB to Braflix id converter.
- *
- * @param server server where to Braflix takes the movie.
- * @param query search query.
- * @param year release year.
- * @param type media type.
- * @param episode episode index if tv show, otherwise default value is 1.
- * @param season season index if tv show, otherwise default value is 1.
- * @param movieId id of the movie.
- * @return braflix movie id.
- * */
-const getMovieIdBraflix = async (server, query, year, type, episode, season, movieId) => {
-    const response = await fetch(`${remote_url}/api/getMovieIdBraflix?server=${server}&query=${encodeURIComponent(query)}&year=${year}&type=${type}&episode=${episode}&season=${season}&movieId=${movieId}`);
-    if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-
-    const data = await response.json();
-
-    return data.id;
-};
-
-/**
- * API used to get movie link from OMEGA server.
- *
- * @param movieId id of the movie.
- * @param season season index.
- * @param episode episode index.
- * @return link to the movie.
- * */
-const getOmegaLink = async (movieId, season=null, episode=null) => {
-    if(season && episode) {
-        const response = await fetch(`${remote_url}/api/getOmegaLink?movieId=${movieId}&mediaType=tv&season=${season}&episode=${episode}`);
-        if (!response.ok) {
-            throw new Error(`Movie not found`);
-        }
-
-        const data = await response.json();
-
-        return data.link;
-    } else {
-        const response = await fetch(`${remote_url}/api/getOmegaLink?movieId=${movieId}&mediaType=movie`);
-        if (!response.ok) {
-            throw new Error(`Movie not found`);
-        }
-
-        const data = await response.json();
-
-        return data.link;
-    }
-}
-
 export {
     getUser,
     updateUserVerification,
@@ -355,10 +279,6 @@ export {
     getTvShowDetails,
     discoverMovies,
     discoverTvShows,
-    getMovieId,
-    getMovieSources,
-    getMovieIdBraflix,
-    getOmegaLink,
     search,
     getTrailerKey,
     mediaGenres,
