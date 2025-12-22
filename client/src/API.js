@@ -1,5 +1,27 @@
-export const remote_url = "https://stiflix.vercel.app";
-//export const remote_url = "http://localhost:3000";
+//export const remote_url = "https://stiflix.vercel.app";
+export const remote_url = "http://localhost:8080/api/v2";
+
+const getUser = async (token) => {
+    const response = await fetch(`${remote_url}/users/me`, {
+        method: "GET",
+        headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/json"
+        }
+    });
+    return await response.json();
+}
+
+const updateUserVerification = async (token) => {
+    const response = await fetch(`${remote_url}/users/`, {
+        method: "PATCH",
+        headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/json"
+        }
+    });
+    return await response.json();
+}
 
 /**
  * API used to get popular movies(only).
@@ -311,6 +333,8 @@ const getOmegaLink = async (movieId, season=null, episode=null) => {
 }
 
 export {
+    getUser,
+    updateUserVerification,
     getPopularMovies,
     getPopularTvShows,
     getTopRatedMovies,

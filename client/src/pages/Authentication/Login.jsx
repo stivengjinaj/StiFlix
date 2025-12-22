@@ -10,12 +10,12 @@ import {
     browserSessionPersistence,
     sendEmailVerification
 } from 'firebase/auth';
-import {auth, db} from "../../../firebaseConfiguration.js";
-import { doc, updateDoc } from "firebase/firestore";
-import {Button, Col, Container, Form, Row} from "react-bootstrap";
+import {auth} from "../../../firebaseConfiguration.js";
+import {Button, Col, Container, Form, Row, Spinner} from "react-bootstrap";
 import logo from "../../assets/images/logo.png";
 import gsap from "gsap";
 import {useGSAP} from "@gsap/react";
+import {getUser, updateUserVerification} from "../../API.js";
 
 function Login(props) {
     const navigate = useNavigate();
@@ -27,6 +27,7 @@ function Login(props) {
     const [rememberMe, setRememberMe] = useState(false);
     const [user, setUser] = useState(auth.currentUser);
     const [forgotPassword, setForgotPassword] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     useGSAP(() => {
         if(!props.isSmartTV) {
@@ -47,34 +48,57 @@ function Login(props) {
     }, []);
 
     const handleLogin = async (e) => {
-        e.preventDefault()
-        setPersistence(auth, rememberMe ? browserLocalPersistence : browserSessionPersistence);
-        signInWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                if(!userCredential.user.emailVerified){
-                    setWrongCredentials(false);
-                    setUser(userCredential.user);
-                    auth.signOut();
-                    setCurrentUserState("Please verify your email before logging in.");
+        e.preventDefault();
+        setLoading(true);
+        try {
+            await setPersistence(
+                auth,
+                rememberMe ? browserLocalPersistence : browserSessionPersistence
+            );
+
+            const userCredential = await signInWithEmailAndPassword(
+                auth,
+                email,
+                password
+            );
+
+            const user = userCredential.user;
+
+            if (!user.emailVerified) {
+                await auth.signOut();
+                setWrongCredentials(false);
+                setCurrentUserState("Please verify your email before logging in.");
+                return;
+            }
+
+            const idToken = await user.getIdToken(true);
+
+            const userData = await getUser(idToken);
+
+            if (userData) {
+                setLoading(false);
+                if (!userData.verified) {
+                    const updateVerification = await updateUserVerification(idToken);
+                    if (updateVerification.success) {
+                        userData.verified = true;
+                        setCurrentUserState("")
+                        setUser(userData);
+                        navigate("/movies");
+                    }else {
+                        setCurrentUserState("Error verifying user. Please try again later.");
+                    }
                 }else {
-                    updateUserVerified(userCredential.user.uid);
-                    setCurrentUserState("");
+                    setCurrentUserState("")
+                    setUser(userData);
                     navigate("/movies");
                 }
-            })
-            .catch(() => {
-                setWrongCredentials(true);
-            });
+            }
+        } catch (e) {
+            setLoading(false);
+            setWrongCredentials(true);
+        }
     }
 
-    const updateUserVerified = async (userId) => {
-        try {
-            const userDocRef = doc(db, "users", userId);
-            await updateDoc(userDocRef, { verified: true });
-        } catch (error) {
-            navigate("/movies");
-        }
-    };
 
     const handleResendEmail = async () => {
         try {
@@ -159,7 +183,15 @@ function Login(props) {
                                         className="w-100"
                                         onClick={handleLogin}
                                     >
-                                        Sign In
+                                        {
+                                            loading
+                                                ? <Spinner
+                                                    animation="border"
+                                                    variant="light"
+                                                    size="sm"
+                                                />
+                                                : "Sign In"
+                                        }
                                     </Button>
                                 </Form.Group>
                             </Form>
