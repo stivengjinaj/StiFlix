@@ -3,6 +3,9 @@ import FetchedMovie from "../models/FetchedMovie.mjs";
 import {sortByVoteAverage} from "../helper/miscs.js";
 import Episode from "../models/Episode.js";
 import Season from "../models/Season.js";
+import CacheService from "../models/CacheService.js";
+
+const cache = new CacheService();
 
 class FetchedMovieController {
 
@@ -12,9 +15,20 @@ class FetchedMovieController {
      * @returns Array of popular movies and tv shows.
      * */
     async getAllPopular() {
+        const cacheKey = 'all_popular';
+        const cached = cache.get(cacheKey);
+        if (cached) {
+            console.log('Cache hit: getAllPopular');
+            return cached;
+        }
+
+        console.log('Cache miss: getAllPopular - fetching...');
         const popularMovies = await this.getPopularMovies();
         const popularTvShows = await this.getPopularTvShows();
-        return sortByVoteAverage([...popularMovies, ...popularTvShows]);
+        const result = sortByVoteAverage([...popularMovies, ...popularTvShows]);
+
+        cache.set(cacheKey, result);
+        return result;
     }
 
     /**
@@ -23,7 +37,17 @@ class FetchedMovieController {
      * @returns Array of trending movies and tv shows.
      */
     async getAllTrending() {
+        const cacheKey = 'all_trending';
+        const cached = cache.get(cacheKey);
+        if (cached) {
+            console.log('Cache hit: getAllTrending');
+            return cached;
+        }
+
+        console.log('Cache miss: getAllTrending - fetching...');
         const movies = await API.getTrendingMovies();
+
+        // Fetch all TV show details in parallel instead of sequentially
         const results = await Promise.all(
             movies.results.map(async (movie) => {
                 if (movie.media_type === "movie" && this.checkMovieData(movie)) {
@@ -42,7 +66,10 @@ class FetchedMovieController {
                 return null;
             })
         );
-        return results.filter(Boolean);
+
+        const result = results.filter(Boolean);
+        cache.set(cacheKey, result);
+        return result;
     }
 
     /**
@@ -51,6 +78,14 @@ class FetchedMovieController {
      * @returns Array of popular movies.
      * */
     async getPopularMovies() {
+        const cacheKey = 'popular_movies';
+        const cached = cache.get(cacheKey);
+        if (cached) {
+            console.log('Cache hit: getPopularMovies');
+            return cached;
+        }
+
+        console.log('Cache miss: getPopularMovies - fetching...');
         const fetchedMovies = [];
         try {
             const movies = await API.getPopularMovies();
@@ -58,6 +93,7 @@ class FetchedMovieController {
                 const detailsExist = this.checkMovieData(movie);
                 detailsExist && fetchedMovies.push(new FetchedMovie(movie, false, 0, 0));
             });
+            cache.set(cacheKey, fetchedMovies);
         } catch (error) {
             console.error('Error fetching popular movies:', error);
         }
@@ -70,6 +106,14 @@ class FetchedMovieController {
      * @returns Array of popular tv shows.
      * */
     async getPopularTvShows() {
+        const cacheKey = 'popular_tvshows';
+        const cached = cache.get(cacheKey);
+        if (cached) {
+            console.log('Cache hit: getPopularTvShows');
+            return cached;
+        }
+
+        console.log('Cache miss: getPopularTvShows - fetching...');
         const tvShows = await API.getPopularTvShows();
 
         const results = await Promise.all(
@@ -86,7 +130,9 @@ class FetchedMovieController {
             })
         );
 
-        return results.filter(Boolean);
+        const result = results.filter(Boolean);
+        cache.set(cacheKey, result);
+        return result;
     }
 
     /**
@@ -95,6 +141,14 @@ class FetchedMovieController {
      * @returns Array of top-rated movies.
      * */
     async getTopRatedMovies() {
+        const cacheKey = 'top_rated_movies';
+        const cached = cache.get(cacheKey);
+        if (cached) {
+            console.log('Cache hit: getTopRatedMovies');
+            return cached;
+        }
+
+        console.log('Cache miss: getTopRatedMovies - fetching...');
         const fetchedMovies = [];
         try {
             const movies = await API.getTopRatedMovies();
@@ -102,6 +156,7 @@ class FetchedMovieController {
                 const detailsExist = this.checkMovieData(movie);
                 detailsExist && fetchedMovies.push(new FetchedMovie(movie, false, 0, 0));
             });
+            cache.set(cacheKey, fetchedMovies);
         } catch (error) {
             console.error('Error fetching top-rated movies:', error);
         }
@@ -110,71 +165,114 @@ class FetchedMovieController {
 
     /**
      * Function used to get 3 pages of movies only
+     * OPTIMIZED: Fetches all pages in parallel instead of sequentially
      *
      * @returns Array of movies.
      * */
     async discoverMovies() {
-        const fetchedMovies = []
-        for (let i = 2; i < 5; i++) {
-            const movies = await API.discoverMovies(i);
+        const cacheKey = 'discover_movies';
+        const cached = cache.get(cacheKey);
+        if (cached) {
+            console.log('✅ Cache hit: discoverMovies');
+            return cached;
+        }
+
+        console.log('🔄 Cache miss: discoverMovies - fetching...');
+        const fetchedMovies = [];
+
+        const pagePromises = [2, 3, 4].map(page => API.discoverMovies(page));
+        const allPages = await Promise.all(pagePromises);
+
+        allPages.forEach(movies => {
             movies.forEach(movie => {
                 const detailsExist = this.checkMovieData(movie);
                 detailsExist && fetchedMovies.push(new FetchedMovie(movie, false, 0, 0));
             });
-        }
+        });
+
+        cache.set(cacheKey, fetchedMovies);
         return fetchedMovies;
     }
 
     /**
      * Function used to get 4 pages of tv shows only
+     * OPTIMIZED: Fetches all pages in parallel instead of sequentially
      *
      * @return Array of tv shows.
      */
     async discoverTvShows() {
+        const cacheKey = 'discover_tvshows';
+        const cached = cache.get(cacheKey);
+        if (cached) {
+            console.log('Cache hit: discoverTvShows');
+            return cached;
+        }
+
+        console.log('Cache miss: discoverTvShows - fetching...');
         const resultsMap = new Map();
 
-        for (let page = 2; page < 6; page++) {
-            try {
-                const tvShows = await API.discoverTvShows(page);
+        try {
+            const pagePromises = [2, 3, 4, 5].map(page =>
+                API.discoverTvShows(page).catch(error => {
+                    console.error(`Error fetching TV shows for page ${page}:`, error);
+                    return [];
+                })
+            );
 
-                const pageResults = await Promise.all(
-                    tvShows.map(async (tvShow) => {
-                        if (!this.checkTvShowData(tvShow)) return null;
+            const allPages = await Promise.all(pagePromises);
 
+            const allTvShows = allPages.flat();
+            const tvShowsWithDetails = await Promise.all(
+                allTvShows.map(async (tvShow) => {
+                    if (!this.checkTvShowData(tvShow)) return null;
+
+                    try {
                         const details = await API.getTvShowDetails(tvShow.id);
-
                         return new FetchedMovie(
                             tvShow,
                             true,
                             details.number_of_seasons,
                             details.number_of_episodes
                         );
-                    })
-                );
+                    } catch (error) {
+                        console.error(`Error fetching details for TV show ${tvShow.id}:`, error);
+                        return null;
+                    }
+                })
+            );
 
-                pageResults
-                    .filter(Boolean)
-                    .forEach(show => {
-                        resultsMap.set(show.id, show);
-                    });
+            tvShowsWithDetails
+                .filter(Boolean)
+                .forEach(show => {
+                    resultsMap.set(show.id, show);
+                });
 
-            } catch (error) {
-                console.error(`Error fetching TV shows for page ${page}:`, error);
-            }
+        } catch (error) {
+            console.error('Error in discoverTvShows:', error);
         }
 
-        return Array.from(resultsMap.values());
+        const result = Array.from(resultsMap.values());
+        cache.set(cacheKey, result);
+        return result;
     }
-
 
     /**
      * Function used to get movie details given an id.
+     * NOTE: Not cached as this is dynamic based on user interaction
      *
      * @param movieId Id of the media.
      * @param mediaType movie or tv show.
      * @return media details.
      * */
     async getMediaDetails(movieId, mediaType) {
+        const cacheKey = `media_details_${mediaType}_${movieId}`;
+        const cached = cache.get(cacheKey);
+        if (cached) {
+            console.log(`Cache hit: getMediaDetails ${mediaType} ${movieId}`);
+            return cached;
+        }
+
+        console.log(`Cache miss: getMediaDetails ${mediaType} ${movieId} - fetching...`);
         const media = await API.mediaDetails(movieId, mediaType);
         const mediaJson = {
             id: media.id,
@@ -189,6 +287,8 @@ class FetchedMovieController {
             first_air_date: media.first_air_date,
             vote_average: media.vote_average,
         }
+
+        let result;
         if(mediaType === "tv") {
             const tvShowDetails = await API.getTvShowsSeasons(movieId, media.number_of_seasons);
             const seasons = [];
@@ -217,10 +317,13 @@ class FetchedMovieController {
                     episodes
                 ));
             });
-            return new FetchedMovie(mediaJson, true, media.number_of_seasons, media.number_of_episodes, seasons);
-        }else {
-            return new FetchedMovie(mediaJson, false, 0, 0)
+            result = new FetchedMovie(mediaJson, true, media.number_of_seasons, media.number_of_episodes, seasons);
+        } else {
+            result = new FetchedMovie(mediaJson, false, 0, 0);
         }
+
+        cache.set(cacheKey, result);
+        return result;
     }
 
     /**
@@ -231,6 +334,14 @@ class FetchedMovieController {
      * @return youtube link of the trailer.
      * */
     async getTrailer(movieId, mediaType) {
+        const cacheKey = `trailer_${mediaType}_${movieId}`;
+        const cached = cache.get(cacheKey);
+        if (cached) {
+            console.log(`Cache hit: getTrailer ${mediaType} ${movieId}`);
+            return cached;
+        }
+
+        console.log(`Cache miss: getTrailer ${mediaType} ${movieId} - fetching...`);
         const data = await API.getTrailerKey(movieId, mediaType);
         if (!data?.length) return null;
 
@@ -238,7 +349,9 @@ class FetchedMovieController {
             data.find(v => v.name?.toLowerCase().includes("trailer")) ??
             data[0];
 
-        return `https://www.youtube.com/embed/${trailer}`;
+        const result = `https://www.youtube.com/embed/${trailer}`;
+        cache.set(cacheKey, result);
+        return result;
     }
 
     /**
@@ -249,17 +362,28 @@ class FetchedMovieController {
      * @return Array of genres.
      * */
     async getMediaGenres(mediaId, media_type) {
+        const cacheKey = `genres_${media_type}_${mediaId}`;
+        const cached = cache.get(cacheKey);
+        if (cached) {
+            console.log(`Cache hit: getMediaGenres ${media_type} ${mediaId}`);
+            return cached;
+        }
+
+        console.log(`Cache miss: getMediaGenres ${media_type} ${mediaId} - fetching...`);
         const details = await API.mediaGenres(mediaId, media_type);
+        cache.set(cacheKey, details.genres);
         return details.genres;
     }
 
     /**
      * Function used to search a movie or tv show.
+     * NOTE: Search results are NOT cached as they're dynamic
      *
      * @param query What to search.
      * @return a list of results.
      * */
     async search(query) {
+        // Don't cache search results - they're user-specific and dynamic
         const movies = await API.search(query);
 
         const results = await Promise.all(
@@ -293,8 +417,18 @@ class FetchedMovieController {
      * @return Array of logos.
      */
     async getMovieLogos(movieId, mediaType) {
+        const cacheKey = `logos_${mediaType}_${movieId}`;
+        const cached = cache.get(cacheKey);
+        if (cached) {
+            console.log(`Cache hit: getMovieLogos ${mediaType} ${movieId}`);
+            return cached;
+        }
+
+        console.log(`Cache miss: getMovieLogos ${mediaType} ${movieId} - fetching...`);
         const logos = await API.getLogos(movieId, mediaType);
-        return logos.images.logos;
+        const result = logos.images.logos;
+        cache.set(cacheKey, result);
+        return result;
     }
 
     /**
@@ -324,6 +458,15 @@ class FetchedMovieController {
             tvShow.backdrop_path !== undefined ||
             tvShow.poster_path !== undefined ||
             tvShow.vote_average !== undefined;
+    }
+
+    /**
+     * Clear all cached data
+     * Useful for manual refresh or when user logs out
+     */
+    clearCache() {
+        cache.clear();
+        console.log('Cache cleared');
     }
 }
 
