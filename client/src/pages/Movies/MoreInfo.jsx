@@ -24,7 +24,7 @@ function MoreInfo(props) {
         }
 
         fetchMediaData();
-    }, [props.movie.id]);
+    }, [props.movie.id, props.movie.isSeries]);
 
     return (
         <Modal {...props} size="lg" centered>
@@ -55,7 +55,7 @@ function MoreInfo(props) {
                         height="400"
                     />
                 )}
-                {genres.length > 0 && (
+                {genres && genres.length > 0 && (
                     genres.map((genre, index) => (
                         <span key={index} className="badge bg-danger me-2 opacity-75">{genre.name}</span>
                     ))

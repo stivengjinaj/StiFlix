@@ -23,27 +23,26 @@ class FetchedMovieController {
      * @returns Array of trending movies and tv shows.
      */
     async getAllTrending() {
-        const fetchedMovies = [];
         const movies = await API.getTrendingMovies();
-        movies.results.forEach(movie => {
-            const detailsExist = movie.media_type === "movie" ? this.checkMovieData(movie) : this.checkTvShowData(movie);
-            if(detailsExist) {
-                if(movie.media_type === "movie") {
-                    fetchedMovies.push(new FetchedMovie(movie, false, 0, 0));
-                }else {
-                    const tvShowDetails = API.getTvShowDetails(movie.id);
-                    fetchedMovies.push(
-                        new FetchedMovie(
-                            movie,
-                            true,
-                            tvShowDetails.number_of_seasons,
-                            tvShowDetails.number_of_episodes
-                        )
+        const results = await Promise.all(
+            movies.results.map(async (movie) => {
+                if (movie.media_type === "movie" && this.checkMovieData(movie)) {
+                    return new FetchedMovie(movie, false, 0, 0);
+                }
+
+                if (movie.media_type === "tv" && this.checkTvShowData(movie)) {
+                    const details = await API.getTvShowDetails(movie.id);
+                    return new FetchedMovie(
+                        movie,
+                        true,
+                        details.number_of_seasons,
+                        details.number_of_episodes
                     );
                 }
-            }
-        });
-        return fetchedMovies;
+                return null;
+            })
+        );
+        return results.filter(Boolean);
     }
 
     /**
@@ -55,7 +54,7 @@ class FetchedMovieController {
         const fetchedMovies = [];
         try {
             const movies = await API.getPopularMovies();
-            movies.results.forEach(movie => {
+            movies.forEach(movie => {
                 const detailsExist = this.checkMovieData(movie);
                 detailsExist && fetchedMovies.push(new FetchedMovie(movie, false, 0, 0));
             });
@@ -71,29 +70,23 @@ class FetchedMovieController {
      * @returns Array of popular tv shows.
      * */
     async getPopularTvShows() {
-        const fetchedMovies = [];
-        try {
-            const tvShows = await API.getPopularTvShows();
-            tvShows.results.forEach(tvShow => {
-                const detailsExist = this.checkTvShowData(tvShow);
-                if (detailsExist) {
-                    API.getTvShowDetails(tvShow.id)
-                        .then(tvShowDetails => {
-                            fetchedMovies.push(
-                                new FetchedMovie(
-                                    tvShow,
-                                    true,
-                                    tvShowDetails.number_of_seasons,
-                                    tvShowDetails.number_of_episodes
-                                )
-                            );
-                        });
-                }
-            });
-        } catch (error) {
-            console.error('Error fetching popular TV shows:', error);
-        }
-        return fetchedMovies;
+        const tvShows = await API.getPopularTvShows();
+
+        const results = await Promise.all(
+            tvShows.map(async (tvShow) => {
+                if (!this.checkTvShowData(tvShow)) return null;
+
+                const details = await API.getTvShowDetails(tvShow.id);
+                return new FetchedMovie(
+                    tvShow,
+                    true,
+                    details.number_of_seasons,
+                    details.number_of_episodes
+                );
+            })
+        );
+
+        return results.filter(Boolean);
     }
 
     /**
@@ -105,7 +98,7 @@ class FetchedMovieController {
         const fetchedMovies = [];
         try {
             const movies = await API.getTopRatedMovies();
-            movies.results.forEach(movie => {
+            movies.forEach(movie => {
                 const detailsExist = this.checkMovieData(movie);
                 detailsExist && fetchedMovies.push(new FetchedMovie(movie, false, 0, 0));
             });
@@ -124,7 +117,7 @@ class FetchedMovieController {
         const fetchedMovies = []
         for (let i = 2; i < 5; i++) {
             const movies = await API.discoverMovies(i);
-            movies.results.forEach(movie => {
+            movies.forEach(movie => {
                 const detailsExist = this.checkMovieData(movie);
                 detailsExist && fetchedMovies.push(new FetchedMovie(movie, false, 0, 0));
             });
@@ -138,32 +131,41 @@ class FetchedMovieController {
      * @return Array of tv shows.
      */
     async discoverTvShows() {
-        const fetchedMovies = [];
-        for (let i = 2; i < 6; i++) {
+        const resultsMap = new Map();
+
+        for (let page = 2; page < 6; page++) {
             try {
-                const tvShows = await API.discoverTvShows(i);
-                tvShows.results.forEach(tvShow => {
-                    const detailsExist = this.checkTvShowData(tvShow);
-                    if (detailsExist) {
-                        API.getTvShowDetails(tvShow.id)
-                            .then(tvShowDetails => {
-                                fetchedMovies.push(
-                                    new FetchedMovie(
-                                        tvShow,
-                                        true,
-                                        tvShowDetails.number_of_seasons,
-                                        tvShowDetails.number_of_episodes
-                                    )
-                                );
-                            });
-                    }
-                });
+                const tvShows = await API.discoverTvShows(page);
+
+                const pageResults = await Promise.all(
+                    tvShows.map(async (tvShow) => {
+                        if (!this.checkTvShowData(tvShow)) return null;
+
+                        const details = await API.getTvShowDetails(tvShow.id);
+
+                        return new FetchedMovie(
+                            tvShow,
+                            true,
+                            details.number_of_seasons,
+                            details.number_of_episodes
+                        );
+                    })
+                );
+
+                pageResults
+                    .filter(Boolean)
+                    .forEach(show => {
+                        resultsMap.set(show.id, show);
+                    });
+
             } catch (error) {
-                console.error(`Error fetching TV shows for page ${i}:`, error);
+                console.error(`Error fetching TV shows for page ${page}:`, error);
             }
         }
-        return fetchedMovies;
+
+        return Array.from(resultsMap.values());
     }
+
 
     /**
      * Function used to get movie details given an id.
@@ -229,21 +231,15 @@ class FetchedMovieController {
      * @return youtube link of the trailer.
      * */
     async getTrailer(movieId, mediaType) {
-        const videoResults = await API.getTrailerKey(movieId, mediaType);
-        const youtubeLink = "https://www.youtube.com/embed/";
+        const data = await API.getTrailerKey(movieId, mediaType);
+        if (!data?.length) return null;
 
-        if(videoResults.results){
-            if (videoResults.results.length > 0) {
-                const trailerVideo = videoResults.results.find(video =>
-                    video.name.toLowerCase().includes("trailer")
-                );
+        const trailer =
+            data.find(v => v.name?.toLowerCase().includes("trailer")) ??
+            data[0];
 
-                return youtubeLink + (trailerVideo ? trailerVideo.key : videoResults.results[0].key);
-            }
-        }
-        return null;
+        return `https://www.youtube.com/embed/${trailer}`;
     }
-
 
     /**
      * Function used to get genres for a movie or tv show.
@@ -264,27 +260,29 @@ class FetchedMovieController {
      * @return a list of results.
      * */
     async search(query) {
-        const fetchedMovies = [];
         const movies = await API.search(query);
-        movies.results.forEach(movie => {
-            const detailsExist = movie.media_type === "movie" ? this.checkMovieData(movie) : this.checkTvShowData(movie);
-            if(detailsExist) {
-                if(movie.media_type === "movie") {
-                    fetchedMovies.push(new FetchedMovie(movie, false, 0, 0));
-                }else {
-                    const tvShowDetails = API.getTvShowDetails(movie.id);
-                    fetchedMovies.push(
-                        new FetchedMovie(
-                            movie,
-                            true,
-                            tvShowDetails.number_of_seasons,
-                            tvShowDetails.number_of_episodes
-                        )
+
+        const results = await Promise.all(
+            movies.results.map(async (movie) => {
+                if (movie.media_type === "movie" && this.checkMovieData(movie)) {
+                    return new FetchedMovie(movie, false, 0, 0);
+                }
+
+                if (movie.media_type === "tv" && this.checkTvShowData(movie)) {
+                    const details = await API.getTvShowDetails(movie.id);
+                    return new FetchedMovie(
+                        movie,
+                        true,
+                        details.number_of_seasons,
+                        details.number_of_episodes
                     );
                 }
-            }
-        });
-        return fetchedMovies;
+
+                return null;
+            })
+        );
+
+        return results.filter(Boolean);
     }
 
     /**

@@ -11,6 +11,7 @@ import {hasSeenSplash, setSplashSeen, sortByVoteAverage, stringQuery} from "../.
 
 function Movies(props) {
     const fetcher = new FetchedMovieController();
+    const hasFetched = useRef(false);
     const [showSplash, setShowSplash] = useState(false);
     const [section, setSection] = useState('home');
     const [allPopular, setAllPopular] = useState([]);
@@ -35,7 +36,7 @@ function Movies(props) {
                     fetcher.getTopRatedMovies(),
                     fetcher.discoverTvShows()
                 ]);
-                setAllTrending([...shuffle(trending)]);
+                setAllTrending(shuffle([...trending]));
                 setAllPopular([...popular]);
                 setTopRatedMovies([...movies]);
                 setOnlySeries([...series]);
@@ -43,7 +44,8 @@ function Movies(props) {
                 console.error('Error fetching data:', error);
             }
         };
-
+        if (hasFetched.current) return;
+        hasFetched.current = true;
         fetchAllData();
     }, []);
 
@@ -89,7 +91,10 @@ function Movies(props) {
 }
 
 function HomePage(props) {
-    const fetcher = new FetchedMovieController();
+    const fetcherRef = useRef(null);
+    if (!fetcherRef.current) {fetcherRef.current = new FetchedMovieController();}
+    const fetcher = fetcherRef.current;
+
     const debounceRef = useRef(null);
 
     const handleSearch = (query) => {
