@@ -4,7 +4,7 @@ import Lottie from 'react-lottie';
 import './StiflixChill.css';
 import {getWindowDimensions} from "../../helper/miscs.js";
 import {Container} from "react-bootstrap";
-import StiflixChillHero from "./StiflixChillHero.jsx";
+import StiflixChillFlow from "./StiflixChillFlow.jsx";
 
 const MOCK_PHRASES = {
     TASK: [
@@ -24,7 +24,7 @@ const MOCK_PHRASES = {
     ]
 };
 
-const StiflixChill = () => {
+const StiflixChillRoot = () => {
     const [showSplash, setShowSplash] = useState(true);
     const [isMobile, setIsMobile] = useState(false);
     const { width, height } = getWindowDimensions()
@@ -48,7 +48,7 @@ const StiflixChill = () => {
         if (!isMobile) {
             setTimeout(() => {
                 setShowSplash(false);
-            }, 3000);
+            }, 2500);
         }
     }, [isMobile]);
 
@@ -83,9 +83,9 @@ const StiflixChill = () => {
     }
 
     return (
-        <StiflixChillHero />
+        <StiflixChillFlow />
     );
 };
 
-export default StiflixChill;
+export default StiflixChillRoot;
 
