@@ -16,6 +16,7 @@ import Loading from "./pages/Miscs/Loading.jsx";
 import NotFound from "./pages/NotFound.jsx";
 import {detectSmartTV} from "./helper/smartTvDetector.js";
 import {getUser} from "./API.js";
+import StiflixChill from "./pages/StiflixChill/StiflixChill.jsx";
 
 function App() {
     const navigate = useNavigate();
@@ -109,6 +110,7 @@ function App() {
             } />
             <Route path={'/loading'} element={<Loading />} />
             <Route path={'*'} element={<NotFound />} />
+            <Route path={'/stiflixchill'} element={<StiflixChill />} />
         </Routes>
     );
 }

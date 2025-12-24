@@ -1,0 +1,47 @@
+.splash-container {
+    background-color: #141414 !important;
+    width: 100vw;
+}
+
+.sc_button {
+    background-color: #e50914 !important;
+    color: white !important;
+    border: none !important;
+    padding: 10px 20px !important;
+    font-size: 16px !important;
+    font-weight: bold;
+    border-radius: 10px !important;
+}
+.stiflix-slogan {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-weight: 700;
+    font-size: 3.5rem;
+    text-shadow: 0 4px 15px rgba(0, 0, 0, 0.9);
+    letter-spacing: 1px;
+}
+
+.choice-card {
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    cursor: pointer;
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    height: 100%;
+}
+
+.choice-card:hover {
+    transform: translateY(-10px);
+    border-color: #e50914;
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(229, 9, 20, 0.2);
+}
+
+.choice-card h3 {
+    font-weight: 600;
+    font-size: 1.5rem;
+}
+
+.choice-card p {
+    color: #b3b3b3;
+    font-size: 0.9rem;
+}
