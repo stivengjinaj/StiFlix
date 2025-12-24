@@ -1,5 +1,5 @@
 import {useEffect, useRef, useState} from 'react';
-import sc_background from '../../assets/images/sc_background2.png';
+import sc_background from '../../assets/images/sc_background.png';
 import sc_logo from '../../assets/images/sc.png';
 import { Container, Row, Button } from 'react-bootstrap';
 import Choice from "./Choice.jsx";
