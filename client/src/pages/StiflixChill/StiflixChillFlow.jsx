@@ -7,9 +7,11 @@ import RandomChoice from "./RandomChoice.jsx";
 import MovieCatalogue from "./MovieCatalogue.jsx";
 import PropTypes from "prop-types";
 import Loading from "../Miscs/Loading.jsx";
+import {useNavigate} from "react-router-dom";
 
 const StiflixChillFlow = ({ movies, page, setPage }) => {
     const comp = useRef(null);
+    const navigate = useNavigate();
     const [step, setStep] = useState(0);
     const [choice, setChoice] = useState(null);
 
@@ -45,7 +47,11 @@ const StiflixChillFlow = ({ movies, page, setPage }) => {
                         <img src={sc_logo} alt={"Stiflix&Chill"} width={300} height={70} style={{objectFit: 'contain'}}/>
                     </div>
                     <div className="col-6 p-3 text-end">
-                        <Button className="sc_button" variant="danger">
+                        <Button
+                            className="sc_button"
+                            variant="danger"
+                            onClick={() => navigate("/movies")}
+                        >
                             Leave Stiflix&Chill
                         </Button>
                     </div>
@@ -54,8 +60,16 @@ const StiflixChillFlow = ({ movies, page, setPage }) => {
                 {step === 0 && <Choice comp={comp} step={step} setStep={setStep} setChoice={setChoice}/>}
                 {step === 1 && (
                     choice === 0
-                        ? <RandomChoice movies={movies} />
-                        : <MovieCatalogue movies={movies} page={page} setPage={setPage} />
+                        ? <RandomChoice
+                            movies={movies}
+                            setStep={setStep}
+                        />
+                        : <MovieCatalogue
+                            movies={movies}
+                            page={page}
+                            setPage={setPage}
+                            setStep={setStep}
+                        />
                 )}
             </Container>
             : <Loading />

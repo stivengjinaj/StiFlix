@@ -72,7 +72,7 @@
     margin-top: 3rem;
     padding-top: 1.5rem;
     display: flex;
-    justify-content: center;
+    justify-content: start;
     align-items: center;
     gap: 1.5rem;
     background: linear-gradient(
@@ -85,4 +85,14 @@
 .page-indicator {
     color: #aaa;
     font-size: 0.9rem;
+}
+
+.home-button {
+    background-color: #e50914 !important;
+    color: white !important;
+    border: none !important;
+    padding: 10px 20px !important;
+    font-size: 16px !important;
+    font-weight: bold;
+    border-radius: 10px !important;
 }

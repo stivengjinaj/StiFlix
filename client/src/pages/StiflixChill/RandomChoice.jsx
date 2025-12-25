@@ -6,7 +6,7 @@ import {shuffleArray2} from "../../helper/miscs.js";
 import PropTypes from "prop-types";
 import ResultView from "./ResultView.jsx";
 
-const RandomChoice = ({ movies }) => {
+const RandomChoice = ({ movies, setStep }) => {
     const containerRef = useRef(null);
     const initial_pool = useRef([...movies.results, ...movies.results].slice(movies.length / 2));
     const cardsRef = useRef([]);
@@ -81,7 +81,7 @@ const RandomChoice = ({ movies }) => {
     }, [isAnimating]);
 
     if (!isAnimating) return (
-        <ResultView movies={movies} movie={selectedMovie} onRollAgain={() => {
+        <ResultView movies={movies} setStep={setStep} movie={selectedMovie} onRollAgain={() => {
             gsap.killTweensOf(cardsRef.current);
             gsap.set(cardsRef.current, {
                 clearProps: "all"
@@ -125,6 +125,7 @@ const RandomChoice = ({ movies }) => {
 
 RandomChoice.propTypes = {
     movies: PropTypes.object,
+    setStep: PropTypes.func.isRequired
 }
 
 export default RandomChoice;
