@@ -44,9 +44,15 @@ function App() {
 
             if (usr && usr.emailVerified) {
                 try {
-                    const idToken = await usr.getIdToken(true);
+                    const tokenResult = await usr.getIdTokenResult()
+                    const idToken = tokenResult.token
+                    const role = tokenResult.claims.role;
                     const userData = await getUser(idToken);
-                    setUser(userData);
+                    setUser({
+                        ...userData,
+                        role
+                    });
+                    console.log(user);
                 } catch (error) {
                     console.error("Error fetching user data:", error);
                     setUser(null);
@@ -85,6 +91,7 @@ function App() {
                     searchQuery={searchQuery}
                     searchResults={searchResults}
                     handleSearchResults={handleSearchResults}
+                    handleSignOut={handleSignOut}
                     isSmartTV={isSmartTV}
                 />
             } />
@@ -105,12 +112,16 @@ function App() {
             <Route path={'/watchLater'} element={
                 user ? <PersonalMovies user={user} type={'watchLater'} /> : <Navigate to={'/login'} />
             } />
-            <Route path={'/watchlist'} element={
+            <Route path={'/watchList'} element={
                 user ? <PersonalMovies user={user} type={'watchlist'} /> : <Navigate to={'/login'} />
             } />
             <Route path={'/loading'} element={<Loading />} />
             <Route path={'*'} element={<NotFound />} />
-            <Route path={'/stiflixchill'} element={<StiflixChillRoot />} />
+            <Route path={'/stiflixchill'} element={
+                user && (user.role === "OWNER" || user.role === "EDITOR")
+                    ? <StiflixChillRoot user={user} />
+                    : <Navigate to={'/movies'}/>
+            } />
         </Routes>
     );
 }

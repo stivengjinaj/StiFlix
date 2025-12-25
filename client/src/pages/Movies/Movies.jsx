@@ -85,6 +85,7 @@ function Movies(props) {
                 onlySeries={onlySeries}
                 section={section}
                 handleSectionChange={handleSectionChange}
+                handleSignOut={props.handleSignOut}
                 isSmartTV={props.isSmartTV}
             />)
     );
@@ -114,9 +115,11 @@ function HomePage(props) {
     return (
         <Container fluid className="p-0">
             <NavBar
+                user={props.user}
                 section={props.section}
                 handleSectionChange={props.handleSectionChange}
                 handleSearch={handleSearch}
+                handleSignOut={props.handleSignOut}
                 searchQuery={props.searchQuery}
                 startSearching={startSearching}
                 isSmartTV={props.isSmartTV}

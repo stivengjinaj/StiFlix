@@ -4,32 +4,9 @@ import {Container, Dropdown, Form, Nav, Navbar} from "react-bootstrap";
 import {useState} from "react";
 import {useGSAP} from "@gsap/react";
 import gsap from "gsap";
-import {auth, db} from "../../../firebaseConfiguration.js";
-import {useNavigate} from "react-router-dom";
-import {doc, getDoc} from "firebase/firestore";
 
 function NavBarMobile(props) {
-    const navigate = useNavigate()
     const [searchVisible, setSearchVisible] = useState(props.searchQuery.length > 0);
-    const [user, setUser] = useState(auth.currentUser);
-    const [avatar, setAvatar] = useState(null)
-
-    auth.onAuthStateChanged((usr) => {
-        if (usr) {
-            setUser(usr);
-            getDoc(doc(db, "users", usr.uid)).then((doc) => {
-                setAvatar(doc.data().avatar);
-            });
-        }
-    })
-
-    const handleSignOut = async (e) => {
-        e.preventDefault()
-        await auth.signOut().then(() => {
-            setUser(null)
-            navigate("/");
-        });
-    }
 
     useGSAP(() => {
         gsap.fromTo('.search-input', {
@@ -88,10 +65,10 @@ function NavBarMobile(props) {
                       setSearchVisible(!searchVisible)
                   }} className="bi bi-search text-white h2"></i>
                   {
-                      user && (
+                      props.user && (
                           <Dropdown align={{lg: 'start'}} className="mx-3">
                               <Dropdown.Toggle className="p-0 btn-avatar">
-                                  {avatar && <img src={`/avatars/${avatar}.png`} alt="avatar"
+                                  {props.avatar && <img src={`/avatars/${props.avatar}.png`} alt="avatar"
                                         width={50} height={50} className="rounded-3"/>}
                               </Dropdown.Toggle>
 
@@ -99,9 +76,9 @@ function NavBarMobile(props) {
                                   <Dropdown.Item className="text-white" href="/movies">Home</Dropdown.Item>
                                   <Dropdown.Item className="text-white" href="/account">Account</Dropdown.Item>
                                   <Dropdown.Item className="text-white" href="/favourites">Favourites</Dropdown.Item>
-                                  <Dropdown.Item className="text-white" href="/watched-list">Watchlist</Dropdown.Item>
-                                  <Dropdown.Item className="text-white" href="/to-watch-list">Watch Later</Dropdown.Item>
-                                  <Dropdown.Item onClick={handleSignOut} href="/" className="text-danger">Logout</Dropdown.Item>
+                                  <Dropdown.Item className="text-white" href="/watchList">Watchlist</Dropdown.Item>
+                                  <Dropdown.Item className="text-white" href="/watchLater">Watch Later</Dropdown.Item>
+                                  <Dropdown.Item onClick={props.handleSignOut} href="/" className="text-danger">Logout</Dropdown.Item>
                               </Dropdown.Menu>
                           </Dropdown>
                       )

@@ -3,9 +3,10 @@ import { useState, useEffect } from 'react';
 import Lottie from 'react-lottie';
 import './StiflixChill.css';
 import {getWindowDimensions} from "../../helper/miscs.js";
-import {Container} from "react-bootstrap";
+import {Button, Container} from "react-bootstrap";
 import StiflixChillFlow from "./StiflixChillFlow.jsx";
 import * as API from "../../API.js";
+import {useNavigate} from "react-router-dom";
 
 const MOCK_PHRASES = {
     TASK: [
@@ -26,6 +27,7 @@ const MOCK_PHRASES = {
 };
 
 const StiflixChillRoot = () => {
+    const navigate = useNavigate();
     const [showSplash, setShowSplash] = useState(true);
     const [isMobile, setIsMobile] = useState(false);
     const [movies, setMovies] = useState([])
@@ -58,6 +60,9 @@ const StiflixChillRoot = () => {
     useEffect(() => {
         const fetchMovies = async () => {
             const movies = await API.getStiflixChillHome(page);
+            if (!movies) {
+                navigate("/movies")
+            }
             setMovies(movies);
         }
 
@@ -66,13 +71,16 @@ const StiflixChillRoot = () => {
 
     if (isMobile) {
         return (
-            <div className="stiflix-mobile-message">
-                <div className="message-content">
-                    <h2>Stiflix&Chill</h2>
-                    <p>is available only on desktop devices.</p>
-                    <p>Please visit us on a larger screen.</p>
+            <Container fluid className="d-flex flex-column align-items-center justify-content-center min-vh-100">
+                <div className="message-content text-center">
+                    <h2 className="text-light">Stiflix&Chill</h2>
+                    <p className="text-light">is available only on desktop devices.</p>
+                    <p className="text-light">Please visit us on a larger screen.</p>
                 </div>
-            </div>
+                <Button className="sc_button" onClick={() => navigate("/movies")}>
+                    Back to the movies
+                </Button>
+            </Container>
         );
     }
 

@@ -9,6 +9,7 @@ function NavBar(props) {
     useEffect(() => {
         const handleResize = () => {
             if (window.innerWidth <= 768) {
+                console.log("mobile");
                 setScreen('mobile');
             } else {
                 setScreen('desktop');
@@ -25,9 +26,11 @@ function NavBar(props) {
         screen === 'desktop'
             ? (
                 <NavBarDesktop
+                    user={props.user}
                     section={props.section}
                     handleSectionChange={props.handleSectionChange}
                     handleSearch={props.handleSearch}
+                    handleSignOut={props.handleSignOut}
                     searchQuery={props.searchQuery}
                     startSearching={props.startSearching}
                     isSmartTV={props.isSmartTV}
@@ -35,9 +38,11 @@ function NavBar(props) {
             )
             : (
                 <NavBarMobile
+                    user={props.user}
                     section={props.section}
                     handleSectionChange={props.handleSectionChange}
                     handleSearch={props.handleSearch}
+                    handleSignOut={props.handleSignOut}
                     searchQuery={props.searchQuery}
                     startSearching={props.startSearching}
                     isSmartTV={props.isSmartTV}

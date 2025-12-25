@@ -1,39 +1,18 @@
+import {useNavigate} from "react-router-dom";
+
 {/*eslint-disable react/prop-types*/}
-import {Container, Dropdown, Form, Nav, Navbar} from "react-bootstrap";
+import {Button, Container, Dropdown, Form, Nav, Navbar} from "react-bootstrap";
 import logo from "../../assets/images/logo.png";
-import {useEffect, useState} from "react";
+import sc_logo from "../../assets/images/sc.png";
+import {useState} from "react";
 import gsap from "gsap";
 import {useGSAP} from "@gsap/react";
-import {auth, db} from "../../../firebaseConfiguration.js";
-import {useNavigate} from "react-router-dom";
-import {doc, getDoc} from "firebase/firestore";
 
 gsap.config().nullTargetWarn = false;
 
 function NavBarDesktop(props) {
     const navigate = useNavigate();
     const [searchVisible, setSearchVisible] = useState(props.searchQuery.length > 0);
-    const [user, setUser] = useState(auth.currentUser);
-    const [avatar, setAvatar] = useState(null)
-
-    useEffect(() => {
-        auth.onAuthStateChanged((usr) => {
-            if (usr) {
-                setUser(usr);
-                getDoc(doc(db, "users", usr.uid)).then((doc) => {
-                    setAvatar(doc.data().avatar);
-                });
-            }
-        })
-    }, []);
-
-    const handleSignOut = async (e) => {
-        e.preventDefault()
-        await auth.signOut().then(() => {
-            setUser(null)
-            navigate("/");
-        });
-    }
     
     useGSAP(() => {
         if(!props.isSmartTV) {
@@ -66,7 +45,7 @@ function NavBarDesktop(props) {
 
     return (
         <Navbar className="position-absolute w-100 bg-gradient-dark z-3">
-            <Container fluid>
+            <Container fluid className="d-flex flex-row flex-wrap justify-content-sm-end">
                 <Navbar.Brand to='/homepage'>
                     <div className="mx-5 mt-2" id="stiflix-logo">
                         <img src={logo} alt="logo" height={50} width={150}/>
@@ -94,6 +73,17 @@ function NavBarDesktop(props) {
                         }
                     }}
                 >
+                    {
+                        props.user && (props.user.role === "OWNER" || props.user.role === "EDITOR") &&
+                        <Button className="sc-button me-3" onClick={() => navigate("/stiflixchill")}>
+                            <img
+                                alt={"stiflix&chill"}
+                                src={sc_logo}
+                                width={130}
+                                height={25}
+                            />
+                        </Button>
+                    }
                     {searchVisible && (
                         <Form.Control
                             type="search"
@@ -109,20 +99,20 @@ function NavBarDesktop(props) {
                     }} className="bi bi-search text-white h2"></i>
                 </Form>
                 {
-                    user && (
-                        <Dropdown align={{lg: 'end'}} className="mx-4">
+                    props.user && (
+                        <Dropdown align={{lg: 'start', xl: 'end'}} className="mx-4">
                             <Dropdown.Toggle className="p-0 btn-avatar">
-                                {avatar && <img src={`/avatars/${avatar}.png`} alt="avatar"
+                                {props.user && <img src={`/avatars/${props.user.avatar}.png`} alt="avatar"
                                                 width={50} height={50} className="rounded-3"/>}
                             </Dropdown.Toggle>
 
-                            <Dropdown.Menu className="mt-2 bg-dark">
+                            <Dropdown.Menu className="mt-2 bg-dark dropdown-menu-start dropdown-menu-lg-end">
                                 <Dropdown.Item className="text-white" href="/movies">Home</Dropdown.Item>
                                 <Dropdown.Item className="text-white" href="/account">Account</Dropdown.Item>
                                 <Dropdown.Item className="text-white" href="/favourites">Favourites</Dropdown.Item>
-                                <Dropdown.Item className="text-white" href="/watched-list">Watchlist</Dropdown.Item>
-                                <Dropdown.Item className="text-white" href="/to-watch-list">Watch Later</Dropdown.Item>
-                                <Dropdown.Item onClick={handleSignOut} href="/" className="text-danger">Logout</Dropdown.Item>
+                                <Dropdown.Item className="text-white" href="/watchList">Watchlist</Dropdown.Item>
+                                <Dropdown.Item className="text-white" href="/watchLater">Watch Later</Dropdown.Item>
+                                <Dropdown.Item onClick={props.handleSignOut} href="/" className="text-danger">Logout</Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>
                     )
