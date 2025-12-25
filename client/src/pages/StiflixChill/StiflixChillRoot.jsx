@@ -5,6 +5,7 @@ import './StiflixChill.css';
 import {getWindowDimensions} from "../../helper/miscs.js";
 import {Container} from "react-bootstrap";
 import StiflixChillFlow from "./StiflixChillFlow.jsx";
+import * as API from "../../API.js";
 
 const MOCK_PHRASES = {
     TASK: [
@@ -27,6 +28,7 @@ const MOCK_PHRASES = {
 const StiflixChillRoot = () => {
     const [showSplash, setShowSplash] = useState(true);
     const [isMobile, setIsMobile] = useState(false);
+    const [movies, setMovies] = useState([])
     const { width, height } = getWindowDimensions()
     const defaultOptions = {
         loop: true,
@@ -51,6 +53,15 @@ const StiflixChillRoot = () => {
             }, 2500);
         }
     }, [isMobile]);
+
+    useEffect(() => {
+        const fetchMovies = async () => {
+            const fetchedMovies = await API.getStiflixChillHome(1);
+            setMovies(fetchedMovies);
+        }
+
+        fetchMovies();
+    }, [])
 
     if (isMobile) {
         return (
@@ -83,7 +94,7 @@ const StiflixChillRoot = () => {
     }
 
     return (
-        <StiflixChillFlow />
+        <StiflixChillFlow movies={movies}/>
     );
 };
 

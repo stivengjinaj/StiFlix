@@ -1,12 +1,13 @@
 import {useEffect, useRef, useState} from 'react';
 import sc_background from '../../assets/images/sc_background.png';
 import sc_logo from '../../assets/images/sc.png';
-import { Container, Row, Button } from 'react-bootstrap';
+import {Container, Row, Button, Spinner} from 'react-bootstrap';
 import Choice from "./Choice.jsx";
 import RandomChoice from "./RandomChoice.jsx";
 import MovieCatalogue from "./MovieCatalogue.jsx";
+import PropTypes from "prop-types";
 
-const StiflixChillFlow = () => {
+const StiflixChillFlow = ({ movies }) => {
     const comp = useRef(null);
     const [step, setStep] = useState(0);
     const [choice, setChoice] = useState(null);
@@ -19,43 +20,51 @@ const StiflixChillFlow = () => {
     }, [step]);
 
     return (
-        <Container
-            fluid
-            className="stiflix-bg-container vh-100 d-flex flex-column"
-            style={{
-                backgroundImage: `url(${sc_background})`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-            }}
-            ref={comp}
-        >
-            <Row
-                className="justify-content-between align-items-center py-3 rounded-bottom-3 flex-grow-0 top-bar"
+        movies.results && movies.results.length > 0
+            ? <Container
+                fluid
+                className="stiflix-bg-container vh-100 d-flex flex-column"
                 style={{
-                    backgroundColor: 'rgba(0, 0, 0, 0.3)',
-                    boxShadow: '0 4px 40px rgba(229, 9, 20, 0.5)',
-                    backdropFilter: 'blur(5px)',
-                    position: 'relative',
+                    backgroundImage: `url(${sc_background})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
                 }}
+                ref={comp}
             >
-                <div className="col-6 p-3">
-                    <img src={sc_logo} alt={"Stiflix&Chill"} width={300} height={70} style={{objectFit: 'contain'}}/>
-                </div>
-                <div className="col-6 p-3 text-end">
-                    <Button className="sc_button" variant="danger">
-                        Leave Stiflix&Chill
-                    </Button>
-                </div>
-            </Row>
+                <Row
+                    className="justify-content-between align-items-center py-3 rounded-bottom-3 flex-grow-0 top-bar"
+                    style={{
+                        backgroundColor: 'rgba(0, 0, 0, 0.3)',
+                        boxShadow: '0 4px 40px rgba(229, 9, 20, 0.5)',
+                        backdropFilter: 'blur(5px)',
+                        position: 'relative',
+                    }}
+                >
+                    <div className="col-6 p-3">
+                        <img src={sc_logo} alt={"Stiflix&Chill"} width={300} height={70} style={{objectFit: 'contain'}}/>
+                    </div>
+                    <div className="col-6 p-3 text-end">
+                        <Button className="sc_button" variant="danger">
+                            Leave Stiflix&Chill
+                        </Button>
+                    </div>
+                </Row>
 
-            {step === 0 && <Choice comp={comp} step={step} setStep={setStep} setChoice={setChoice}/>}
-            {step === 1 && (
-                choice === 0
-                    ? <RandomChoice onComplete={() => console.log("Random movie")}/>
-                    : <MovieCatalogue />
-            )}
-        </Container>
+                {step === 0 && <Choice comp={comp} step={step} setStep={setStep} setChoice={setChoice}/>}
+                {step === 1 && (
+                    choice === 0
+                        ? <RandomChoice movies={movies} />
+                        : <MovieCatalogue />
+                )}
+            </Container>
+            : <Container fluid className="vh-100 d-flex justify-content-center align-items-center bg-black">
+                <Spinner animation="border" variant="danger" />
+            </Container>
     );
 };
+
+StiflixChillFlow.propTypes = {
+    movies: PropTypes.object.isRequired,
+}
 
 export default StiflixChillFlow;
