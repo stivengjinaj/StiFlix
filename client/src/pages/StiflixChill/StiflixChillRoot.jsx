@@ -29,6 +29,7 @@ const StiflixChillRoot = () => {
     const [showSplash, setShowSplash] = useState(true);
     const [isMobile, setIsMobile] = useState(false);
     const [movies, setMovies] = useState([])
+    const [page, setPage] = useState(1);
     const { width, height } = getWindowDimensions()
     const defaultOptions = {
         loop: true,
@@ -56,12 +57,12 @@ const StiflixChillRoot = () => {
 
     useEffect(() => {
         const fetchMovies = async () => {
-            const fetchedMovies = await API.getStiflixChillHome(1);
-            setMovies(fetchedMovies);
+            const movies = await API.getStiflixChillHome(page);
+            setMovies(movies);
         }
 
         fetchMovies();
-    }, [])
+    }, [page]);
 
     if (isMobile) {
         return (
@@ -94,7 +95,7 @@ const StiflixChillRoot = () => {
     }
 
     return (
-        <StiflixChillFlow movies={movies}/>
+        <StiflixChillFlow movies={movies} page={page} setPage={setPage} />
     );
 };
 

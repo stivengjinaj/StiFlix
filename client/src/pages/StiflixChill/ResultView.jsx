@@ -2,6 +2,7 @@ import PropTypes from "prop-types";
 import {Badge, Button, Col, Container, Image, Row} from "react-bootstrap";
 import {useEffect, useRef} from "react";
 import gsap from "gsap";
+import Loading from "../Miscs/Loading.jsx";
 
 const ResultView = ({ movie, onRollAgain }) => {
     const containerRef = useRef(null);
@@ -26,7 +27,7 @@ const ResultView = ({ movie, onRollAgain }) => {
         );
     }, []);
 
-    if (!movie) return null;
+    if (!movie) return <Loading />;
 
     return (
         <div className="position-relative vh-100 w-100 overflow-hidden d-flex flex-column align-items-center justify-content-center text-white">
@@ -44,7 +45,7 @@ const ResultView = ({ movie, onRollAgain }) => {
                 <Container className="result-glass" style={{ position: 'relative', zIndex: 10 }}>
                     <Row className="align-items-center justify-content-center">
 
-                        <Col md={5} lg={4} className="mb-4 mb-md-0 text-center">
+                        <Col md={5} lg={4} className="text-center">
                             <Image
                                 fluid
                                 src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
@@ -54,15 +55,16 @@ const ResultView = ({ movie, onRollAgain }) => {
                             />
                         </Col>
 
-                        <Col md={7} lg={6} className="text-center text-md-start ps-md-5">
+                        <Col md={7} lg={8} className="text-start pe-5">
 
                             <h1 className="display-3 fw-bold mb-3" style={{ textShadow: '2px 2px 10px rgba(0,0,0,0.8)' }}>
-                                {movie.original_title || movie.original_name}
+                                {movie.title || movie.original_title}
                             </h1>
 
                             <div className="d-flex align-items-center justify-content-center justify-content-md-start mb-4 gap-3 text-light">
-                                <span className="fw-bold text-success">Rating: {movie.vote_average}</span>
+                                <span className="fw-bold text-light">Rating: {movie.vote_average}</span>
                                 <Badge bg="secondary" className="border border-white bg-transparent">HD</Badge>
+                                <span className="fw-bold text-light">{movie.release_date}</span>
                             </div>
 
                             <p className="lead mb-4 text-white-50">

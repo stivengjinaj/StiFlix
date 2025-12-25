@@ -1,13 +1,14 @@
 import {useEffect, useRef, useState} from 'react';
 import sc_background from '../../assets/images/sc_background.png';
 import sc_logo from '../../assets/images/sc.png';
-import {Container, Row, Button, Spinner} from 'react-bootstrap';
+import {Container, Row, Button} from 'react-bootstrap';
 import Choice from "./Choice.jsx";
 import RandomChoice from "./RandomChoice.jsx";
 import MovieCatalogue from "./MovieCatalogue.jsx";
 import PropTypes from "prop-types";
+import Loading from "../Miscs/Loading.jsx";
 
-const StiflixChillFlow = ({ movies }) => {
+const StiflixChillFlow = ({ movies, page, setPage }) => {
     const comp = useRef(null);
     const [step, setStep] = useState(0);
     const [choice, setChoice] = useState(null);
@@ -54,17 +55,17 @@ const StiflixChillFlow = ({ movies }) => {
                 {step === 1 && (
                     choice === 0
                         ? <RandomChoice movies={movies} />
-                        : <MovieCatalogue />
+                        : <MovieCatalogue movies={movies} page={page} setPage={setPage} />
                 )}
             </Container>
-            : <Container fluid className="vh-100 d-flex justify-content-center align-items-center bg-black">
-                <Spinner animation="border" variant="danger" />
-            </Container>
+            : <Loading />
     );
 };
 
 StiflixChillFlow.propTypes = {
     movies: PropTypes.object.isRequired,
+    page: PropTypes.number.isRequired,
+    setPage: PropTypes.func.isRequired,
 }
 
 export default StiflixChillFlow;
