@@ -18,11 +18,9 @@ class FetchedMovieController {
         const cacheKey = 'all_popular';
         const cached = cache.get(cacheKey);
         if (cached) {
-            console.log('Cache hit: getAllPopular');
             return cached;
         }
 
-        console.log('Cache miss: getAllPopular - fetching...');
         const popularMovies = await this.getPopularMovies();
         const popularTvShows = await this.getPopularTvShows();
         const result = sortByVoteAverage([...popularMovies, ...popularTvShows]);
@@ -40,11 +38,9 @@ class FetchedMovieController {
         const cacheKey = 'all_trending';
         const cached = cache.get(cacheKey);
         if (cached) {
-            console.log('Cache hit: getAllTrending');
             return cached;
         }
 
-        console.log('Cache miss: getAllTrending - fetching...');
         const movies = await API.getTrendingMovies();
 
         // Fetch all TV show details in parallel instead of sequentially
@@ -81,11 +77,9 @@ class FetchedMovieController {
         const cacheKey = 'popular_movies';
         const cached = cache.get(cacheKey);
         if (cached) {
-            console.log('Cache hit: getPopularMovies');
             return cached;
         }
 
-        console.log('Cache miss: getPopularMovies - fetching...');
         const fetchedMovies = [];
         try {
             const movies = await API.getPopularMovies();
@@ -113,7 +107,6 @@ class FetchedMovieController {
             return cached;
         }
 
-        console.log('Cache miss: getPopularTvShows - fetching...');
         const tvShows = await API.getPopularTvShows();
 
         const results = await Promise.all(
@@ -144,11 +137,9 @@ class FetchedMovieController {
         const cacheKey = 'top_rated_movies';
         const cached = cache.get(cacheKey);
         if (cached) {
-            console.log('Cache hit: getTopRatedMovies');
             return cached;
         }
 
-        console.log('Cache miss: getTopRatedMovies - fetching...');
         const fetchedMovies = [];
         try {
             const movies = await API.getTopRatedMovies();
@@ -173,11 +164,8 @@ class FetchedMovieController {
         const cacheKey = 'discover_movies';
         const cached = cache.get(cacheKey);
         if (cached) {
-            console.log('✅ Cache hit: discoverMovies');
             return cached;
         }
-
-        console.log('🔄 Cache miss: discoverMovies - fetching...');
         const fetchedMovies = [];
 
         const pagePromises = [2, 3, 4].map(page => API.discoverMovies(page));
@@ -204,11 +192,9 @@ class FetchedMovieController {
         const cacheKey = 'discover_tvshows';
         const cached = cache.get(cacheKey);
         if (cached) {
-            console.log('Cache hit: discoverTvShows');
             return cached;
         }
 
-        console.log('Cache miss: discoverTvShows - fetching...');
         const resultsMap = new Map();
 
         try {
@@ -268,11 +254,8 @@ class FetchedMovieController {
         const cacheKey = `media_details_${mediaType}_${movieId}`;
         const cached = cache.get(cacheKey);
         if (cached) {
-            console.log(`Cache hit: getMediaDetails ${mediaType} ${movieId}`);
             return cached;
         }
-
-        console.log(`Cache miss: getMediaDetails ${mediaType} ${movieId} - fetching...`);
         const media = await API.mediaDetails(movieId, mediaType);
         const mediaJson = {
             id: media.id,
@@ -337,11 +320,9 @@ class FetchedMovieController {
         const cacheKey = `trailer_${mediaType}_${movieId}`;
         const cached = cache.get(cacheKey);
         if (cached) {
-            console.log(`Cache hit: getTrailer ${mediaType} ${movieId}`);
             return cached;
         }
 
-        console.log(`Cache miss: getTrailer ${mediaType} ${movieId} - fetching...`);
         const data = await API.getTrailerKey(movieId, mediaType);
         if (!data?.length) return null;
 
@@ -365,11 +346,9 @@ class FetchedMovieController {
         const cacheKey = `genres_${media_type}_${mediaId}`;
         const cached = cache.get(cacheKey);
         if (cached) {
-            console.log(`Cache hit: getMediaGenres ${media_type} ${mediaId}`);
             return cached;
         }
 
-        console.log(`Cache miss: getMediaGenres ${media_type} ${mediaId} - fetching...`);
         const details = await API.mediaGenres(mediaId, media_type);
         cache.set(cacheKey, details.genres);
         return details.genres;
@@ -420,11 +399,9 @@ class FetchedMovieController {
         const cacheKey = `logos_${mediaType}_${movieId}`;
         const cached = cache.get(cacheKey);
         if (cached) {
-            console.log(`Cache hit: getMovieLogos ${mediaType} ${movieId}`);
             return cached;
         }
 
-        console.log(`Cache miss: getMovieLogos ${mediaType} ${movieId} - fetching...`);
         const logos = await API.getLogos(movieId, mediaType);
         const result = logos.images.logos;
         cache.set(cacheKey, result);

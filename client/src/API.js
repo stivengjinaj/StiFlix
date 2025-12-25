@@ -1,14 +1,29 @@
+import {auth} from "../firebaseConfiguration.js";
+
 //export const remote_url = "https://stiflix.vercel.app";
 export const remote_url = "http://localhost:8080/api/v2";
 
-const apiFetch = async (url, options = {}) => {
+export const apiFetch = async (url, options = {}) => {
+    const headers = {
+        Accept: "application/json",
+        ...(options.headers || {}),
+    };
+
+    const user = auth.currentUser;
+
+    if (user) {
+        try {
+            const token = await user.getIdToken();
+            headers.Authorization = `Bearer ${token}`;
+        } catch (err) {
+            console.warn("Failed to get auth token:", err);
+        }
+    }
+
     const res = await fetch(url, {
         credentials: "include",
         ...options,
-        headers: {
-            Accept: "application/json",
-            ...(options.headers || {})
-        }
+        headers,
     });
 
     if (!res.ok) {
@@ -200,3 +215,6 @@ export const getLogos = (id, mediaType) =>
     apiFetch(
         `${remote_url}/movies/logos/${mediaType}/${id}`
     );
+
+export const getStiflixChillHome = (page) =>
+    apiFetch(`${remote_url}/stiflixchill/home/${page}`);
