@@ -75,7 +75,7 @@ function Choice({ comp, setStep, setChoice }) {
             <Row className="justify-content-center mt-4">
                 <Col xs={12} className="text-center text-white">
                     <h1 className="stiflix-slogan">
-                        Because the movies is not the main event...
+                        Because the movie is not the main event...
                     </h1>
                 </Col>
             </Row>

@@ -186,6 +186,20 @@ export function shuffleArray(array) {
 }
 
 /**
+ * Function to shuffle an array using the Fisher-Yates algorithm.
+ * @param array
+ * @returns {*[]}
+ */
+export const shuffleArray2 = (array) => {
+    const arr = [...array];
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+};
+
+/**
  * Functions used to manage splash screen visibility with localStorage and expiry.
  *
  * @returns {boolean} - True if the splash screen has been seen and is still valid, false otherwise.

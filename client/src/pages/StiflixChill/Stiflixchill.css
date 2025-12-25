@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Satisfy&display=swap');
+
 .splash-container {
     background-color: #141414 !important;
     width: 100vw;
@@ -12,8 +14,9 @@
     font-weight: bold;
     border-radius: 10px !important;
 }
+
 .stiflix-slogan {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: 'Satisfy', cursive;
     font-weight: 700;
     font-size: 3.5rem;
     text-shadow: 0 4px 15px rgba(0, 0, 0, 0.9);
@@ -26,16 +29,13 @@
     backdrop-filter: blur(10px);
     border-radius: 15px;
     cursor: pointer;
-    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.3s ease !important;
     height: 100%;
 }
 
-.choice-card::after {
-    transition: transform 0.3s ease-in-out;
-}
-
 .choice-card:hover {
-    transition: transform 1s ease-in-out;
+    scale: 1.05 !important;
+    transition: transform 0.3s ease-in-out !important;
 }
 
 .choice-card h3 {

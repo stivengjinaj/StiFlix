@@ -51,7 +51,7 @@ const StiflixChillFlow = () => {
             {step === 0 && <Choice comp={comp} step={step} setStep={setStep} setChoice={setChoice}/>}
             {step === 1 && (
                 choice === 0
-                    ? <RandomChoice />
+                    ? <RandomChoice onComplete={() => console.log("Random movie")}/>
                     : <MovieCatalogue />
             )}
         </Container>
