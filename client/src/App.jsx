@@ -17,6 +17,7 @@ import NotFound from "./pages/NotFound.jsx";
 import {detectSmartTV} from "./helper/smartTvDetector.js";
 import {getUser} from "./API.js";
 import StiflixChillRoot from "./pages/StiflixChill/StiflixChillRoot.jsx";
+import DmcaDisclaimer from "./pages/Miscs/DmcaDisclaimer.jsx";
 
 function App() {
     const navigate = useNavigate();
@@ -122,6 +123,7 @@ function App() {
                     ? <StiflixChillRoot user={user} />
                     : <Navigate to={'/movies'}/>
             } />
+            <Route path={"/disclaimer"} element={<DmcaDisclaimer />} />
         </Routes>
     );
 }

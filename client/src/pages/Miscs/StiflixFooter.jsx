@@ -7,6 +7,7 @@ function StiflixFooter() {
                 <Row>
                     <h6>Stiflix does not store any of the contents present in the site.</h6>
                     <strong>Copyright © Stiflix 2026</strong>
+                    <strong><a href={"/disclaimer"}>DMCA Disclaimer</a></strong>
                 </Row>
             </Container>
         </footer>
