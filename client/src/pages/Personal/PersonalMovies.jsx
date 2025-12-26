@@ -3,23 +3,14 @@ import Loading from "../Miscs/Loading.jsx";
 {/* eslint-disable react/prop-types */}
 import logo from "../../assets/images/logo.png";
 import {useEffect, useState} from "react";
-import {db} from "../../../firebaseConfiguration.js";
-import {collection, doc, getDocs} from "firebase/firestore";
-import {Button, Container, Nav, Navbar} from "react-bootstrap";
+import {Button, Container, Nav, Navbar, Spinner} from "react-bootstrap";
 import GridMovies from "../Movies/GridMovies.jsx";
 import smallLogo from "../../assets/images/titleLogo.png";
 import {useNavigate} from "react-router-dom";
-import FetchedMovieController from "../../controllers/FetchedMovieController.js";
 
 function PersonalMovies(props) {
     const navigate = useNavigate();
     const [screen, setScreen] = useState('desktop');
-    const movieFetcher = new FetchedMovieController();
-    const [favourites, setFavourites] = useState([]);
-    const [watchLater, setWatchLater] = useState([]);
-    const [watchlist, setWatchlist] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [noMovies, setNoMovies] = useState(false);
 
     useEffect(() => {
         const handleResize = () => {
@@ -36,62 +27,6 @@ function PersonalMovies(props) {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    useEffect(() => {
-        const fetchMovies = async (usr) => {
-            if (usr) {
-                setNoMovies(false);
-                setLoading(true);
-
-                const userDocRef = doc(db, 'users', usr.uid);
-                let snapshot;
-                let movies = [];
-
-                try {
-                    switch (props.type) {
-                        case "watchLater":
-                            snapshot = await getDocs(collection(userDocRef, 'toWatch'));
-                            break;
-                        case "watchlist":
-                            snapshot = await getDocs(collection(userDocRef, 'watched'));
-                            break;
-                        case "favourites":
-                            snapshot = await getDocs(collection(userDocRef, 'favourites'));
-                            break;
-                        default:
-                            return;
-                    }
-
-                    const moviePromises = snapshot.docs.map((doc) => movieFetcher.getMediaDetails(doc.data().movieId, doc.data().mediaType));
-                    movies = await Promise.all(moviePromises);
-
-                    switch (props.type) {
-                        case "watchLater":
-                            setWatchLater(movies);
-                            break;
-                        case "watchlist":
-                            setWatchlist(movies);
-                            break;
-                        case "favourites":
-                            setFavourites(movies);
-                            break;
-                        default:
-                            return;
-                    }
-
-                    if (movies.length === 0) {
-                        setNoMovies(true);
-                    }
-                } catch (error) {
-                    console.error("Error fetching movies:", error);
-                } finally {
-                    setLoading(false);
-                }
-            }
-        };
-        fetchMovies(props.user);
-    }, [props.type, props.user]);
-
-
     const handleMovieTypeSelection = (type) => {
         navigate(`/${type}`);
     };
@@ -99,15 +34,8 @@ function PersonalMovies(props) {
     return (
         <Container fluid className="min-vh-100 bg-gradient-dark-radius main-banner overflow-x-hidden">
             <Navbar className="bg-gradient-dark-radius">
-                <Container fluid className="justify-content-start ">
-                    <Navbar.Brand>
-                        <Button variant="transparent" onClick={() => navigate('/movies')}>
-                            <strong>
-                                <i className="bi bi-arrow-left text-white h1"></i>
-                            </strong>
-                        </Button>
-                    </Navbar.Brand>
-                    <Navbar.Brand href="/movies">
+                <Container fluid className="justify-content-start">
+                    <Navbar.Brand href="/movies" className="p-4">
                         {screen === 'desktop' ? (
                             <img src={logo} alt="logo" height={50} width={150} />
                         ) : (
@@ -149,22 +77,16 @@ function PersonalMovies(props) {
                 )
             }
             {
-                loading
-                    ? <Loading />
-                    : (
-                        noMovies
-                            ? <Container fluid className="d-flex justify-content-center bg-gradient-dark-radius">
-                                <h2 className="text-white mt-5 mx-3">
-                                    No movies in {props.type === "favourites" ? "Favourites" : props.type === "watchLater" ? "Watch Later" : "Watchlist"}
-                                </h2>
-                            </Container>
-                            : <Container fluid className="mx-2">
-                                <h2 className="text-white mt-5 mx-3">
-                                    {props.type === "favourites" ? "Favourites" : props.type === "watchLater" ? "Watch Later" : "Watchlist"}
-                                </h2>
-                                <GridMovies movies={props.type === "favourites" ? favourites : props.type === "watchLater" ? watchLater : watchlist} />
-                            </Container>
-                    )
+                !props.userMovies
+                    ? <Container fluid className="d-flex flex-column justify-content-center align-items-center h-100">
+                        <Spinner animation="border" variant="danger" />
+                    </Container>
+                    : <Container fluid className="mx-2">
+                        <h2 className="text-white mt-5 mx-3">
+                            {props.type === "favourites" ? "Favourites" : props.type === "watchLater" ? "Watch Later" : "Watchlist"}
+                        </h2>
+                        <GridMovies movies={props.type === "favourites" ? props.userMovies.favourites : props.type === "watchLater" ? props.userMovies.watchLater : props.userMovies.watchlist} />
+                    </Container>
             }
         </Container>
     );

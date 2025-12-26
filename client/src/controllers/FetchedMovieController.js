@@ -436,15 +436,6 @@ class FetchedMovieController {
             tvShow.poster_path !== undefined ||
             tvShow.vote_average !== undefined;
     }
-
-    /**
-     * Clear all cached data
-     * Useful for manual refresh or when user logs out
-     */
-    clearCache() {
-        cache.clear();
-        console.log('Cache cleared');
-    }
 }
 
 export default FetchedMovieController;

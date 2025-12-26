@@ -45,6 +45,17 @@ export const getUser = (token) =>
         headers: { Authorization: `Bearer ${token}` }
     });
 
+/**
+ * API used to get user personal movies.
+ *
+ * @param token
+ * @returns {Promise<any>}
+ */
+export const getUserMovies = (token) =>
+    apiFetch(`${remote_url}/users/movies`, {
+        headers: { Authorization: `Bearer ${token}` }
+    })
+
 /** * API used to update user verification status.
  *
  * @param token

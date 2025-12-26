@@ -15,7 +15,7 @@ import {auth} from "../firebaseConfiguration.js";
 import Loading from "./pages/Miscs/Loading.jsx";
 import NotFound from "./pages/NotFound.jsx";
 import {detectSmartTV} from "./helper/smartTvDetector.js";
-import {getUser} from "./API.js";
+import {getUser, getUserMovies} from "./API.js";
 import StiflixChillRoot from "./pages/StiflixChill/StiflixChillRoot.jsx";
 import DmcaDisclaimer from "./pages/Miscs/DmcaDisclaimer.jsx";
 
@@ -28,14 +28,13 @@ function App() {
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
     const isSmartTV = detectSmartTV();
     const isRegistering = useRef(false);
+    const [userMovies, setUserMovies] = useState(null);
 
     useEffect(() => {
         const handleResize = () => setScreenWidth(window.innerWidth);
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
     }, [])
-
-
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(async (usr) => {
@@ -53,7 +52,6 @@ function App() {
                         ...userData,
                         role
                     });
-                    console.log(user);
                 } catch (error) {
                     console.error("Error fetching user data:", error);
                     setUser(null);
@@ -65,6 +63,26 @@ function App() {
         });
         return () => unsubscribe();
     }, []);
+
+    useEffect(() => {
+        if (!user) return;
+        const fetchUserMovies = async () => {
+            const movies = await getUserMovies(user.token);
+            if (movies) {
+                console.log(movies)
+                setUserMovies({
+                    ...movies,
+                    success: true
+                });
+            }else {
+                setUserMovies({
+                    success: false
+                })
+            }
+        }
+
+        fetchUserMovies();
+    }, [user])
 
     const handleSignOut = async (e) => {
         e.preventDefault();
@@ -108,13 +126,13 @@ function App() {
                 user ? <MyAccount user={user} handleSignOut={handleSignOut}/> : <Navigate to={'/login'} />
             } />
             <Route path={'/favourites'} element={
-                user ? <PersonalMovies user={user} type={'favourites'} /> : <Navigate to={'/login'} />
+                user ? <PersonalMovies user={user} type={'favourites'} userMovies={userMovies}/> : <Navigate to={'/login'} />
             } />
             <Route path={'/watchLater'} element={
-                user ? <PersonalMovies user={user} type={'watchLater'} /> : <Navigate to={'/login'} />
+                user ? <PersonalMovies user={user} type={'watchLater'} userMovies={userMovies}/> : <Navigate to={'/login'} />
             } />
             <Route path={'/watchList'} element={
-                user ? <PersonalMovies user={user} type={'watchlist'} /> : <Navigate to={'/login'} />
+                user ? <PersonalMovies user={user} type={'watchlist'} userMovies={userMovies}/> : <Navigate to={'/login'} />
             } />
             <Route path={'/loading'} element={<Loading />} />
             <Route path={'*'} element={<NotFound />} />
