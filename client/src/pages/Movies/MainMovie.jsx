@@ -90,11 +90,11 @@ function MainMovie(props) {
     useLayoutEffect(() => {
         if (currentMovie && !props.isSmartTV) {
             const ctx = gsap.context(() => {
-                gsap.fromTo('.main-banner', { x: 50, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: 1 });
-                gsap.fromTo('.main-banner-title', { x: 50, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: 1 });
-                gsap.fromTo('.main-banner-category', { x: 50, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: 1 });
-                gsap.fromTo('.main-banner-description', { x: 50, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: 1 });
-                gsap.fromTo('button', { x: 50, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: 1.5 });
+                gsap.fromTo('.main-banner', { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.5 });
+                gsap.fromTo('.main-banner-title', { y: 20, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.5 });
+                gsap.fromTo('.main-banner-category', { y: 20, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.5 });
+                gsap.fromTo('.main-banner-description', { y: 20, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.5 });
+                gsap.fromTo('button', { y: 20, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.5 });
             });
 
             return () => ctx.revert();
