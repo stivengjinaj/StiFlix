@@ -3,44 +3,16 @@ import {Button, Col, Container, Form, Navbar, Row} from "react-bootstrap";
 import logo from "../../assets/images/logo.png";
 import smallLogo from "../../assets/images/titleLogo.png";
 import {useEffect, useState} from "react";
-import {useNavigate} from "react-router-dom";
-import {db} from "../../../firebaseConfiguration.js";
 import {updatePassword} from "firebase/auth";
-import {doc, getDoc} from "firebase/firestore";
-import User from "../../models/User.js";
 import Loading from "../Miscs/Loading.jsx";
 
 
 function MyAccount(props) {
-    const navigate = useNavigate();
     const [screen, setScreen] = useState('desktop');
-    const [userDetails, setUserDetails] = useState(null);
     const [changingPassword, setChangingPassword] = useState(false);
     const [newPassword, setNewPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
     const [wrongCredentials, setWrongCredentials] = useState(false)
-
-    useEffect(() => {
-        const fetchUserDetails = async (usr) => {
-            const userDocRef = doc(db, 'users', usr.uid);
-
-            try {
-                const userDocSnap = await getDoc(userDocRef);
-
-                if (userDocSnap.exists()) {
-                    const userData = userDocSnap.data();
-                    const userDetails = new User(userData.fullName, usr.email, userData.verified, userData.avatar);
-                    setUserDetails(userDetails);
-                } else {
-                    console.log('No such document!');
-                }
-            } catch (error) {
-                console.error('Error fetching user document:', error);
-            }
-        }
-
-        fetchUserDetails(props.user);
-    }, []);
 
     useEffect(() => {
         const handleResize = () => {
@@ -75,13 +47,6 @@ function MyAccount(props) {
         <Container fluid className="min-vh-100 p-0 bg-white">
             <Navbar className="bg-gradient-dark-radius">
                 <Container fluid className="justify-content-start align-items-center">
-                    <Navbar.Brand>
-                        <Button variant="transparent" onClick={() => navigate('/movies')}>
-                            <strong>
-                                <i className="bi bi-arrow-left text-white h1"></i>
-                            </strong>
-                        </Button>
-                    </Navbar.Brand>
                     <Navbar.Brand href="/movies">
                         {screen === 'desktop' ? (
                             <img src={logo} alt="logo" height={50} width={150} />
@@ -92,7 +57,7 @@ function MyAccount(props) {
                 </Container>
             </Navbar>
             {
-                userDetails
+                props.user
                     ? (
                         <Container fluid className="p-0">
                             <Container className="mt-5">
@@ -187,8 +152,8 @@ function MyAccount(props) {
                                         </Col>
                                         <Col xs={12} md={4} className="mb-3">
                                             <Container className="d-flex align-items-center p-0">
-                                                <img alt="avatar" src={`/avatars/${userDetails.avatar}.png`} width={50} height={50} />
-                                                <h5 className="mx-3">{userDetails.fullName}</h5>
+                                                <img alt="avatar" src={`/avatars/${props.user.avatar}.png`} width={50} height={50} />
+                                                <h5 className="mx-3">{props.user.fullName}</h5>
                                             </Container>
                                         </Col>
                                         <Col xs={12} md={4} className="mb-3">
