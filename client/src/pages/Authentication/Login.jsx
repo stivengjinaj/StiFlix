@@ -60,6 +60,7 @@ function Login(props) {
         e.preventDefault();
         setLoading(true);
         setWrongCredentials(false);
+        setCurrentUserState("");
 
         try {
             await setPersistence(
