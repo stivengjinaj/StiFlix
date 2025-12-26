@@ -134,7 +134,6 @@ function App() {
             <Route path={'/watchList'} element={
                 user ? <PersonalMovies user={user} type={'watchlist'} userMovies={userMovies}/> : <Navigate to={'/login'} />
             } />
-            <Route path={'/loading'} element={<Loading />} />
             <Route path={'*'} element={<NotFound />} />
             <Route path={'/stiflixchill'} element={
                 user && (user.role === "OWNER" || user.role === "EDITOR")

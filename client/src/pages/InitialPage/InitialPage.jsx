@@ -1,8 +1,8 @@
+import Faq from "./Faq.jsx";
+
 {/*eslint-disable react/prop-types*/}
 import {Button, Col, Container, Dropdown, Row} from "react-bootstrap";
 import logo from "../../assets/images/logo.png";
-import tvvideo from "../../assets/videos/tv.mp4";
-import devicePile from "../../assets/videos/device-pile.mp4";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import FeatureRow from "./FeatureRow.jsx";
@@ -84,33 +84,24 @@ function InitialPage(props) {
                             className="btn-danger py-4 px-5 mt-5 mb-3"
                             onClick={() => navigate('/movies')}
                         >
-                            <h2><strong>Go to the cinema</strong></h2>
+                            <h2><strong>Go to the movies</strong></h2>
                         </Button>
                     </Col>
                 </Row>
             </Container>
-            <Container fluid className="min-vh-100 bg-gradient-dark-radius">
-                <div id="feature1">
-                    <FeatureRow
-                        hOne="Enjoy on your TV."
-                        hFourFirst="Watch on smart TVs, PlayStation, Xbox, Chromecast,"
-                        hFourSecond="Apple TV, Blu-ray players and more."
-                        video={tvvideo}
-                        textDirection="left"
-                        isSmartTV={props.isSmartTV}
-                    />
-                </div>
-                <div style={{backgroundColor: '#2b2a2a', height: '7px', width: '100%', margin: '2rem 0'}}></div>
-                <div id="feature2">
-                    <FeatureRow
-                        hOne="Watch everywhere."
-                        hFourFirst="Stream unlimited films and TV programmes on your"
-                        hFourSecond="phone, tablet, laptop and TV for free."
-                        video={devicePile}
-                        textDirection="right"
-                    />
-                </div>
-
+            <Container fluid className="w-75 bg-gradient-dark-radius mt-5">
+                <h2 className="text-light">More reasons to join</h2>
+                <FeatureRow/>
+                <h2 className="text-light mt-5">Frequently Asked Questions</h2>
+                <Faq />
+                <Container fluid className="d-flex flex-row justify-content-center">
+                    <Button
+                        className="btn-danger py-4 px-5 mt-5 mb-3"
+                        onClick={() => navigate('/movies')}
+                    >
+                        <h2><strong>Go to the movies</strong></h2>
+                    </Button>
+                </Container>
             </Container>
         </Container>
     );

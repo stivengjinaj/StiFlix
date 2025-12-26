@@ -11,13 +11,39 @@ body {
   background-color: #000000 !important;
 }
 
-.initial-bg{
-  background-image: url('assets/images/background.jpg');
-  min-height: 70vh;
+.initial-bg {
+  background-image: url('assets/images/background2.png');
+  min-height: 100vh;
   background-repeat: no-repeat;
   background-size: cover;
-  border-bottom: 7px solid #2b2a2a;
+  background-position: bottom center;
 }
+.accordion-item {
+  background-color: #2b2a2a;
+  border: none !important;
+  margin-bottom: 0.5rem;
+}
+
+.accordion-button {
+  background-color: #2b2a2a !important;
+  color: white !important;
+  font-weight: 500;
+}
+
+.accordion-button:not(.collapsed) {
+  background-color: #2b2a2a;
+  color: white;
+}
+
+.accordion-body {
+  background-color: #2b2a2a;
+  color: #ddd;
+}
+
+.accordion-button::after {
+  filter: invert(1);
+}
+
 
 .login-bg {
   background-image: url('assets/images/background.jpg');
