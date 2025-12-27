@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 function NewCommModal({ setNewComm, handleNewComm }) {
     const [formData, setFormData] = useState({
-        type: "",
+        type: "IDLE_POPUP",
         content: "",
     });
     return (

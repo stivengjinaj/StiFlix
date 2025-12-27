@@ -81,6 +81,7 @@ const AdminDashboard = () => {
     };
 
     const handleNewCommunication = async (newComm) => {
+        if (newComm.type === '' && newComm.content === '') return;
         const communicationSaved = await saveStiflixChillCommunication(newComm);
         if (!communicationSaved) return;
         window.location.reload();
