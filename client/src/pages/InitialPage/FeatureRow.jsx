@@ -8,7 +8,7 @@ function FeaturesRow() {
     return (
         <Row className="g-4 mt-2">
             <Col sm={6} lg={3}>
-                <Card className="h-100 bg-dark text-white border-0 rounded-4 px-4 pt-3">
+                <Card className="h-100 gradient-bg text-white border-0 rounded-4 px-4 pt-3">
                     <Card.Body className="d-flex flex-column justify-content-between">
                         <div>
                             <Card.Title as="h3">
@@ -29,7 +29,7 @@ function FeaturesRow() {
             </Col>
 
             <Col sm={6} lg={3}>
-                <Card className="h-100 bg-dark text-white border-0 rounded-4 px-4 pt-3">
+                <Card className="h-100 gradient-bg text-white border-0 rounded-4 px-4 pt-3">
                     <Card.Body className="d-flex flex-column align-content-between justify-content-between">
                         <div className="d-flex flex-column justify-content-between">
                             <Card.Title as="h3">
@@ -49,7 +49,7 @@ function FeaturesRow() {
             </Col>
 
             <Col sm={6} lg={3}>
-                <Card className="h-100 bg-dark text-white border-0 rounded-4 px-4 pt-3">
+                <Card className="h-100 gradient-bg text-white border-0 rounded-4 px-4 pt-3">
                     <Card.Body>
                         <div className="d-flex flex-column justify-content-between">
                             <Card.Title as="h3">
@@ -69,7 +69,7 @@ function FeaturesRow() {
             </Col>
 
             <Col sm={6} lg={3}>
-                <Card className="h-100 bg-dark text-white border-0 rounded-4 px-4 pt-3">
+                <Card className="h-100 gradient-bg text-white border-0 rounded-4 px-4 pt-3">
                     <Card.Body>
                         <div className="d-flex flex-column justify-content-between">
                             <Card.Title as="h3">

@@ -8,6 +8,7 @@ import { useGSAP } from "@gsap/react";
 import FeatureRow from "./FeatureRow.jsx";
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import {useNavigate} from "react-router-dom";
+import StiflixFooter from "../Miscs/StiflixFooter.jsx";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -73,7 +74,7 @@ function InitialPage(props) {
                 </Row>
                 <Row className="justify-content-center mx-0">
                     <Col className="d-flex flex-column justify-content-center align-items-center text-center mt-5">
-                        <h1 className="text-white mt-5">Unlimited films, TV programmes and more</h1>
+                        <h1 className="text-white mt-5">Unlimited films, TV <br/>shows and more</h1>
                         <h3 className="text-white mt-3">
                             <strong>Watch anywhere. Always free.</strong>
                         </h3>
@@ -102,6 +103,7 @@ function InitialPage(props) {
                         <h2><strong>Go to the movies</strong></h2>
                     </Button>
                 </Container>
+                <StiflixFooter />
             </Container>
         </Container>
     );
