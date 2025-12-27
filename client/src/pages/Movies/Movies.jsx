@@ -74,6 +74,7 @@ function Movies(props) {
             ? (<SplashScreen />)
             : (<HomePage
                 user={props.user}
+                userMovies={props.userMovies}
                 searchQuery={props.searchQuery}
                 searchResults={props.searchResults}
                 handleSearchResults={props.handleSearchResults}
@@ -126,6 +127,7 @@ function HomePage(props) {
             />
             <MainMovie
                 user={props.user}
+                userMovies={props.userMovies}
                 isSearching={props.searchQuery !== ""}
                 searchQuery={props.searchQuery}
                 searchedResults={props.searchResults}

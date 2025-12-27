@@ -9,11 +9,9 @@ import MoviesCarousel from "./MoviesCarousel.jsx";
 import GridMovies from "./GridMovies.jsx";
 import SeachResults from "./SeachResults.jsx";
 import StiflixFooter from "../Miscs/StiflixFooter.jsx";
-import {collection, deleteDoc, doc, getDocs} from "firebase/firestore";
-import {db} from "../../../firebaseConfiguration.js";
 import FetchedMovieController from "../../controllers/FetchedMovieController.js";
 import ContinueWatching from "./ContinueWatching.jsx";
-import {parseDateString, truncateString} from "../../helper/miscs.js";
+import {truncateString} from "../../helper/miscs.js";
 
 function MainMovie(props) {
     const movieFetcher = new FetchedMovieController();
@@ -21,7 +19,6 @@ function MainMovie(props) {
     const [movieTitleLogo, setMovieTitleLogo] = useState(null);
     const [playMovieSplash, setPlayMovieSplash] = useState(false);
     const [showMoreInfo, setShowMoreInfo] = useState(false);
-    const [moviesInProgress, setMoviesInProgress] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -36,56 +33,6 @@ function MainMovie(props) {
             getMovieLogos(props.allTrending[0].id, props.allTrending[0].isSeries ? 'tv' : 'movie');
         }
     }, [props.allTrending]);
-
-    useEffect(() => {
-        if (props.user?.uid) {
-            const fetchMoviesInProgress = async () => {
-                try {
-                    const userDocRef = doc(db, 'users', props.user.uid);
-                    const continueWatchingCollection = collection(userDocRef, 'continueWatching');
-
-                    const querySnapshot = await getDocs(continueWatchingCollection);
-                    const movies = querySnapshot.docs.map(doc => ({
-                        id: doc.id,
-                        ...doc.data()
-                    }));
-
-                    const currentDate = new Date();
-                    const moviesInProgress = [];
-
-                    const movieDetailsPromises = movies.map(async (movie) => {
-                        const movieDetails = await movieFetcher.getMediaDetails(movie.movieId, movie.mediaType);
-                        const movieDate = parseDateString(movie.date);
-
-                        const timeDifference = currentDate - movieDate;
-                        const daysDifference = timeDifference / (1000 * 3600 * 24);
-
-                        if (daysDifference > 2) {
-                            const movieDocRef = doc(continueWatchingCollection, movie.id);
-                            await deleteDoc(movieDocRef);
-                        } else {
-                            const movieData = {
-                                movie: movieDetails,
-                                season: movie.season,
-                                episode: movie.episode,
-                                date: movie.date,
-                            }
-                            moviesInProgress.push(movieData);
-                        }
-                    });
-
-                    await Promise.all(movieDetailsPromises);
-                    setMoviesInProgress(moviesInProgress);
-                } catch (error) {
-                    console.error('Error fetching or deleting movies:', error);
-                }
-            };
-
-            fetchMoviesInProgress();
-        }
-    }, []);
-
-
 
     useLayoutEffect(() => {
         if (currentMovie && !props.isSmartTV) {
@@ -212,8 +159,8 @@ function MainMovie(props) {
                                                                     <MoviesCarousel title={"Popular on Stiflix"}
                                                                                     movies={props.allPopular} moving={true}
                                                                                     scrollable={false}/>
-                                                                    {props.user && moviesInProgress.length > 0 &&
-                                                                        <ContinueWatching movies={moviesInProgress}/>}
+                                                                    {props.userMovies && props.userMovies.continueWatching.length > 0 &&
+                                                                        <ContinueWatching movies={props.userMovies.continueWatching}/>}
                                                                     <MoviesCarousel title={"Trending Now"}
                                                                                     movies={props.allTrending} moving={false}
                                                                                     scrollable={true}/>

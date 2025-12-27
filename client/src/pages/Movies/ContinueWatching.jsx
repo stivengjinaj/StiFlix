@@ -20,10 +20,10 @@ function ContinueWatching (props) {
                             {
                                 props.movies.map((object, index) => (
                                     <td key={index} className="carousel-slider-cover mx-2" onClick={() =>
-                                        navigate(`/${object.movie.isSeries ? "tv" : "movie"}/${object.movie.id}/${object.season}/${object.episode}`)}>
+                                        navigate(`/${object.mediaType}/${object.movieId}/${object.season}/${object.episode}`)}>
                                         <img
-                                            src={`https://image.tmdb.org/t/p/w500/${object.movie.poster_path}`}
-                                            alt={object.movie.title}
+                                            src={`https://image.tmdb.org/t/p/w500/${object.posterPath}`}
+                                            alt={object.title}
                                             className="carousel-image"
                                         />
                                     </td>

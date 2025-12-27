@@ -55,16 +55,16 @@ function MovieDetails(props) {
     useEffect(() => {
         const getUserPersonalData = async () => {
             if(!props.userMovies) return;
-
+                console.log(props.userMovies);
                 props.userMovies.favourites.map(favourite => {
                     favourite.movieId === movieId ? setIsFavourite(true) : setIsFavourite(false);
                 });
 
-                props.userMovies.watchLater.map(watched => {
+                props.userMovies.watchList.map(watched => {
                     watched.movieId === movieId ? setWatchList(true) : setWatchList(false);
                 });
 
-                props.userMovies.watchList.map(toWatch => {
+                props.userMovies.watchLater.map(toWatch => {
                     toWatch.movieId === movieId ? setWatchLater(true) : setWatchLater(false);
                 });
         }

@@ -1,15 +1,13 @@
-import {collection, doc, getDocs, query, setDoc, updateDoc, where} from "firebase/firestore";
 
 {/*eslint-disable react/prop-types*/}
 import {useEffect, useRef, useState} from "react";
 import FetchLinksController from "../../controllers/FetchLinksController.js";
 import {useNavigate, useParams} from "react-router-dom";
 import FetchedMovieController from "../../controllers/FetchedMovieController.js";
-import {getCurrentDateString} from "../../helper/miscs.js";
 import Loading from "../Miscs/Loading.jsx";
 import {Col, Container, Dropdown, Row} from "react-bootstrap";
-import {db} from "../../../firebaseConfiguration.js";
 import ChangeSeasonEpisode from "./ChangeSeasonEpisode.jsx";
+import {addToContinueWatching} from "../../API.js";
 
 function MoviePlaying(props) {
     const navigate = useNavigate();
@@ -27,37 +25,20 @@ function MoviePlaying(props) {
 
     const handleProgressSave = async () => {
         if (props.user && movieId) {
-            try {
-                const userDocRef = doc(db, 'users', props.user.uid);
-                const continueWatchingCollection = collection(userDocRef, 'continueWatching');
-
-                const querySnapshot = await getDocs(query(continueWatchingCollection, where('movieId', '==', String(movieId))));
-
-                if (querySnapshot.empty) {
-                    await setDoc(doc(continueWatchingCollection), {
-                        movieId: String(movieId),
-                        mediaType: mediaType,
-                        season: mediaType === 'tv' ? season : 1,
-                        episode: mediaType === 'tv' ? episode : 1,
-                        date: getCurrentDateString(),
-                    });
-                } else if (mediaType === 'tv') {
-                    const docRef = querySnapshot.docs[0].ref;
-                    await updateDoc(docRef, {
-                        season: season,
-                        episode: episode,
-                        date: getCurrentDateString(),
-                    });
-                }
-            } catch (error) {
-                console.error('Error handling progress save:', error);
-            }
+            console.log("save");
+            await addToContinueWatching(props.user.token, {
+                movieId: String(movieId),
+                mediaType: mediaType,
+                season: mediaType === 'tv' ? parseInt(season) : 1,
+                episode: mediaType === 'tv' ? parseInt(episode) : 1,
+                posterPath: movie.poster_path
+            })
         }
     };
 
     useEffect(() => {
         if (props.user) {
-            const countdownId = setTimeout(handleProgressSave, 60000);
+            const countdownId = setTimeout(handleProgressSave, 10000);
 
             return () => clearTimeout(countdownId);
         }

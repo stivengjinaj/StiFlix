@@ -18,7 +18,6 @@ import {detectSmartTV} from "./helper/smartTvDetector.js";
 import {getUser, getUserMovies} from "./API.js";
 import StiflixChillRoot from "./pages/StiflixChill/StiflixChillRoot.jsx";
 import DmcaDisclaimer from "./pages/Miscs/DmcaDisclaimer.jsx";
-import SplashScreen from "./pages/Movies/SplashScreen.jsx";
 
 function App() {
     const navigate = useNavigate();
@@ -74,6 +73,7 @@ function App() {
                     ...movies,
                     success: true
                 });
+                console.log(movies)
             }else {
                 setUserMovies({
                     success: false
@@ -107,6 +107,7 @@ function App() {
             <Route path={'/movies'} element={
                 <Movies
                     user={user}
+                    userMovies={userMovies}
                     searchQuery={searchQuery}
                     searchResults={searchResults}
                     handleSearchResults={handleSearchResults}
