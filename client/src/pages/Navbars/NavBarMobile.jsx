@@ -78,6 +78,7 @@ function NavBarMobile(props) {
                                   <Dropdown.Item className="text-white" href="/favourites">Favourites</Dropdown.Item>
                                   <Dropdown.Item className="text-white" href="/watchList">Watchlist</Dropdown.Item>
                                   <Dropdown.Item className="text-white" href="/watchLater">Watch Later</Dropdown.Item>
+                                  {props.user.role === "OWNER" && <Dropdown.Item className="text-white" href="/admin">Admin</Dropdown.Item>}
                                   <Dropdown.Item onClick={props.handleSignOut} href="/" className="text-danger">Logout</Dropdown.Item>
                               </Dropdown.Menu>
                           </Dropdown>

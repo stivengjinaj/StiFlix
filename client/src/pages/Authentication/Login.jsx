@@ -42,15 +42,15 @@ function Login(props) {
         if(!props.isSmartTV) {
             gsap.from('img', {
                 opacity: 0,
-                x: 100,
-                duration: 1,
+                x: 20,
+                duration: 0.4,
                 animation: "ease-in"
             })
 
             gsap.from('#login-form', {
                 opacity: 0,
-                y: 100,
-                duration: 1,
+                y: 20,
+                duration: 0.4,
                 animation: "ease-in"
             })
         }
