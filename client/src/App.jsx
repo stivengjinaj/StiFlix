@@ -69,7 +69,6 @@ function App() {
         const fetchUserMovies = async () => {
             const movies = await getUserMovies(user.token);
             if (movies) {
-                console.log(movies)
                 setUserMovies({
                     ...movies,
                     success: true
@@ -114,7 +113,7 @@ function App() {
                     isSmartTV={isSmartTV}
                 />
             } />
-            <Route path={'/movies/info/:mediaType/:movieId'} element={<MovieDetails user={user} isSmartTV={isSmartTV}/>} />
+            <Route path={'/movies/info/:mediaType/:movieId'} element={<MovieDetails user={user} isSmartTV={isSmartTV} userMovies={userMovies} />} />
             <Route path={'/:mediaType/:movieId/:season/:episode'} element={<MoviePlaying user={user} screenWidth={screenWidth} />} />
             <Route path={'/login'} element={
                 !user ? <Login isSmartTv={isSmartTV}/> : <Navigate to={'/'} />

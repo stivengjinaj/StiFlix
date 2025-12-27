@@ -6,11 +6,16 @@ import {useNavigate, useParams} from "react-router-dom";
 import FetchedMovieController from "../../controllers/FetchedMovieController.js";
 import {useEffect, useState} from "react";
 import Loading from "../Miscs/Loading.jsx";
-import {db} from "../../../firebaseConfiguration.js";
-import {collection, doc, addDoc, deleteDoc, query, where, getDocs} from "firebase/firestore";
 import {gsap} from "gsap";
 import {useGSAP} from "@gsap/react";
 import {containsNonLatinChars} from "../../helper/miscs.js";
+import {
+    addToFavourites,
+    addToWatchLater,
+    addToWatchList,
+    removeFromFavourites, removeFromWatchLater,
+    removeFromWatchList
+} from "../../API.js";
 
 function MovieDetails(props) {
     const fetcher = new FetchedMovieController();
@@ -20,8 +25,8 @@ function MovieDetails(props) {
     const [trailer, setTrailer] = useState('');
     const [noTrailer, setNoTrailer] = useState(false);
     const [isFavourite, setIsFavourite] = useState(false);
-    const [isWatched, setIsWatched] = useState(false);
-    const [toWatch, setToWatch] = useState(false);
+    const [watchList, setWatchList] = useState(false);
+    const [watchLater, setWatchLater] = useState(false);
     const [playMovieSplash, setPlayMovieSplash] = useState(false);
     const [screen, setScreen] = useState("desktop");
     const [currentSeason, setCurrentSeason] = useState(null);
@@ -45,37 +50,26 @@ function MovieDetails(props) {
         }
 
         fetchData();
+    }, [])
 
-        const getUserPresonalData = async () => {
-            const userDocRef = doc(db, 'users', props.user.uid);
+    useEffect(() => {
+        const getUserPersonalData = async () => {
+            if(!props.userMovies) return;
 
-            try {
-                const favouritesSnapshot = await getDocs(collection(userDocRef, 'favourites'));
-                const watchedSnapshot = await getDocs(collection(userDocRef, 'watched'));
-                const toWatchSnapshot = await getDocs(collection(userDocRef, 'toWatch'));
-
-                const favourites = favouritesSnapshot.docs.map(doc => doc.data());
-                const watched = watchedSnapshot.docs.map(doc => doc.data());
-                const toWatch = toWatchSnapshot.docs.map(doc => doc.data());
-
-                favourites.map(favourite => {
+                props.userMovies.favourites.map(favourite => {
                     favourite.movieId === movieId ? setIsFavourite(true) : setIsFavourite(false);
                 });
 
-                watched.map(watched => {
-                    watched.movieId === movieId ? setIsWatched(true) : setIsWatched(false);
+                props.userMovies.watchLater.map(watched => {
+                    watched.movieId === movieId ? setWatchList(true) : setWatchList(false);
                 });
 
-                toWatch.map(toWatch => {
-                    toWatch.movieId === movieId ? setToWatch(true) : setToWatch(false);
+                props.userMovies.watchList.map(toWatch => {
+                    toWatch.movieId === movieId ? setWatchLater(true) : setWatchLater(false);
                 });
-
-            } catch (error) {
-                console.error('Error fetching user collections:', error);
-            }
         }
-        props.user && getUserPresonalData();
-    }, [props.user]);
+        getUserPersonalData();
+    }, [props.userMovies]);
 
     useEffect(() => {
         if (playMovieSplash && !props.isSmartTV) {
@@ -101,92 +95,75 @@ function MovieDetails(props) {
     }
 
     const onFavourite = async () => {
-        if (props.user) {
-            try {
-                const userDocRef = doc(db, 'users', props.user.uid);
-                const favouritesRef = collection(userDocRef, 'favourites');
+        if (!props.user) return
+        if (isFavourite){
+            const removeMovie = await removeFromFavourites(props.user.token, movieId)
 
-                const favouritesQuery = query(favouritesRef, where("movieId", "==", movie.id.toString()));
-                const favouritesSnapshot = await getDocs(favouritesQuery);
-
-                if (!favouritesSnapshot.empty) {
-                    await deleteDoc(favouritesSnapshot.docs[0].ref);
-                    setIsFavourite(false);
-                } else {
-                    await addDoc(favouritesRef, { movieId: movie.id.toString(), mediaType: mediaType });
-                    setIsFavourite(true);
-                }
-            } catch (error) {
-                console.error("Error managing favourites: ", error);
+            if(!removeMovie){
+                setIsFavourite(true);
+            }else {
+                setIsFavourite(false);
             }
-        } else {
-            console.log("User not authenticated.");
+        }else {
+            const addMovie = await addToFavourites(props.user.token, {
+                mediaType,
+                movieId,
+            });
+
+            if (!addMovie) {
+                setIsFavourite(false);
+            } else {
+                setIsFavourite(true);
+            }
         }
     };
 
     const onWatchlist = async () => {
-        if (props.user) {
-            try {
-                const userDocRef = doc(db, 'users', props.user.uid);
-                const watchedRef = collection(userDocRef, 'watched');
-                const toWatchRef = collection(userDocRef, 'toWatch');
+        if (!props.user) return
+        if (watchList){
+            const removeMovie = await removeFromWatchList(props.user.token, movieId)
 
-                const watchedQuery = query(watchedRef, where("movieId", "==", movie.id.toString()));
-                const watchedSnapshot = await getDocs(watchedQuery);
-
-                if (!watchedSnapshot.empty) {
-                    await deleteDoc(watchedSnapshot.docs[0].ref);
-                    setIsWatched(false);
-                } else {
-                    const toWatchQuery = query(toWatchRef, where("movieId", "==", movie.id.toString()));
-                    const toWatchSnapshot = await getDocs(toWatchQuery);
-
-                    if (!toWatchSnapshot.empty) {
-                        await deleteDoc(toWatchSnapshot.docs[0].ref);
-                        setToWatch(false);
-                    }
-                    await addDoc(watchedRef, { movieId: movie.id.toString(), mediaType: mediaType });
-                    setIsWatched(true);
-                }
-            } catch (error) {
-                console.error("Error managing watched: ", error);
+            if(!removeMovie){
+                setWatchList(true);
+            }else {
+                setWatchList(false);
             }
-        } else {
-            console.log("User not authenticated.");
+        }else {
+            const addMovie = await addToWatchList(props.user.token, {
+                mediaType,
+                movieId,
+            });
+
+            if (!addMovie) {
+                setWatchList(false);
+            } else {
+                setWatchList(true);
+            }
         }
     };
 
 
     const onWatchLater = async () => {
-        if (props.user) {
-            try {
-                const userDocRef = doc(db, 'users', props.user.uid);
-                const toWatchRef = collection(userDocRef, 'toWatch');
-                const watchedRef = collection(userDocRef, 'watched');
+        if (!props.user) return
+        if (watchLater){
+            const removeMovie = await removeFromWatchLater(props.user.token, movieId)
 
-                const toWatchQuery = query(toWatchRef, where("movieId", "==", movie.id.toString()));
-                const toWatchSnapshot = await getDocs(toWatchQuery);
-
-                if (!toWatchSnapshot.empty) {
-                    await deleteDoc(toWatchSnapshot.docs[0].ref);
-                    setToWatch(false);
-                } else {
-                    const watchedQuery = query(watchedRef, where("movieId", "==", movie.id.toString()));
-                    const watchedSnapshot = await getDocs(watchedQuery);
-
-                    if (!watchedSnapshot.empty) {
-                        await deleteDoc(watchedSnapshot.docs[0].ref);
-                        setIsWatched(false);
-                    }
-
-                    await addDoc(toWatchRef, { movieId: movie.id.toString(), mediaType: mediaType });
-                    setToWatch(true);
-                }
-            } catch (error) {
-                console.error("Error managing toWatch: ", error);
+            if(!removeMovie){
+                setWatchLater(true);
+            }else {
+                setWatchLater(false);
             }
-        } else {
-            console.log("User not authenticated.");
+        }else {
+            const addMovie = await addToWatchLater(props.user.token, {
+                mediaType,
+                movieId,
+            });
+
+            if (!addMovie) {
+                setWatchLater(false);
+            } else {
+                setWatchLater(true);
+            }
         }
     };
 
@@ -259,8 +236,8 @@ function MovieDetails(props) {
                                   noTrailer={noTrailer}
                                   user={props.user}
                                   isFavourite={isFavourite}
-                                  isWatched={isWatched}
-                                  toWatch={toWatch}
+                                  isWatched={watchList}
+                                  toWatch={watchLater}
                                   onFavourite={onFavourite}
                                   onWatchlist={onWatchlist}
                                   onWatchLater={onWatchLater}
@@ -272,8 +249,8 @@ function MovieDetails(props) {
                                   noTrailer={noTrailer}
                                   user={props.user}
                                   isFavourite={isFavourite}
-                                  isWatched={isWatched}
-                                  toWatch={toWatch}
+                                  isWatched={watchList}
+                                  toWatch={watchLater}
                                   onFavourite={onFavourite}
                                   onWatchlist={onWatchlist}
                                   onWatchLater={onWatchLater}

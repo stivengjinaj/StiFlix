@@ -56,6 +56,134 @@ export const getUserMovies = (token) =>
         headers: { Authorization: `Bearer ${token}` }
     })
 
+/**
+ * API used to add a movie to continue watching
+ *
+ * @param token
+ * @param movie
+ * @returns {Promise<any>}
+ */
+export const addToContinueWatching = (token, movie) =>
+    apiFetch(`${remote_url}/users/continueWatching`, {
+        method: "POST",
+        headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(movie)
+    });
+
+/**
+ * API used to add a movie to watch list
+ *
+ * @param token
+ * @param movie
+ * @returns {Promise<any>}
+ */
+export const addToWatchList = (token, movie) =>
+    apiFetch(`${remote_url}/users/watchList`, {
+        method: "POST",
+        headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(movie)
+    });
+
+/**
+ * API used to add a movie to watch later list
+ *
+ * @param token
+ * @param movie
+ * @returns {Promise<any>}
+ */
+export const addToWatchLater = (token, movie) =>
+    apiFetch(`${remote_url}/users/watchLater`, {
+        method: "POST",
+        headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(movie)
+    });
+
+/**
+ * API used to add a movie to favourites
+ *
+ * @param token
+ * @param movie
+ * @returns {Promise<any>}
+ */
+export const addToFavourites = (token, movie) =>
+    apiFetch(`${remote_url}/users/favourites`, {
+        method: "POST",
+        headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(movie)
+    });
+
+/**
+ * API used to delete a movie from favourites
+ *
+ * @param token
+ * @param movieId
+ * @returns {Promise<any>}
+ */
+export const removeFromFavourites = (token, movieId) =>
+    apiFetch(`${remote_url}/users/favourites/${movieId}`, {
+        method: "DELETE",
+        headers: {
+            Authorization: `Bearer ${token}`,
+        }
+    });
+
+/**
+ * API used to delete a movie from watch later
+ *
+ * @param token
+ * @param movieId
+ * @returns {Promise<any>}
+ */
+export const removeFromWatchLater = (token, movieId) =>
+    apiFetch(`${remote_url}/users/watchLater/${movieId}`, {
+        method: "DELETE",
+        headers: {
+            Authorization: `Bearer ${token}`,
+        }
+    });
+
+/**
+ * API used to delete a movie from watch list
+ *
+ * @param token
+ * @param movieId
+ * @returns {Promise<any>}
+ */
+export const removeFromWatchList = (token, movieId) =>
+    apiFetch(`${remote_url}/users/watchList/${movieId}`, {
+        method: "DELETE",
+        headers: {
+            Authorization: `Bearer ${token}`,
+        }
+    });
+
+/**
+ * API used to delete a movie from continue watching
+ *
+ * @param token
+ * @param movieId
+ * @returns {Promise<any>}
+ */
+export const removeFromContinueWatching = (token, movieId) =>
+    apiFetch(`${remote_url}/users/continueWatching/${movieId}`, {
+        method: "DELETE",
+        headers: {
+            Authorization: `Bearer ${token}`,
+        }
+    });
+
 /** * API used to update user verification status.
  *
  * @param token
