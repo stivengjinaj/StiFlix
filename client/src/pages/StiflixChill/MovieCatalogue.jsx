@@ -1,10 +1,12 @@
 import PropTypes from "prop-types";
 import {Container, Button, Row, Col} from "react-bootstrap";
 import "./MovieCatalogue.css";
-import {useEffect, useRef} from "react";
+import {useEffect, useRef, useState} from "react";
 import {gsap} from "gsap";
+import MovieDetails from "./MovieDetails.jsx";
 
 function MovieCatalogue({ movies, page, setPage, setStep }) {
+    const [selectedMovie, setSelectedMovie] = useState(null);
     const cardsRef = useRef([]);
     cardsRef.current = [];
 
@@ -44,10 +46,12 @@ function MovieCatalogue({ movies, page, setPage, setStep }) {
     };
 
     return (
-        <Container fluid className="movie-catalogue-container d-flex flex-column">
+        selectedMovie
+        ? <MovieDetails movie={selectedMovie} setSelectedMovie={setSelectedMovie}/>
+        : <Container fluid className="movie-catalogue-container d-flex flex-column">
             <div className="movie-grid flex-grow-1 pt-5">
                 {movies.results.map((movie) => (
-                    <div key={movie.id} ref={addToRefs} className="movie-tile">
+                    <div key={movie.id} ref={addToRefs} className="movie-tile" onClick={() => setSelectedMovie(movie)}>
                         <img
                             src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
                             alt={movie.title || movie.original_title}

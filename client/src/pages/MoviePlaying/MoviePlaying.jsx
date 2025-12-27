@@ -25,7 +25,6 @@ function MoviePlaying(props) {
 
     const handleProgressSave = async () => {
         if (props.user && movieId) {
-            console.log("save");
             await addToContinueWatching(props.user.token, {
                 movieId: String(movieId),
                 mediaType: mediaType,

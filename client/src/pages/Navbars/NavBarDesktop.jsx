@@ -6,42 +6,12 @@ import logo from "../../assets/images/logo.png";
 import sc_logo from "../../assets/images/sc.png";
 import {useState} from "react";
 import gsap from "gsap";
-import {useGSAP} from "@gsap/react";
 
 gsap.config().nullTargetWarn = false;
 
 function NavBarDesktop(props) {
     const navigate = useNavigate();
     const [searchVisible, setSearchVisible] = useState(props.searchQuery.length > 0);
-    
-    useGSAP(() => {
-        if(!props.isSmartTV) {
-            gsap.fromTo('.search-input', {
-                duration: 1,
-                x: 50,
-                opacity: 0,
-                ease: 'ease-in'
-            }, {
-                x: 0,
-                opacity: 1,
-                ease: 'ease-out'
-            })
-        }
-    }, [searchVisible]);
-
-    useGSAP(() => {
-        if (!props.isSmartTV) {
-            gsap.from(['.nav-item-selected', '.nav-item'], {
-                duration: 1,
-                delay: 0.1,
-                x: 50,
-                opacity: 0,
-                ease: 'ease-in',
-                stagger: 0.1
-            })
-        }
-    }, [])
-
 
     return (
         <Navbar className="position-absolute w-100 bg-gradient-dark z-3">
@@ -112,6 +82,7 @@ function NavBarDesktop(props) {
                                 <Dropdown.Item className="text-white" href="/favourites">Favourites</Dropdown.Item>
                                 <Dropdown.Item className="text-white" href="/watchList">Watchlist</Dropdown.Item>
                                 <Dropdown.Item className="text-white" href="/watchLater">Watch Later</Dropdown.Item>
+                                {props.user.role === "OWNER" && <Dropdown.Item className="text-white" href="/admin">Admin</Dropdown.Item>}
                                 <Dropdown.Item onClick={props.handleSignOut} href="/" className="text-danger">Logout</Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>

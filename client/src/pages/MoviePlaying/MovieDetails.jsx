@@ -97,14 +97,14 @@ function MovieDetails(props) {
     const onFavourite = async () => {
         if (!props.user) return
         if (isFavourite){
+            setIsFavourite(false);
             const removeMovie = await removeFromFavourites(props.user.token, movieId)
 
             if(!removeMovie){
                 setIsFavourite(true);
-            }else {
-                setIsFavourite(false);
             }
         }else {
+            setIsFavourite(true);
             const addMovie = await addToFavourites(props.user.token, {
                 mediaType,
                 movieId,
@@ -112,8 +112,6 @@ function MovieDetails(props) {
 
             if (!addMovie) {
                 setIsFavourite(false);
-            } else {
-                setIsFavourite(true);
             }
         }
     };
@@ -121,14 +119,14 @@ function MovieDetails(props) {
     const onWatchlist = async () => {
         if (!props.user) return
         if (watchList){
+            setWatchList(false);
             const removeMovie = await removeFromWatchList(props.user.token, movieId)
 
             if(!removeMovie){
                 setWatchList(true);
-            }else {
-                setWatchList(false);
             }
         }else {
+            setWatchList(true);
             const addMovie = await addToWatchList(props.user.token, {
                 mediaType,
                 movieId,
@@ -136,8 +134,6 @@ function MovieDetails(props) {
 
             if (!addMovie) {
                 setWatchList(false);
-            } else {
-                setWatchList(true);
             }
         }
     };
@@ -146,14 +142,13 @@ function MovieDetails(props) {
     const onWatchLater = async () => {
         if (!props.user) return
         if (watchLater){
+            setWatchLater(false);
             const removeMovie = await removeFromWatchLater(props.user.token, movieId)
-
             if(!removeMovie){
                 setWatchLater(true);
-            }else {
-                setWatchLater(false);
             }
         }else {
+            setWatchLater(true);
             const addMovie = await addToWatchLater(props.user.token, {
                 mediaType,
                 movieId,
@@ -161,8 +156,6 @@ function MovieDetails(props) {
 
             if (!addMovie) {
                 setWatchLater(false);
-            } else {
-                setWatchLater(true);
             }
         }
     };
