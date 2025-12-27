@@ -42,8 +42,47 @@ export const apiFetch = async (url, options = {}) => {
  * */
 export const getUser = (token) =>
     apiFetch(`${remote_url}/users/me`, {
-        headers: { Authorization: `Bearer ${token}` }
+        headers: {
+            Authorization: `Bearer ${token}`,
+        }
     });
+
+/**
+ * API used to update user information.
+ *
+ * @param user
+ * @returns {Promise<any>}
+ */
+export const updateUserData = (user) =>
+    apiFetch(`${remote_url}/admin/users`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(user)
+    })
+
+/** * API used to get all user information.
+ *
+ * @returns JSON object of user information.
+ * */
+export const getAllUsers = () =>
+    apiFetch(`${remote_url}/admin/users`)
+
+/**
+ * API used to update user role.
+ *
+ * @param userId
+ * @param role
+ * @returns {Promise<any>}
+ */
+export const updateUserRole = (userId, role) =>
+    apiFetch(`${remote_url}/admin/users/${userId}/role/${role}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
 
 /**
  * API used to get user personal movies.
@@ -211,6 +250,15 @@ export const createUser = (user, token) =>
         body: JSON.stringify(user)
     });
 
+
+export const deleteUser = (userId) =>
+    apiFetch(`${remote_url}/admin/users/${userId}`, {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+
 /**
  * API used to get popular movies(only).
  *
@@ -355,20 +403,50 @@ export const getLogos = (id, mediaType) =>
         `${remote_url}/movies/logos/${mediaType}/${id}`
     );
 
+/**
+ * API used to get Stiflix&Chill home content
+ *
+ * @param page
+ * @returns {Promise<any>}
+ */
 export const getStiflixChillHome = (page) =>
     apiFetch(`${remote_url}/stiflixchill/home/${page}`);
 
+/**
+ * API used to get Stiflix&Chill communication
+ *
+ * @returns {Promise<any>}
+ */
 export const getStiflixChillCommunication = () =>
     apiFetch(`${remote_url}/stiflixchill/communication`)
 
-export const saveStiflixChillCommunication = () =>
-    apiFetch(`${remote_url}/stiflixchill/communication`, {
+/**
+ * API used to save Stiflix&Chill communication
+ *
+ * @returns {Promise<any>}
+ */
+export const saveStiflixChillCommunication = (communication) =>
+    apiFetch(`${remote_url}/admin/stiflixchill/communication`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-            type: "IDLE_POPUP",
-            content: "Test"
-        })
+        body: JSON.stringify(communication)
+    })
+
+export const updateStiflixChillCommunication = (communication) =>
+    apiFetch(`${remote_url}/admin/stiflixchill/communication`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(communication)
+    })
+
+export const deleteStiflixChillCommunication = (communicationId) =>
+    apiFetch(`${remote_url}/admin/stiflixchill/communication/${communicationId}`, {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+        }
     })

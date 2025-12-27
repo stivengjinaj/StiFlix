@@ -18,6 +18,7 @@ import {detectSmartTV} from "./helper/smartTvDetector.js";
 import {getUser, getUserMovies} from "./API.js";
 import StiflixChillRoot from "./pages/StiflixChill/StiflixChillRoot.jsx";
 import DmcaDisclaimer from "./pages/Miscs/DmcaDisclaimer.jsx";
+import AdminDashboard from "./pages/Admin/AdminDashboard.jsx";
 
 function App() {
     const navigate = useNavigate();
@@ -141,6 +142,11 @@ function App() {
                     : <Navigate to={'/movies'}/>
             } />
             <Route path={"/disclaimer"} element={<DmcaDisclaimer />} />
+            <Route path={"/admin"} element={
+                user && (user.role === "OWNER")
+                    ? <AdminDashboard />
+                    : <Navigate to={'/movies'} />
+            } />
         </Routes>
     );
 }
