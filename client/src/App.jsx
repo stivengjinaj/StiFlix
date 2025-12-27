@@ -73,7 +73,6 @@ function App() {
                     ...movies,
                     success: true
                 });
-                console.log(movies)
             }else {
                 setUserMovies({
                     success: false

@@ -3,8 +3,10 @@ import {Badge, Button, Col, Container, Image, Row} from "react-bootstrap";
 import {useEffect, useRef} from "react";
 import gsap from "gsap";
 import Loading from "../Miscs/Loading.jsx";
+import {useNavigate} from "react-router-dom";
 
 const ResultView = ({ movie, onRollAgain, setStep }) => {
+    const navigate = useNavigate();
     const containerRef = useRef(null);
 
     useEffect(() => {
@@ -89,7 +91,7 @@ const ResultView = ({ movie, onRollAgain, setStep }) => {
                             </p>
 
                             <div className="d-flex gap-3 justify-content-center justify-content-md-start">
-                                <Button className="btn-netflix-play d-flex align-items-center gap-2">
+                                <Button onClick={() => navigate(`/movie/${movie.id}/1/1`)} className="btn-netflix-play d-flex align-items-center gap-2">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
                                         <path d="M8 5v14l11-7z"/>
                                     </svg>

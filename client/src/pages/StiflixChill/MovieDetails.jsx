@@ -3,8 +3,10 @@ import PropTypes from "prop-types";
 import { gsap } from "gsap";
 import "./MovieCatalogue.css";
 import FetchedMovieController from "../../controllers/FetchedMovieController.js";
+import {useNavigate} from "react-router-dom";
 
 const MovieDetails = ({ movie, setSelectedMovie }) => {
+    const navigate = useNavigate();
     const containerRef = useRef(null);
     const [trailer, setTrailer] = useState(null);
 
@@ -72,7 +74,7 @@ const MovieDetails = ({ movie, setSelectedMovie }) => {
                             </div>
 
                             <div className="d-flex gap-3">
-                                <button className="btn btn-play flex-grow-1 py-2">
+                                <button className="btn btn-play flex-grow-1 py-2" onClick={() => navigate(`/movie/${movie.id}/1/1`)}>
                                     ▶ Play
                                 </button>
                                 <button

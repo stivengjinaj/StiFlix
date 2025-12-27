@@ -8,12 +8,16 @@ import MovieCatalogue from "./MovieCatalogue.jsx";
 import PropTypes from "prop-types";
 import Loading from "../Miscs/Loading.jsx";
 import {useNavigate} from "react-router-dom";
+import IdleBanner from "./IdleBanner.jsx";
 
-const StiflixChillFlow = ({ movies, page, setPage }) => {
+const StiflixChillFlow = ({ movies, communication, page, setPage }) => {
     const comp = useRef(null);
     const navigate = useNavigate();
     const [step, setStep] = useState(0);
     const [choice, setChoice] = useState(null);
+    const [showBanner, setShowBanner] = useState(false);
+    const [bannerMessage, setBannerMessage] = useState('');
+    const idleTimerRef = useRef(null);
 
     useEffect(() => {
         if (step > 1 || step < 0) {
@@ -21,6 +25,49 @@ const StiflixChillFlow = ({ movies, page, setPage }) => {
             setChoice(null);
         }
     }, [step]);
+
+    useEffect(() => {
+        const resetIdleTimer = () => {
+            if (idleTimerRef.current) {
+                clearTimeout(idleTimerRef.current);
+            }
+
+            idleTimerRef.current = setTimeout(() => {
+                if (communication.length > 0) {
+                    const randomIndex = Math.floor(Math.random() * communication.length);
+                    const selectedMessage = communication[randomIndex];
+
+                    setBannerMessage(selectedMessage.content);
+                    setShowBanner(true);
+                }
+            }, 10000); // 10 seconds
+        };
+
+        const handleMouseMove = () => {
+            resetIdleTimer();
+        };
+
+        const handleKeyPress = () => {
+            resetIdleTimer();
+        };
+
+        resetIdleTimer();
+
+        window.addEventListener('mousemove', handleMouseMove);
+        window.addEventListener('keypress', handleKeyPress);
+
+        return () => {
+            if (idleTimerRef.current) {
+                clearTimeout(idleTimerRef.current);
+            }
+            window.removeEventListener('mousemove', handleMouseMove);
+            window.removeEventListener('keypress', handleKeyPress);
+        };
+    }, [communication]);
+
+    const handleCloseBanner = () => {
+        setShowBanner(false);
+    };
 
     return (
         movies.results && movies.results.length > 0
@@ -34,6 +81,13 @@ const StiflixChillFlow = ({ movies, page, setPage }) => {
                 }}
                 ref={comp}
             >
+                {showBanner && (
+                    <IdleBanner
+                        message={bannerMessage}
+                        onClose={handleCloseBanner}
+                    />
+                )}
+
                 <Row
                     className="justify-content-between align-items-center py-3 rounded-bottom-3 flex-grow-0 top-bar"
                     style={{
@@ -78,6 +132,7 @@ const StiflixChillFlow = ({ movies, page, setPage }) => {
 
 StiflixChillFlow.propTypes = {
     movies: PropTypes.object.isRequired,
+    communication: PropTypes.array.isRequired,
     page: PropTypes.number.isRequired,
     setPage: PropTypes.func.isRequired,
 }

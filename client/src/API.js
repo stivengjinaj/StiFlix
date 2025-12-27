@@ -357,3 +357,18 @@ export const getLogos = (id, mediaType) =>
 
 export const getStiflixChillHome = (page) =>
     apiFetch(`${remote_url}/stiflixchill/home/${page}`);
+
+export const getStiflixChillCommunication = () =>
+    apiFetch(`${remote_url}/stiflixchill/communication`)
+
+export const saveStiflixChillCommunication = () =>
+    apiFetch(`${remote_url}/stiflixchill/communication`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            type: "IDLE_POPUP",
+            content: "Test"
+        })
+    })
