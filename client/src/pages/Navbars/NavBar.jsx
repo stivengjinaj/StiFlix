@@ -9,7 +9,6 @@ function NavBar(props) {
     useEffect(() => {
         const handleResize = () => {
             if (window.innerWidth <= 768) {
-                console.log("mobile");
                 setScreen('mobile');
             } else {
                 setScreen('desktop');

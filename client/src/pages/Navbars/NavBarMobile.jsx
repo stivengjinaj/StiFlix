@@ -11,7 +11,7 @@ function NavBarMobile(props) {
     useGSAP(() => {
         gsap.fromTo('.search-input', {
             duration: 1,
-            x: 100,
+            x: 20,
             opacity: 0,
             ease: 'ease-in'
         }, {
@@ -24,8 +24,8 @@ function NavBarMobile(props) {
     useGSAP(() => {
         gsap.from(['.nav-item-selected', '.nav-item'], {
             duration: 1,
-            delay: 0.1,
-            x: 100,
+            delay: 0.4,
+            y: 20,
             opacity: 0,
             ease: 'ease-in',
             stagger: 0.1
@@ -68,7 +68,7 @@ function NavBarMobile(props) {
                       props.user && (
                           <Dropdown align={{lg: 'start'}} className="mx-3">
                               <Dropdown.Toggle className="p-0 btn-avatar">
-                                  {props.avatar && <img src={`/avatars/${props.avatar}.png`} alt="avatar"
+                                  {props.user.avatar && <img src={`/avatars/${props.user.avatar}.png`} alt="avatar"
                                         width={50} height={50} className="rounded-3"/>}
                               </Dropdown.Toggle>
 

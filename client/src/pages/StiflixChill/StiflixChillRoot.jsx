@@ -61,7 +61,7 @@ const StiflixChillRoot = () => {
 
     if (isMobile) {
         return (
-            <Container fluid className="d-flex flex-column align-items-center justify-content-center min-vh-100">
+            <Container fluid className="d-flex flex-column align-items-center justify-content-center min-vh-100 bg-dark">
                 <div className="message-content text-center">
                     <h2 className="text-light">Stiflix&Chill</h2>
                     <p className="text-light">is available only on desktop devices.</p>

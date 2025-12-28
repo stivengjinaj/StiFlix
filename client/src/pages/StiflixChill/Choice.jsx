@@ -6,11 +6,11 @@ import catalog_icon from '../../assets/images/movies_catalog.png';
 import PropTypes from "prop-types";
 
 function Choice({ comp, setStep, setChoice }) {
-    const containerRef = useRef(null);
     const isAnimating = useRef(false);
 
-    // Intro effects
     useLayoutEffect(() => {
+        if (!comp || !comp.current) return;
+
         let ctx = gsap.context(() => {
             const tl = gsap.timeline();
 
@@ -18,30 +18,33 @@ function Choice({ comp, setStep, setChoice }) {
                 .from(".top-bar", {
                     y: -100,
                     opacity: 0,
-                    duration: 0.6,
+                    duration: 0.4,
                     ease: "power3.out"
                 })
-                .from(".stiflix-slogan", {
-                    y: 30,
-                    opacity: 0,
-                    duration: 0.6,
-                    ease: "power3.out"
-                }, "-=0.3")
-                .from(".choice-card", {
-                    y: 100,
-                    opacity: 0,
-                    duration: 0.6,
-                    ease: "back.out(1.7)",
-                    stagger: 0.15
-                }, "-=0.4");
+                .fromTo(".stiflix-slogan",
+                    { y: 30, autoAlpha: 0 },
+                    { y: 0, autoAlpha: 1, duration: 0.6, ease: "power3.out" },
+                    "-=0.3"
+                )
+                .fromTo(".choice-card",
+                    { y: 100, autoAlpha: 0 },
+                    {
+                        y: 0,
+                        autoAlpha: 1,
+                        duration: 0.4,
+                        ease: "back.out(1.7)",
+                        stagger: 0.15,
+                        clearProps: "transform"
+                    },
+                    "-=0.4"
+                );
         }, comp);
 
         return () => ctx.revert();
     }, [comp]);
 
-    // Outro effects
     const handleChoiceClick = (choiceValue) => {
-        if (isAnimating.current) return;
+        if (isAnimating.current || !comp.current) return;
         isAnimating.current = true;
 
         const ctx = gsap.context(() => {
@@ -54,38 +57,38 @@ function Choice({ comp, setStep, setChoice }) {
 
             tl.to(".stiflix-slogan", {
                 y: -30,
-                opacity: 0,
+                autoAlpha: 0,
                 duration: 0.4,
                 ease: "power2.in"
             })
                 .to(".choice-card", {
                     y: 200,
-                    opacity: 0,
+                    autoAlpha: 0,
                     duration: 0.5,
                     ease: "back.in(1.2)",
                     stagger: 0.1
                 }, "-=0.2");
-        }, containerRef);
+        }, comp);
 
         return () => ctx.revert();
     };
 
     return (
-        <Container ref={containerRef} className="flex-grow-1 d-flex flex-column justify-content-start">
+        <Container className="flex-grow-1 d-flex flex-column justify-content-start">
             <Row className="justify-content-center mt-4">
                 <Col xs={12} className="text-center text-white">
-                    <h1 className="stiflix-slogan">
+                    <h1 className="stiflix-slogan" style={{ opacity: 0 }}>
                         Because the movie is not the main event...
                     </h1>
                 </Col>
             </Row>
 
-            <Row className="justify-content-center g-5">
+            <Row className="justify-content-center g-5 mt-3">
                 <Col md={5} lg={4} className="me-4">
                     <div
                         className="choice-card p-5 text-center text-white d-flex flex-column align-items-center justify-content-center"
                         onClick={() => handleChoiceClick(0)}
-                        style={{ cursor: 'pointer' }}
+                        style={{ cursor: 'pointer', opacity: 0 }}
                     >
                         <img
                             src={random_icon}
@@ -104,7 +107,7 @@ function Choice({ comp, setStep, setChoice }) {
                     <div
                         className="choice-card p-5 text-center text-white d-flex flex-column align-items-center justify-content-center"
                         onClick={() => handleChoiceClick(1)}
-                        style={{ cursor: 'pointer' }}
+                        style={{ cursor: 'pointer', opacity: 0 }}
                     >
                         <img
                             src={catalog_icon}
