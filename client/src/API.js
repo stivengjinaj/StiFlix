@@ -1,7 +1,7 @@
 import {auth} from "../firebaseConfiguration.js";
 
-//export const remote_url = "https://stiflix.vercel.app";
-export const remote_url = "http://localhost:8080/api/v2";
+export const remote_url = "https://stiflixbackend.onrender.com/api/v2";
+//export const remote_url = "http://localhost:8080/api/v2";
 
 export const apiFetch = async (url, options = {}) => {
     const headers = {
