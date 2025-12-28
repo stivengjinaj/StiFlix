@@ -41,7 +41,7 @@ const MoviesCarousel = (props) => {
                 );
             }
         }
-    }, [screenWidth]);
+    }, [screenWidth, props.movies]);
 
 
     useGSAP(() => {
