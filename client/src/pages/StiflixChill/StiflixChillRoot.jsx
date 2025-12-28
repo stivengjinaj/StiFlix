@@ -1,7 +1,7 @@
 import stiflixchill_splash from '../../assets/stiflix&chill_splash.json';
 import { useState, useEffect } from 'react';
 import Lottie from 'react-lottie';
-import './StiflixChill.css';
+import './Stiflixchill.css';
 import {getWindowDimensions} from "../../helper/miscs.js";
 import {Button, Container} from "react-bootstrap";
 import StiflixChillFlow from "./StiflixChillFlow.jsx";
