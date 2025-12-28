@@ -54,7 +54,6 @@ function App() {
                         role
                     });
                 } catch (error) {
-                    console.error("Error fetching user data:", error);
                     setUser(null);
                 }
             } else {
