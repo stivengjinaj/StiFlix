@@ -18,7 +18,7 @@ function GridMovies({ movies, type }) {
                             <Col xs={4} sm={4} md={3} lg={2} key={movie.movieId} className="mb-4">
                                 <Card
                                     className="h-100 border-0 movie-card"
-                                    onClick={() => navigate(`/movies/info/${movie.isSeries ? "tv" : "movie"}/${movie.id}`)}
+                                    onClick={() => navigate(`/movies/info/${movie.isSeries ? "tv" : "movie"}/${movie.movieId}`)}
                                 >
                                     <Card.Img
                                         variant="top"
