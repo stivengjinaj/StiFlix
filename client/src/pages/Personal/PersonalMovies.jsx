@@ -1,9 +1,7 @@
-import Loading from "../Miscs/Loading.jsx";
-
-{/* eslint-disable react/prop-types */}
+/* eslint-disable react/prop-types */
 import logo from "../../assets/images/logo.png";
 import {useEffect, useState} from "react";
-import {Button, Container, Nav, Navbar, Spinner} from "react-bootstrap";
+import {Container, Nav, Navbar, Spinner} from "react-bootstrap";
 import GridMovies from "../Movies/GridMovies.jsx";
 import smallLogo from "../../assets/images/titleLogo.png";
 import {useNavigate} from "react-router-dom";
@@ -23,13 +21,30 @@ function PersonalMovies(props) {
 
         window.addEventListener('resize', handleResize);
         handleResize();
-
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
     const handleMovieTypeSelection = (type) => {
         navigate(`/${type}`);
     };
+
+    const getMoviesToDisplay = () => {
+        if (!props.userMovies) return [];
+
+        let selectedList;
+
+        if (props.type === "favourites") {
+            selectedList = props.userMovies.favourites;
+        } else if (props.type === "watchLater") {
+            selectedList = props.userMovies.watchLater;
+        } else {
+            selectedList = props.userMovies.watchlist;
+        }
+
+        return selectedList || [];
+    };
+
+    const moviesToDisplay = getMoviesToDisplay();
 
     return (
         <Container fluid className="min-vh-100 bg-gradient-dark-radius main-banner overflow-x-hidden">
@@ -85,12 +100,11 @@ function PersonalMovies(props) {
                         <h2 className="text-white mt-5 mx-3">
                             {props.type === "favourites" ? "Favourites" : props.type === "watchLater" ? "Watch Later" : "Watchlist"}
                         </h2>
-                        <GridMovies movies={props.type === "favourites" ? props.userMovies.favourites : props.type === "watchLater" ? props.userMovies.watchLater : props.userMovies.watchlist} />
+                        <GridMovies movies={moviesToDisplay} type={props.type} />
                     </Container>
             }
         </Container>
     );
 }
-
 
 export default PersonalMovies;

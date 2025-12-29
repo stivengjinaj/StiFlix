@@ -1,6 +1,5 @@
+/*eslint-disable react/prop-types*/
 import EpisodeCard from "./EpisodeCard.jsx";
-
-{/*eslint-disable react/prop-types*/}
 import {Button, Col, Container, Dropdown, Navbar, Row, Spinner} from "react-bootstrap";
 import {useNavigate, useParams} from "react-router-dom";
 import FetchedMovieController from "../../controllers/FetchedMovieController.js";
@@ -50,26 +49,31 @@ function MovieDetails(props) {
         }
 
         fetchData();
-    }, [])
+    }, [mediaType, movieId])
 
     useEffect(() => {
         const getUserPersonalData = async () => {
             if(!props.userMovies) return;
-                console.log(props.userMovies);
-                props.userMovies.favourites.map(favourite => {
-                    favourite.movieId === movieId ? setIsFavourite(true) : setIsFavourite(false);
-                });
 
-                props.userMovies.watchList.map(watched => {
-                    watched.movieId === movieId ? setWatchList(true) : setWatchList(false);
-                });
+            const targetId = Number(movieId);
 
-                props.userMovies.watchLater.map(toWatch => {
-                    toWatch.movieId === movieId ? setWatchLater(true) : setWatchLater(false);
-                });
+            if (props.userMovies.favourites) {
+                const inFavs = props.userMovies.favourites.some(fav => Number(fav.movieId) === targetId);
+                setIsFavourite(inFavs);
+            }
+
+            if (props.userMovies.watchlist) {
+                const inWatchlist = props.userMovies.watchlist.some(watched => Number(watched.movieId) === targetId);
+                setWatchList(inWatchlist);
+            }
+
+            if (props.userMovies.watchLater) {
+                const inWatchLater = props.userMovies.watchLater.some(toWatch => Number(toWatch.movieId) === targetId);
+                setWatchLater(inWatchLater);
+            }
         }
         getUserPersonalData();
-    }, [props.userMovies]);
+    }, [movieId, props.userMovies]);
 
     useEffect(() => {
         if (playMovieSplash && !props.isSmartTV) {
@@ -95,7 +99,7 @@ function MovieDetails(props) {
     }
 
     const onFavourite = async () => {
-        if (!props.user) return
+        if (!props.user || !movie) return
         if (isFavourite){
             setIsFavourite(false);
             const removeMovie = await removeFromFavourites(props.user.token, movieId)
@@ -108,6 +112,7 @@ function MovieDetails(props) {
             const addMovie = await addToFavourites(props.user.token, {
                 mediaType,
                 movieId,
+                posterPath: movie.poster_path
             });
 
             if (!addMovie) {
@@ -117,7 +122,7 @@ function MovieDetails(props) {
     };
 
     const onWatchlist = async () => {
-        if (!props.user) return
+        if (!props.user || !movie) return
         if (watchList){
             setWatchList(false);
             const removeMovie = await removeFromWatchList(props.user.token, movieId)
@@ -130,6 +135,7 @@ function MovieDetails(props) {
             const addMovie = await addToWatchList(props.user.token, {
                 mediaType,
                 movieId,
+                posterPath: movie.poster_path
             });
 
             if (!addMovie) {
@@ -140,7 +146,7 @@ function MovieDetails(props) {
 
 
     const onWatchLater = async () => {
-        if (!props.user) return
+        if (!props.user || !movie) return
         if (watchLater){
             setWatchLater(false);
             const removeMovie = await removeFromWatchLater(props.user.token, movieId)
@@ -152,6 +158,7 @@ function MovieDetails(props) {
             const addMovie = await addToWatchLater(props.user.token, {
                 mediaType,
                 movieId,
+                posterPath: movie.poster_path
             });
 
             if (!addMovie) {
@@ -198,69 +205,69 @@ function MovieDetails(props) {
     }, [trailer]);
 
     return (
-      movie
-          ? (
-              <>
-                  <div className={`splash-screen ${playMovieSplash ? 'visible' : 'invisible'}`} style={{
-                      position: 'fixed',
-                      top: 0,
-                      left: 0,
-                      width: '100%',
-                      height: '100vh',
-                      backgroundColor: 'black',
-                      zIndex: playMovieSplash ? 1000 : -1,
-                  }}></div>
-                  <Container fluid className="movie-details w-100 p-0" style={{
-                      backgroundImage: `url(https://image.tmdb.org/t/p/original/${screen === "desktop" ? movie.backdrop_path : movie.poster_path})`,
-                  }}>
-                      <Navbar className="bg-gradient-dark"
-                              style={{backgroundColor: mediaType === "tv" && "rgb(0,0,0,0.7)"}}>
-                          <Navbar.Brand>
-                              <Button variant="transparent" onClick={() => navigate('/movies')}>
-                                  <strong><i className="bi bi-arrow-left text-white h1"></i></strong>
-                              </Button>
-                          </Navbar.Brand>
-                      </Navbar>
-                      {
-                          mediaType === 'movie'
-                              ? <Movie
-                                  movie={movie}
-                                  trailer={trailer}
-                                  noTrailer={noTrailer}
-                                  user={props.user}
-                                  isFavourite={isFavourite}
-                                  isWatched={watchList}
-                                  toWatch={watchLater}
-                                  onFavourite={onFavourite}
-                                  onWatchlist={onWatchlist}
-                                  onWatchLater={onWatchLater}
-                                  onPlay={onPlay}
-                              />
-                              : <TvShow
-                                  movie={movie}
-                                  trailer={trailer}
-                                  noTrailer={noTrailer}
-                                  user={props.user}
-                                  isFavourite={isFavourite}
-                                  isWatched={watchList}
-                                  toWatch={watchLater}
-                                  onFavourite={onFavourite}
-                                  onWatchlist={onWatchlist}
-                                  onWatchLater={onWatchLater}
-                                  onPlay={onPlay}
-                              />
-                      }
-                  </Container>
-              </>
-          )
-          : (<Container fluid className="d-flex justify-content-center align-items-center vh-100 loading">
-              <Spinner
-                  animation="border"
-                  role="status"
-                  style={{color: 'red'}}
-              >
-              </Spinner>
-          </Container>)
+        movie
+            ? (
+                <>
+                    <div className={`splash-screen ${playMovieSplash ? 'visible' : 'invisible'}`} style={{
+                        position: 'fixed',
+                        top: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '100vh',
+                        backgroundColor: 'black',
+                        zIndex: playMovieSplash ? 1000 : -1,
+                    }}></div>
+                    <Container fluid className="movie-details w-100 p-0" style={{
+                        backgroundImage: `url(https://image.tmdb.org/t/p/original/${screen === "desktop" ? movie.backdrop_path : movie.poster_path})`,
+                    }}>
+                        <Navbar className="bg-gradient-dark"
+                                style={{backgroundColor: mediaType === "tv" && "rgb(0,0,0,0.7)"}}>
+                            <Navbar.Brand>
+                                <Button variant="transparent" onClick={() => navigate('/movies')}>
+                                    <strong><i className="bi bi-arrow-left text-white h1"></i></strong>
+                                </Button>
+                            </Navbar.Brand>
+                        </Navbar>
+                        {
+                            mediaType === 'movie'
+                                ? <Movie
+                                    movie={movie}
+                                    trailer={trailer}
+                                    noTrailer={noTrailer}
+                                    user={props.user}
+                                    isFavourite={isFavourite}
+                                    isWatched={watchList}
+                                    toWatch={watchLater}
+                                    onFavourite={onFavourite}
+                                    onWatchlist={onWatchlist}
+                                    onWatchLater={onWatchLater}
+                                    onPlay={onPlay}
+                                />
+                                : <TvShow
+                                    movie={movie}
+                                    trailer={trailer}
+                                    noTrailer={noTrailer}
+                                    user={props.user}
+                                    isFavourite={isFavourite}
+                                    isWatched={watchList}
+                                    toWatch={watchLater}
+                                    onFavourite={onFavourite}
+                                    onWatchlist={onWatchlist}
+                                    onWatchLater={onWatchLater}
+                                    onPlay={onPlay}
+                                />
+                        }
+                    </Container>
+                </>
+            )
+            : (<Container fluid className="d-flex justify-content-center align-items-center vh-100 loading">
+                <Spinner
+                    animation="border"
+                    role="status"
+                    style={{color: 'red'}}
+                >
+                </Spinner>
+            </Container>)
     );
 }
 
