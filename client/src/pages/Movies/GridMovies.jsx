@@ -1,7 +1,5 @@
-import { useGSAP } from "@gsap/react";
 /* eslint-disable react/prop-types */
 import { Card, Col, Container, Row } from "react-bootstrap";
-import { gsap } from "gsap";
 import { useNavigate } from "react-router-dom";
 import { useRef } from "react";
 
@@ -9,19 +7,8 @@ function GridMovies({ movies, type }) {
     const navigate = useNavigate();
     const containerRef = useRef();
 
-    useGSAP(() => {
-        if (movies && movies.length > 0) {
-            gsap.from('.movie-card', {
-                y: 50,
-                opacity: 0,
-                stagger: 0.1,
-                duration: 0.5
-            });
-        }
-    }, { dependencies: [movies], scope: containerRef });
-
     const hasMovies = movies && Array.isArray(movies) && movies.length > 0;
-    
+
     return (
         <div ref={containerRef}>
             {hasMovies ? (
