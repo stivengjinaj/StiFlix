@@ -21,7 +21,7 @@ function GridMovies({ movies, type }) {
                                 >
                                     <Card.Img
                                         variant="top"
-                                        src={`https://image.tmdb.org/t/p/w500/${movie.posterPath}`}
+                                        src={`https://image.tmdb.org/t/p/w500/${movie.posterPath || movie.poster_path}`}
                                         alt={movie.title}
                                     />
                                 </Card>
