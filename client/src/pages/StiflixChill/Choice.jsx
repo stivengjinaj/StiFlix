@@ -1,4 +1,4 @@
-import {useLayoutEffect, useRef} from "react";
+import {useLayoutEffect, useRef, useState} from "react";
 import gsap from "gsap";
 import {Col, Container, Row} from "react-bootstrap";
 import random_icon from '../../assets/images/dices.png';
@@ -7,9 +7,10 @@ import PropTypes from "prop-types";
 
 function Choice({ comp, setStep, setChoice }) {
     const isAnimating = useRef(false);
+    const [imagesLoaded, setImagesLoaded] = useState(0);
 
     useLayoutEffect(() => {
-        if (!comp || !comp.current) return;
+        if (!comp || !comp.current || imagesLoaded < 2) return;
 
         let ctx = gsap.context(() => {
             const tl = gsap.timeline();
@@ -41,7 +42,7 @@ function Choice({ comp, setStep, setChoice }) {
         }, comp);
 
         return () => ctx.revert();
-    }, [comp]);
+    }, [comp, imagesLoaded]);
 
     const handleChoiceClick = (choiceValue) => {
         if (isAnimating.current || !comp.current) return;
@@ -97,6 +98,7 @@ function Choice({ comp, setStep, setChoice }) {
                             height={150}
                             className="mb-4"
                             style={{filter: 'invert(1)', pointerEvents: 'none'}}
+                            onLoad={() => setImagesLoaded((prev) => prev + 1)}
                         />
                         <h3>Roll the Dice</h3>
                         <p className="mb-0">Let fate decide your night.</p>
@@ -116,6 +118,7 @@ function Choice({ comp, setStep, setChoice }) {
                             height={140}
                             className="mb-4"
                             style={{ pointerEvents: 'none' }}
+                            onLoad={() => setImagesLoaded((prev) => prev + 1)}
                         />
                         <h3>The Catalogue</h3>
                         <p className="mb-0">Choose your perfect backdrop.</p>
