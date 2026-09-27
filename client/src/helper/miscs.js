@@ -200,6 +200,23 @@ export const shuffleArray2 = (array) => {
 };
 
 /**
+ * Function that returns a random season and episode.
+ *
+ * @param seasons array of seasons (with episodes).
+ * @return string in the following format "/{season_number}/{episode_number}"
+ */
+export const getRandomEpisode = (seasons) => {
+    const seasonsWithEpisodes = seasons.filter(season => season.episodes?.length > 0);
+    if (seasonsWithEpisodes.length === 0) {
+        throw new Error("Cannot select a random episode because no seasons contain episodes.");
+    }
+
+    const randomSeason = seasonsWithEpisodes[Math.floor(Math.random() * seasonsWithEpisodes.length)];
+    const randomEpisode = randomSeason.episodes[Math.floor(Math.random() * randomSeason.episodes.length)];
+    return `${randomSeason.season_number}/${randomEpisode.episode_number}`;
+};
+
+/**
  * Functions used to manage splash screen visibility with localStorage and expiry.
  *
  * @returns {boolean} - True if the splash screen has been seen and is still valid, false otherwise.

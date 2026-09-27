@@ -1,3 +1,4 @@
+import {getRandomEpisode} from "../../helper/miscs.js";
 
 {/*eslint-disable react/prop-types*/}
 import {useEffect, useRef, useState} from "react";
@@ -177,6 +178,19 @@ function MoviePlaying(props) {
 
                             {movie.isSeries && (
                                 <div className="d-flex align-items-center">
+                                    <button
+                                        onClick={() => navigate(`/tv/${movie.id}/${getRandomEpisode(movie.seasons)}`)}
+                                        className="btn border-0 text-white fw-semibold px-4 py-2"
+                                        style={{
+                                            background: 'linear-gradient(90deg, #e50914 0%, #b8070f 100%)',
+                                            borderRadius: '4px',
+                                            fontSize: '0.95rem',
+                                            transition: 'all 0.3s ease',
+                                            boxShadow: '0 2px 8px rgba(229, 9, 20, 0.3)'
+                                        }}
+                                    >
+                                        Random
+                                    </button>
                                     {!(parseInt(season) === 1 && parseInt(episode) === 1) &&
                                         <button
                                             onClick={handlePreviousEpisode}
@@ -194,7 +208,7 @@ function MoviePlaying(props) {
                                     {!lastEpisodeSeason &&
                                         <button
                                             onClick={handleNextEpisode}
-                                            className="btn border-0 text-white d-flex align-items-center justify-content-center me-2"
+                                            className="btn border-0 text-white d-flex align-items-center justify-content-center mx-2"
                                             style={{
                                                 width: '40px',
                                                 height: '40px',
@@ -226,7 +240,7 @@ function MoviePlaying(props) {
                         <Container fluid>
                             <Row className="justify-content-center align-items-center my-5">
                                 <h1 className="text-white text-center mb-0 fw-bold" style={{ fontSize: '2rem', letterSpacing: '-0.5px' }}>
-                                    {movie.title}
+                                    {movie.isSeries ? `${movie.title} - Season ${season} Episode ${currentEpisode}` : movie.title}
                                 </h1>
                             </Row>
                         </Container>
@@ -246,7 +260,9 @@ function MoviePlaying(props) {
                                                 <div className="ratio ratio-16x9">
                                                     <iframe
                                                         ref={iframeRef}
+                                                        key={currentServer.link}
                                                         src={currentServer.link}
+                                                        title={`${currentServer.server} video player`}
                                                         allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen"
                                                         style={{ borderRadius: '8px' }}
                                                     ></iframe>
@@ -273,4 +289,3 @@ function MoviePlaying(props) {
 }
 
 export default MoviePlaying;
-
