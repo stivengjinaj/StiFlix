@@ -6,27 +6,39 @@ import { useRef } from "react";
 function GridMovies({ movies, type }) {
     const navigate = useNavigate();
     const containerRef = useRef();
-    const hasMovies = movies && Array.isArray(movies) && movies.length > 0;
+    const movieEntries = Array.isArray(movies)
+        ? movies.map(movie => {
+            const movieId = movie.id ?? movie.movieId;
+            const mediaType = movie.mediaType ?? (movie.isSeries ? "tv" : type === "tvShows" ? "tv" : "movie");
+            return { movie, movieId, mediaType };
+        })
+        : [];
+    const uniqueMovies = Array.from(
+        new Map(movieEntries.map(entry => [`${entry.mediaType}-${entry.movieId}`, entry])).values()
+    );
+    const hasMovies = uniqueMovies.length > 0;
 
     return (
         <div ref={containerRef}>
             {hasMovies ? (
                 <Container fluid className="py-5 allMovies">
                     <Row>
-                        {movies.map((movie) => (
-                            <Col xs={4} sm={4} md={3} lg={2} key={movie.movieId} className="mb-4">
-                                <Card
-                                    className="h-100 border-0 movie-card"
-                                    onClick={() => navigate(`/movies/info/${movie.mediaType}/${movie.movieId}`)}
-                                >
-                                    <Card.Img
-                                        variant="top"
-                                        src={`https://image.tmdb.org/t/p/w500/${movie.posterPath || movie.poster_path}`}
-                                        alt={movie.title}
-                                    />
-                                </Card>
-                            </Col>
-                        ))}
+                        {uniqueMovies.map(({ movie, movieId, mediaType }) => {
+                            return (
+                                <Col xs={4} sm={4} md={3} lg={2} key={`${mediaType}-${movieId}`} className="mb-4">
+                                    <Card
+                                        className="h-100 border-0 movie-card"
+                                        onClick={() => navigate(`/movies/info/${mediaType}/${movieId}`)}
+                                    >
+                                        <Card.Img
+                                            variant="top"
+                                            src={`https://image.tmdb.org/t/p/w500/${movie.posterPath || movie.poster_path}`}
+                                            alt={movie.title}
+                                        />
+                                    </Card>
+                                </Col>
+                            );
+                        })}
                     </Row>
                 </Container>
             ) : (
